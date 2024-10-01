@@ -2,6 +2,7 @@ package com.hrm.view;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -10,9 +11,11 @@ import com.hrm.dao.UserDAO;
 
 import java.awt.Font;
 import java.awt.Color;
-
+import java.awt.Cursor;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class LoginFrame extends JFrame {
 
@@ -113,6 +116,25 @@ public class LoginFrame extends JFrame {
         JLabel lblQuenMatKhau = new JLabel("Quen mat khau ?");
         lblQuenMatKhau.setForeground(new Color(0, 128, 255));
         lblQuenMatKhau.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 12));
+        lblQuenMatKhau.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JOptionPane.showMessageDialog(null, "Ban da nhan nut quen mat khau", "Thong bao",
+                        JOptionPane.PLAIN_MESSAGE);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                lblQuenMatKhau.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                lblQuenMatKhau.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+        });
         lblQuenMatKhau.setBounds(217, 132, 93, 18);
         panel.add(lblQuenMatKhau);
 
@@ -132,6 +154,25 @@ public class LoginFrame extends JFrame {
         JLabel lblTaoTaiKhoan = new JLabel("Dang ky ngay");
         lblTaoTaiKhoan.setForeground(new Color(0, 128, 255));
         lblTaoTaiKhoan.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 12));
+        lblTaoTaiKhoan.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JOptionPane.showMessageDialog(null, "Ban da nhat nut dang ky", "Thong bao",
+                        JOptionPane.PLAIN_MESSAGE);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                lblTaoTaiKhoan.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                lblTaoTaiKhoan.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+        });
         lblTaoTaiKhoan.setBounds(226, 385, 76, 18);
         contentPane.add(lblTaoTaiKhoan);
 

@@ -10,8 +10,10 @@ public class JDBCUtil {
     public static Connection createConnection() {
         Connection con = null;
         try {
-            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
-            String url = "jdbc:mySQL://localhost:3306/testjava";
+            // Nao dung mySQL thi mo lai
+            // DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
+            // String url = "jdbc:mySQL://localhost:3306/testjava";
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=testjava";
             String user = "root";
             String pass = "";
             con = DriverManager.getConnection(url, user, pass);

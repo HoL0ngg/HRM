@@ -17,32 +17,38 @@ public class UserDAO implements DAOInterface<User> {
 
     @Override
     public int them(User object) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'them'");
+        return 0;
     }
 
     @Override
     public boolean xoa(User object) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'xoa'");
+        return true;
     }
 
     @Override
     public boolean capnhat(User object) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'capnhat'");
+        return true;
     }
 
     @Override
     public User seclectByID(User object) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'seclectByID'");
+        String sql = "select * from account where emloyee_id = ?";
+        Connection con = JDBCUtil.createConnection();
+        User user = null;
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setString(1, object.getUser_id());
+            ResultSet rs = pst.executeQuery();
+            if (rs.next())
+                user = new User(rs.getString(1), rs.getString(2));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 
     @Override
     public ArrayList<User> seclectAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'seclectAll'");
+        return null;
     }
 
     public boolean DangNhap(String user, String password) {

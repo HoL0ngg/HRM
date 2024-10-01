@@ -14,10 +14,15 @@
     </properties>
 
     <dependencies>
-        <dependency>
+        <!-- <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
+        </dependency> -->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>11.2.2.jre8</version> 
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
@@ -26,8 +31,8 @@
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>javacpp</artifactId>
-            <version>1.5.10</version>
+            <artifactId>javacv-platform</artifactId>
+            <version>1.5.8</version>
         </dependency>
     </dependencies>
 

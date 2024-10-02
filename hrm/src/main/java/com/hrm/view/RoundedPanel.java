@@ -6,10 +6,17 @@ import java.awt.*;
 public class RoundedPanel extends JPanel {
 
     private int radius;
+    private String iconPath;
 
     public RoundedPanel(int radius) {
         this.radius = radius;
         setOpaque(false); // Để JPanel trong suốt, không vẽ nền mặc định
+    }
+
+    public RoundedPanel(int radius, String iconPath) {
+        this.radius = radius;
+        this.iconPath = iconPath;
+        setOpaque(false);
     }
 
     @Override
@@ -21,6 +28,7 @@ public class RoundedPanel extends JPanel {
         // Vẽ nền với góc bo tròn
         g2.setColor(getBackground());
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
+        g.drawImage(new ImageIcon(iconPath).getImage(), 6, 6, getWidth() - 12, getHeight() - 12, this);
     }
 
     @Override

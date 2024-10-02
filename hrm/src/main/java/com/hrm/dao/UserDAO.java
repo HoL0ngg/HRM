@@ -36,7 +36,7 @@ public class UserDAO implements DAOInterface<User> {
         Connection con = JDBCUtil.createConnection();
         User user = null;
         try (PreparedStatement pst = con.prepareStatement(sql)) {
-            pst.setString(1, object.getUser_id());
+            pst.setString(1, object.getId());
             ResultSet rs = pst.executeQuery();
             if (rs.next())
                 user = new User(rs.getString(1), rs.getString(2));

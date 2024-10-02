@@ -14,26 +14,16 @@
     </properties>
 
     <dependencies>
-        <!-- <dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
-        </dependency> -->
-        <dependency>
+        </dependency>
+        <!-- <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
             <version>11.2.2.jre8</version> 
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>opencv-platform</artifactId>
-            <version>4.9.0-1.5.10</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>javacv-platform</artifactId>
-            <version>1.5.8</version>
-        </dependency>
+        </dependency> -->
     </dependencies>
 
 </project>

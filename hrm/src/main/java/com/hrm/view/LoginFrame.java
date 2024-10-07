@@ -25,7 +25,7 @@ public class LoginFrame extends JFrame {
 
     public LoginFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 550, 450);
+        setBounds(100, 100, 680, 550);
         setLocationRelativeTo(null);
         contentPane = new JPanel();
         contentPane.setBackground(new Color(245, 143, 82));
@@ -36,36 +36,43 @@ public class LoginFrame extends JFrame {
 
         JLabel ProStaffLabel = new JLabel("ProStaff");
         ProStaffLabel.setFont(new Font("Segoe UI Black", Font.PLAIN, 36));
-        ProStaffLabel.setBounds(186, 35, 151, 59);
+        ProStaffLabel.setBounds(270, 35, 151, 59);
         contentPane.add(ProStaffLabel);
 
         RoundedPanel panel = new RoundedPanel(20);
-        panel.setBounds(101, 104, 343, 215);
-        contentPane.add(panel);
+        panel.setBounds(106, 106, 480, 300);
         panel.setLayout(null);
 
         JLabel DangNhapLabel = new JLabel("Dang nhap");
         DangNhapLabel.setForeground(new Color(0, 128, 255));
-        DangNhapLabel.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 18));
-        DangNhapLabel.setBounds(118, 10, 91, 27);
+        DangNhapLabel.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 20));
+        DangNhapLabel.setBounds(186, 10, 120, 27);
         panel.add(DangNhapLabel);
 
         JLabel tenDangNhapLabel = new JLabel("Ten dang nhap");
         tenDangNhapLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
-        tenDangNhapLabel.setBounds(10, 51, 126, 18);
+        tenDangNhapLabel.setBounds(30, 60, 126, 18);
         panel.add(tenDangNhapLabel);
 
         namefield = new RoundedTextField(12);
-        namefield.setBounds(146, 47, 164, 27);
-        namefield.setColumns(10);
+        namefield.setBounds(168, 55, 240, 30);
         namefield.setText("Nhap ten dang nhap ...");
         namefield.setForeground(Color.GRAY);
+
+        JLabel nameErrorLabel = new JLabel("Ban phai nhap ten dang nhap");
+        nameErrorLabel.setFont(new Font("Segoe UI Semibold", Font.BOLD, 12));
+        nameErrorLabel.setForeground(Color.red);
+        nameErrorLabel.setBounds(170, 86, 200, 18);
+        nameErrorLabel.setVisible(false);
+        panel.add(nameErrorLabel);
+
         namefield.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {
                 if (String.valueOf(namefield.getText()).equals("Nhap ten dang nhap ...")) {
                     namefield.setText(""); // Xóa placeholder khi focus
                     namefield.setForeground(Color.BLACK);
                 }
+                nameErrorLabel.setVisible(false);
             }
 
             @Override
@@ -73,6 +80,7 @@ public class LoginFrame extends JFrame {
                 if (String.valueOf(namefield.getText()).isEmpty()) {
                     namefield.setText("Nhap ten dang nhap ..."); // Hiển thị lại placeholder khi không có dữ liệu
                     namefield.setForeground(Color.GRAY);
+                    nameErrorLabel.setVisible(true);
                 }
             }
 
@@ -81,15 +89,22 @@ public class LoginFrame extends JFrame {
 
         JLabel matKhauLabel = new JLabel("Mat khau");
         matKhauLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
-        matKhauLabel.setBounds(10, 98, 126, 18);
+        matKhauLabel.setBounds(31, 130, 126, 18);
         panel.add(matKhauLabel);
 
         pwfield = new RoundedPasswordField(12);
-        pwfield.setColumns(10);
-        pwfield.setBounds(146, 98, 164, 27);
+        pwfield.setBounds(168, 123, 240, 30);
         pwfield.setText("Nhap mat khau ...");
         pwfield.setForeground(Color.GRAY);
         pwfield.setEchoChar((char) 0);
+
+        JLabel pwErrorLabel = new JLabel("Ban phai nhap mat khau");
+        pwErrorLabel.setBounds(170, 148, 140, 30);
+        pwErrorLabel.setFont(new Font("Segoe UI Semibold", Font.BOLD, 12));
+        pwErrorLabel.setForeground(Color.red);
+        pwErrorLabel.setVisible(false);
+        panel.add(pwErrorLabel);
+
         pwfield.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {
                 if (String.valueOf(pwfield.getPassword()).equals("Nhap mat khau ...")) {
@@ -97,6 +112,7 @@ public class LoginFrame extends JFrame {
                     pwfield.setForeground(Color.BLACK);
                     pwfield.setEchoChar('*'); // Hiển thị ký tự ẩn khi nhập mật khẩu
                 }
+                pwErrorLabel.setVisible(false);
             }
 
             @Override
@@ -105,6 +121,7 @@ public class LoginFrame extends JFrame {
                     pwfield.setText("Nhap mat khau ..."); // Hiển thị lại placeholder khi không có dữ liệu
                     pwfield.setForeground(Color.GRAY);
                     pwfield.setEchoChar((char) 0); // Hiển thị văn bản bình thường cho placeholder
+                    pwErrorLabel.setVisible(true);
                 }
             }
 
@@ -115,7 +132,8 @@ public class LoginFrame extends JFrame {
 
         JLabel lblQuenMatKhau = new JLabel("Quen mat khau ?");
         lblQuenMatKhau.setForeground(new Color(0, 128, 255));
-        lblQuenMatKhau.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 12));
+        lblQuenMatKhau.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 14));
+        lblQuenMatKhau.setBounds(295, 175, 120, 20);
         lblQuenMatKhau.addMouseListener(new MouseAdapter() {
 
             @Override
@@ -135,25 +153,25 @@ public class LoginFrame extends JFrame {
             }
 
         });
-        lblQuenMatKhau.setBounds(217, 132, 93, 18);
         panel.add(lblQuenMatKhau);
 
         RoundedButton btnLogin = new RoundedButton("Dang nhap", 12);
-        btnLogin.setFont(new Font("Segoe UI Semibold", Font.BOLD, 12));
+        btnLogin.setFont(new Font("Segoe UI Semibold", Font.BOLD, 16));
         btnLogin.setBackground(new Color(245, 143, 82));
-        btnLogin.setBounds(118, 154, 105, 40);
+        btnLogin.setBounds(165, 210, 150, 50);
         panel.add(btnLogin);
         btnLogin.addActionListener(act);
 
         JLabel lblBanCoTai = new JLabel("Ban co tai khoan chua ?");
-        lblBanCoTai.setForeground(new Color(128, 128, 128));
-        lblBanCoTai.setFont(new Font("Segoe UI Light", Font.PLAIN, 14));
-        lblBanCoTai.setBounds(197, 370, 151, 18);
+        lblBanCoTai.setBounds(270, 460, 150, 20);
+        lblBanCoTai.setForeground(Color.gray);
+        lblBanCoTai.setFont(new Font("Segoe UI Light", Font.PLAIN, 15));
         contentPane.add(lblBanCoTai);
 
         JLabel lblTaoTaiKhoan = new JLabel("Dang ky ngay");
+        lblTaoTaiKhoan.setBounds(290, 480, 120, 20);
         lblTaoTaiKhoan.setForeground(new Color(0, 128, 255));
-        lblTaoTaiKhoan.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 12));
+        lblTaoTaiKhoan.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 14));
         lblTaoTaiKhoan.addMouseListener(new MouseAdapter() {
 
             @Override
@@ -173,9 +191,8 @@ public class LoginFrame extends JFrame {
             }
 
         });
-        lblTaoTaiKhoan.setBounds(226, 385, 76, 18);
+        contentPane.add(panel);
         contentPane.add(lblTaoTaiKhoan);
-
         setVisible(true);
     }
 

@@ -5,12 +5,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
 import java.awt.Font;
 
@@ -21,6 +20,7 @@ import com.hrm.model.Employee;
 public class MainFrame extends JFrame {
 
         private JPanel contentPane;
+        private RoundedTextField TimKiemField;
         private Employee employee;
 
         public MainFrame(Employee employee) {
@@ -49,23 +49,38 @@ public class MainFrame extends JFrame {
                 contentPane.add(TenLabel);
 
                 // Thanh tim kiem
-                RoundedPanel TimKiemPanel = new RoundedPanel(20);
-                TimKiemPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-                TimKiemPanel.setBounds(340, 140, 500, 46);
                 Image TimKiemIcon = new ImageIcon(
                                 new File("hrm/src/main/resources/img/search.png").getAbsolutePath())
                                 .getImage()
                                 .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
                 JLabel timkiemLabel = new JLabel(new ImageIcon(TimKiemIcon));
-                timkiemLabel.setPreferredSize(new Dimension(35, 35));
-                JTextField TimKiemField = new JTextField();
-                TimKiemField.setBorder(BorderFactory.createEmptyBorder(0, 6, 0, 0));
-                TimKiemField.setPreferredSize(new Dimension(430, 36));
+                timkiemLabel.setBounds(280, 130, 40, 40);
+                contentPane.add(timkiemLabel);
+                TimKiemField = new RoundedTextField(15);
                 TimKiemField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-                TimKiemPanel.setBackground(Color.white);
-                TimKiemPanel.add(timkiemLabel);
-                TimKiemPanel.add(TimKiemField);
-                contentPane.add(TimKiemPanel);
+                TimKiemField.setText("Tim kiem");
+                TimKiemField.setForeground(Color.gray);
+                TimKiemField.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 0));
+                TimKiemField.setBounds(280, 130, 650, 40);
+                TimKiemField.addFocusListener(new FocusListener() {
+                        public void focusGained(FocusEvent e) {
+                                if (String.valueOf(TimKiemField.getText()).equals("Tim kiem")) {
+                                        TimKiemField.setText(""); // Xóa placeholder khi focus
+                                        TimKiemField.setForeground(Color.BLACK);
+                                }
+                        }
+
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                                if (String.valueOf(TimKiemField.getText()).isEmpty()) {
+                                        TimKiemField.setText("Tim kiem"); // Hiển thị lại placeholder khi
+                                                                          // không có dữ liệu
+                                        TimKiemField.setForeground(Color.GRAY);
+                                }
+                        }
+
+                });
+                contentPane.add(TimKiemField);
 
                 // Font cho Menu
                 Font MenuFont = new Font("Roboto", Font.PLAIN, 17);
@@ -136,6 +151,11 @@ public class MainFrame extends JFrame {
                 MucTieuPanel.setBounds(220, 515, 80, 80);
                 contentPane.add(MucTieuPanel);
 
+                // Tranh focus vao JTextfield tu ban dau
+                JPanel emptyJPanel = new JPanel();
+                emptyJPanel.setBounds(0, 0, 0, 0);
+                contentPane.add(emptyJPanel);
                 setVisible(true);
+                emptyJPanel.requestFocusInWindow();
         }
 }

@@ -6,8 +6,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.hrm.controller.ActionController;
+import com.hrm.controller.LoginController;
 import com.hrm.dao.UserDAO;
+import com.hrm.model.Employee;
 
 import java.awt.Font;
 import java.awt.Color;
@@ -128,7 +129,7 @@ public class LoginFrame extends JFrame {
         });
         panel.add(pwfield);
 
-        ActionController act = new ActionController(this);
+        LoginController act = new LoginController(this);
 
         JLabel lblQuenMatKhau = new JLabel("Quen mat khau ?");
         lblQuenMatKhau.setForeground(new Color(0, 128, 255));
@@ -193,10 +194,16 @@ public class LoginFrame extends JFrame {
         });
         contentPane.add(panel);
         contentPane.add(lblTaoTaiKhoan);
+
+        // Tranh focus vao JTextfield tu ban dau
+        JPanel emptyJPanel = new JPanel();
+        emptyJPanel.setBounds(0, 0, 0, 0);
+        contentPane.add(emptyJPanel);
         setVisible(true);
+        emptyJPanel.requestFocusInWindow();
     }
 
-    public boolean DangNhap() {
+    public Employee DangNhap() {
         String user = namefield.getText();
         String password = String.valueOf(pwfield.getPassword());
 

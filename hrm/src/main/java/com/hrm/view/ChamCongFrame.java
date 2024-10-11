@@ -9,15 +9,26 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+
+import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+
+import java.util.Date;
+
+import java.text.SimpleDateFormat;
 
 public class ChamCongFrame extends JFrame {
 
@@ -56,6 +67,9 @@ public class ChamCongFrame extends JFrame {
             }
         });
 
+        // kh cho di chuyen cac cot trong table
+        table.getTableHeader().setReorderingAllowed(false);
+
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(0, 150, 800, 550);
         contentPane.add(scrollPane);
@@ -75,24 +89,28 @@ public class ChamCongFrame extends JFrame {
         navBar.add(lblNewLabel);
 
         lblNewLabel_2 = new JLabel("Tu ngay");
-        lblNewLabel_2.setBounds(10, 68, 80, 13);
+        lblNewLabel_2.setBounds(20, 72, 80, 13);
         contentPane.add(lblNewLabel_2);
 
         lblNewLabel_3 = new JLabel("Den ngay");
-        lblNewLabel_3.setBounds(230, 68, 80, 13);
+        lblNewLabel_3.setBounds(240, 72, 80, 13);
         contentPane.add(lblNewLabel_3);
 
-        JComboBox comboBox = new JComboBox();
-        comboBox.setBounds(60, 65, 130, 30);
-        contentPane.add(comboBox);
+        JDateChooser NgayBatDau = new JDateChooser();
+        NgayBatDau.setDate(new Date());
+        NgayBatDau.setBounds(75, 65, 140, 30);
 
-        comboBox_1 = new JComboBox();
-        comboBox_1.setBounds(290, 65, 130, 30);
-        contentPane.add(comboBox_1);
+        contentPane.add(NgayBatDau);
+
+        JDateChooser NgayKetThuc = new JDateChooser();
+        NgayKetThuc.setDate(new Date()); // Đặt ngày mặc định
+        NgayKetThuc.setBounds(300, 65, 140, 30);
+
+        contentPane.add(NgayKetThuc);
 
         RoundedPanel TimKiemPanel = new RoundedPanel(20);
         TimKiemPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        TimKiemPanel.setBounds(440, 60, 250, 30);
+        TimKiemPanel.setBounds(480, 65, 250, 30);
         Image TimKiemIcon = new ImageIcon(
                 new File("hrm/src/main/resources/img/search.png").getAbsolutePath())
                 .getImage()
@@ -101,7 +119,7 @@ public class ChamCongFrame extends JFrame {
         timkiemLabel.setPreferredSize(new Dimension(35, 20));
         JTextField TimKiemField = new JTextField();
         TimKiemPanel.setBackground(Color.white);
-        TimKiemField.setBorder(BorderFactory.createEmptyBorder(0, 6, 0, 0));
+        TimKiemField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         TimKiemField.setPreferredSize(new Dimension(200, 20));
         TimKiemField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
         TimKiemPanel.add(timkiemLabel);
@@ -109,6 +127,27 @@ public class ChamCongFrame extends JFrame {
         TimKiemPanel.setOpaque(true);
         contentPane.add(TimKiemPanel);
 
+        Image FilterIcon = new ImageIcon(
+                new File("hrm/src/main/resources/img/filter.png").getAbsolutePath())
+                .getImage()
+                .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        JLabel FilterLabel = new JLabel(new ImageIcon(FilterIcon));
+        FilterLabel.setBounds(735, 63, 35, 35);
+        contentPane.add(FilterLabel);
+
+        RoundedPanel xuatFilePanel = new RoundedPanel(20);
+        xuatFilePanel.setBounds(660, 110, 100, 25);
+        xuatFilePanel.setBackground(Color.white);
+        JLabel xuatFile = new JLabel("Xuat file");
+        xuatFile.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+        xuatFilePanel.add(xuatFile);
+        contentPane.add(xuatFilePanel);
+
+        // Tranh focus vao JTextfield tu ban dau
+        JPanel emptyJPanel = new JPanel();
+        emptyJPanel.setBounds(0, 0, 0, 0);
+        contentPane.add(emptyJPanel);
         setVisible(true);
+        emptyJPanel.requestFocusInWindow();
     }
 }

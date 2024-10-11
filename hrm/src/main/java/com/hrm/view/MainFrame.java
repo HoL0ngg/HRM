@@ -88,7 +88,7 @@ public class MainFrame extends JFrame {
                 // Phan Menu
                 RoundedPanel NhanVienPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/people.png").getAbsolutePath());
-                NhanVienPanel.setBounds(220, 235, 80, 80);
+                NhanVienPanel.setBounds(220, 235, 60, 60);
                 JLabel NhanVienLabel = new JLabel("NHAN VIEN");
                 NhanVienLabel.setBounds(215, 290, 98, 80);
                 NhanVienLabel.setFont(MenuFont);
@@ -97,7 +97,7 @@ public class MainFrame extends JFrame {
 
                 RoundedPanel TuyenDungPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/promotion.png").getAbsolutePath());
-                TuyenDungPanel.setBounds(440, 235, 80, 80);
+                TuyenDungPanel.setBounds(440, 235, 70, 70);
                 JLabel TuyenDungLabel = new JLabel("TUYEN DUNG");
                 TuyenDungLabel.setBounds(424, 290, 110, 80);
                 TuyenDungLabel.setFont(MenuFont);

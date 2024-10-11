@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.hrm.db.JDBCUtil;
+import com.hrm.model.Employee;
 import com.hrm.model.User;
 
 public class UserDAO implements DAOInterface<User> {
@@ -31,12 +32,12 @@ public class UserDAO implements DAOInterface<User> {
     }
 
     @Override
-    public User seclectByID(User object) {
+    public User seclectByID(String id) {
         String sql = "select * from account where emloyee_id = ?";
         Connection con = JDBCUtil.createConnection();
         User user = null;
         try (PreparedStatement pst = con.prepareStatement(sql)) {
-            pst.setString(1, object.getId());
+            pst.setString(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next())
                 user = new User(rs.getString(1), rs.getString(2));
@@ -51,8 +52,8 @@ public class UserDAO implements DAOInterface<User> {
         return null;
     }
 
-    public boolean DangNhap(String user, String password) {
-        String sql = "select employee_password from account where employee_id = ?";
+    public Employee DangNhap(String user, String password) {
+        String sql = "select * from account where account_id = ?";
 
         Connection con = JDBCUtil.createConnection();
 
@@ -61,12 +62,15 @@ public class UserDAO implements DAOInterface<User> {
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-                return true;
+                if (password.equals(rs.getString(2))) {
+                    return EmployeeDAO.getInstance().seclectByID(user);
+                }
+                System.out.println(rs.getString(2));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
 }

@@ -5,12 +5,14 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+import com.hrm.model.Employee;
 import com.hrm.view.LoginFrame;
+import com.hrm.view.MainFrame;
 
-public class ActionController implements ActionListener {
+public class LoginController implements ActionListener {
     private LoginFrame log;
 
-    public ActionController(LoginFrame log) {
+    public LoginController(LoginFrame log) {
         this.log = log;
     }
 
@@ -18,12 +20,12 @@ public class ActionController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String str = e.getActionCommand();
         if (str.equals("Dang nhap")) {
-            boolean check = log.DangNhap();
-            if (!check)
+            Employee employee = log.DangNhap();
+            if (employee == null)
                 JOptionPane.showMessageDialog(log, "Ten dang nhap hoac mat khau khong dung", "Thong bao",
                         JOptionPane.ERROR_MESSAGE);
             else {
-                // new MainFrame();
+                new MainFrame(employee);
                 log.dispose();
             }
         }

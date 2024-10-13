@@ -9,17 +9,13 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
-import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.BorderFactory;
@@ -27,8 +23,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 
 import java.util.Date;
-
-import java.text.SimpleDateFormat;
 
 public class ChamCongFrame extends JFrame {
 
@@ -38,7 +32,6 @@ public class ChamCongFrame extends JFrame {
     private JLabel TenLabel;
     private JLabel lblNewLabel_2;
     private JLabel lblNewLabel_3;
-    private JComboBox comboBox_1;
 
     public ChamCongFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

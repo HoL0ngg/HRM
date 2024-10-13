@@ -5,12 +5,13 @@ import java.util.Date;
 public class Employee {
 
     public enum Gender {
-        Male,
-        Female
+        men,
+        woman
     }
 
     public enum Status {
-        Hihi
+        on,
+        off
     }
 
     private String id;

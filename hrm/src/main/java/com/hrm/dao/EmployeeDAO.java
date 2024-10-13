@@ -62,7 +62,7 @@ public class EmployeeDAO implements DAOInterface<Employee> {
                 Date hire_date = Date.valueOf(rs.getString("hire_date"));
                 Status status = Status.valueOf(rs.getString("status"));
                 int account_bank = rs.getInt("account_bank");
-                int indentity_card = rs.getInt("indentity_card");
+                int indentity_card = rs.getInt("identity_card");
                 employee = new Employee(id, name, dob, positionID, department_id, gender, phone, address, email,
                         hire_date, status, account_bank, indentity_card);
             }

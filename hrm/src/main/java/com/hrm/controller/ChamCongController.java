@@ -4,24 +4,21 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JPanel;
-
 import com.hrm.view.ChamCongFrame;
 import com.hrm.view.MainFrame;
 
-public class MainController implements MouseListener {
-    private MainFrame mainFrame;
+public class ChamCongController implements MouseListener {
+    private ChamCongFrame frame;
 
-    public MainController(MainFrame mainFrame) {
-        this.mainFrame = mainFrame;
+    public ChamCongController(ChamCongFrame frame) {
+        this.frame = frame;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        JPanel src = (JPanel) e.getSource();
-        if (src.getName().equals("ChamCongPanel")) {
-            new ChamCongFrame(mainFrame.getEmployee());
-            mainFrame.setVisible(false);
+        if (e.getComponent().getName().equals("quaylai")) {
+            new MainFrame(frame.getEmployee());
+            frame.dispose();
         }
     }
 

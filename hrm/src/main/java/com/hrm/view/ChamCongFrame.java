@@ -16,131 +16,153 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
+import com.hrm.controller.ChamCongController;
+import com.hrm.model.Employee;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
 
 import java.util.Date;
 
 public class ChamCongFrame extends JFrame {
 
-    private JPanel contentPane;
-    private JTable table;
-    private JPanel navBar;
-    private JLabel TenLabel;
-    private JLabel lblNewLabel_2;
-    private JLabel lblNewLabel_3;
+        private JPanel contentPane;
+        private JTable table;
+        private Employee employee;
 
-    public ChamCongFrame() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 700);
-        setLocationRelativeTo(null);
-        contentPane = new JPanel();
-        contentPane.setBackground(Color.WHITE);
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        public ChamCongFrame(Employee employee) {
+                this.employee = employee;
+                this.init();
+        }
 
-        setContentPane(contentPane);
-        contentPane.setLayout(null);
+        private void init() {
+                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                setSize(800, 700);
+                setLocationRelativeTo(null);
+                contentPane = new JPanel();
+                contentPane.setBackground(Color.WHITE);
+                contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        table = new JTable();
-        table.setModel(new DefaultTableModel(
-                new Object[][] {
-                },
-                new String[] {
-                        "Ma NV", "Ho va ten", "Ngay", "Gio vao", "Gio ra", "So gio lam viec", "Lam them gio"
-                }) {
-            Class[] columnTypes = new Class[] {
-                    String.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class
-            };
+                setContentPane(contentPane);
+                contentPane.setLayout(null);
 
-            public Class getColumnClass(int columnIndex) {
-                return columnTypes[columnIndex];
-            }
-        });
+                ChamCongController controller = new ChamCongController(this);
 
-        // kh cho di chuyen cac cot trong table
-        table.getTableHeader().setReorderingAllowed(false);
+                table = new JTable();
+                table.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                },
+                                new String[] {
+                                                "Ma NV", "Ho va ten", "Ngay", "Gio vao", "Gio ra", "So gio lam viec",
+                                                "Lam them gio"
+                                }) {
+                        Class[] columnTypes = new Class[] {
+                                        String.class, Object.class, Object.class, Object.class, Object.class,
+                                        Object.class, Object.class
+                        };
 
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBounds(0, 150, 800, 550);
-        contentPane.add(scrollPane);
+                        public Class getColumnClass(int columnIndex) {
+                                return columnTypes[columnIndex];
+                        }
+                });
 
-        navBar = new JPanel();
-        navBar.setLayout(null);
-        navBar.setBackground(new Color(245, 143, 82));
-        navBar.setBounds(0, 0, 800, 40);
-        contentPane.add(navBar);
+                // kh cho di chuyen cac cot trong table
+                table.getTableHeader().setReorderingAllowed(false);
 
-        TenLabel = new JLabel("Ten");
-        TenLabel.setBounds(700, 12, 100, 15);
-        navBar.add(TenLabel);
+                JScrollPane scrollPane = new JScrollPane(table);
+                scrollPane.setBounds(0, 150, 800, 550);
+                contentPane.add(scrollPane);
 
-        JLabel lblNewLabel = new JLabel("Cham cong");
-        lblNewLabel.setBounds(60, 12, 100, 15);
-        navBar.add(lblNewLabel);
+                JPanel navBar = new JPanel();
+                navBar.setLayout(null);
+                navBar.setBackground(new Color(245, 143, 82));
+                navBar.setBounds(0, 0, 800, 40);
+                contentPane.add(navBar);
 
-        lblNewLabel_2 = new JLabel("Tu ngay");
-        lblNewLabel_2.setBounds(20, 72, 80, 13);
-        contentPane.add(lblNewLabel_2);
+                JLabel TenLabel = new JLabel();
+                // TenLabel.setText("Long cute");
+                TenLabel.setText(employee.getName());
+                TenLabel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 13));
+                TenLabel.setBounds(700, 15, 100, 15);
+                navBar.add(TenLabel);
 
-        lblNewLabel_3 = new JLabel("Den ngay");
-        lblNewLabel_3.setBounds(240, 72, 80, 13);
-        contentPane.add(lblNewLabel_3);
+                JLabel QuayLaiLabel = new JLabel("Quay lai trang truoc");
+                QuayLaiLabel.setBounds(380, 15, 150, 16);
+                QuayLaiLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+                QuayLaiLabel.setName("quaylai");
+                QuayLaiLabel.addMouseListener(controller);
+                navBar.add(QuayLaiLabel);
 
-        JDateChooser NgayBatDau = new JDateChooser();
-        NgayBatDau.setDate(new Date());
-        NgayBatDau.setBounds(75, 65, 140, 30);
+                JLabel lblNewLabel = new JLabel("BANG CHAM CONG");
+                lblNewLabel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 15));
+                lblNewLabel.setBounds(50, 15, 160, 15);
+                navBar.add(lblNewLabel);
 
-        contentPane.add(NgayBatDau);
+                JLabel lblNewLabel_2 = new JLabel("Tu ngay");
+                lblNewLabel_2.setBounds(20, 72, 80, 13);
+                contentPane.add(lblNewLabel_2);
 
-        JDateChooser NgayKetThuc = new JDateChooser();
-        NgayKetThuc.setDate(new Date()); // Đặt ngày mặc định
-        NgayKetThuc.setBounds(300, 65, 140, 30);
+                JLabel lblNewLabel_3 = new JLabel("Den ngay");
+                lblNewLabel_3.setBounds(240, 72, 80, 13);
+                contentPane.add(lblNewLabel_3);
 
-        contentPane.add(NgayKetThuc);
+                JDateChooser NgayBatDau = new JDateChooser();
+                NgayBatDau.setDate(new Date());
+                NgayBatDau.setBounds(75, 65, 140, 30);
 
-        RoundedPanel TimKiemPanel = new RoundedPanel(20);
-        TimKiemPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        TimKiemPanel.setBounds(480, 65, 250, 30);
-        Image TimKiemIcon = new ImageIcon(
-                new File("hrm/src/main/resources/img/search.png").getAbsolutePath())
-                .getImage()
-                .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        JLabel timkiemLabel = new JLabel(new ImageIcon(TimKiemIcon));
-        timkiemLabel.setPreferredSize(new Dimension(35, 20));
-        JTextField TimKiemField = new JTextField();
-        TimKiemPanel.setBackground(Color.white);
-        TimKiemField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        TimKiemField.setPreferredSize(new Dimension(200, 20));
-        TimKiemField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-        TimKiemPanel.add(timkiemLabel);
-        TimKiemPanel.add(TimKiemField);
-        TimKiemPanel.setOpaque(true);
-        contentPane.add(TimKiemPanel);
+                contentPane.add(NgayBatDau);
 
-        Image FilterIcon = new ImageIcon(
-                new File("hrm/src/main/resources/img/filter.png").getAbsolutePath())
-                .getImage()
-                .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-        JLabel FilterLabel = new JLabel(new ImageIcon(FilterIcon));
-        FilterLabel.setBounds(735, 63, 35, 35);
-        contentPane.add(FilterLabel);
+                JDateChooser NgayKetThuc = new JDateChooser();
+                NgayKetThuc.setDate(new Date()); // Đặt ngày mặc định
+                NgayKetThuc.setBounds(300, 65, 140, 30);
 
-        RoundedPanel xuatFilePanel = new RoundedPanel(20);
-        xuatFilePanel.setBounds(660, 110, 100, 25);
-        xuatFilePanel.setBackground(Color.white);
-        JLabel xuatFile = new JLabel("Xuat file");
-        xuatFile.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
-        xuatFilePanel.add(xuatFile);
-        contentPane.add(xuatFilePanel);
+                contentPane.add(NgayKetThuc);
 
-        // Tranh focus vao JTextfield tu ban dau
-        JPanel emptyJPanel = new JPanel();
-        emptyJPanel.setBounds(0, 0, 0, 0);
-        contentPane.add(emptyJPanel);
-        setVisible(true);
-        emptyJPanel.requestFocusInWindow();
-    }
+                RoundedPanel TimKiemPanel = new RoundedPanel(20);
+                TimKiemPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+                TimKiemPanel.setBounds(480, 65, 250, 30);
+                Image TimKiemIcon = new ImageIcon(
+                                new File("hrm/src/main/resources/img/search.png").getAbsolutePath())
+                                .getImage()
+                                .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+                JLabel timkiemLabel = new JLabel(new ImageIcon(TimKiemIcon));
+                timkiemLabel.setPreferredSize(new Dimension(35, 20));
+                JTextField TimKiemField = new JTextField();
+                TimKiemPanel.setBackground(Color.white);
+                TimKiemField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+                TimKiemField.setPreferredSize(new Dimension(200, 20));
+                TimKiemField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+                TimKiemPanel.add(timkiemLabel);
+                TimKiemPanel.add(TimKiemField);
+                TimKiemPanel.setOpaque(true);
+                contentPane.add(TimKiemPanel);
+
+                Image FilterIcon = new ImageIcon(
+                                new File("hrm/src/main/resources/img/filter.png").getAbsolutePath())
+                                .getImage()
+                                .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+                JLabel FilterLabel = new JLabel(new ImageIcon(FilterIcon));
+                FilterLabel.setBounds(735, 63, 35, 35);
+                contentPane.add(FilterLabel);
+
+                RoundedPanel xuatFilePanel = new RoundedPanel(20);
+                xuatFilePanel.setBounds(660, 110, 100, 25);
+                xuatFilePanel.setBackground(Color.white);
+                JLabel xuatFile = new JLabel("Xuat file");
+                xuatFile.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+                xuatFilePanel.add(xuatFile);
+                contentPane.add(xuatFilePanel);
+
+                // Tranh focus vao JTextfield tu ban dau
+                JPanel emptyJPanel = new JPanel();
+                emptyJPanel.setBounds(0, 0, 0, 0);
+                contentPane.add(emptyJPanel);
+                setVisible(true);
+                emptyJPanel.requestFocusInWindow();
+        }
+
+        public Employee getEmployee() {
+                return employee;
+        }
 }

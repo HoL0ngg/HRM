@@ -15,6 +15,7 @@ import java.awt.Font;
 
 import javax.swing.border.EmptyBorder;
 
+import com.hrm.controller.MainController;
 import com.hrm.model.Employee;
 
 public class MainFrame extends JFrame {
@@ -25,6 +26,10 @@ public class MainFrame extends JFrame {
 
         public MainFrame(Employee employee) {
                 this.employee = employee;
+                this.init();
+        }
+
+        private void init() {
                 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 setSize(1200, 760);
                 setLocationRelativeTo(null);
@@ -35,17 +40,17 @@ public class MainFrame extends JFrame {
                 contentPane.setLayout(null);
 
                 // Phan Thong tin
-                Image AvatarIcon = new ImageIcon(new File("hrm/src/main/resources/img/avatar.png").getAbsolutePath())
+                Image AvatarIcon = new ImageIcon(new File("hrm/src/main/resources/img/profile.png").getAbsolutePath())
                                 .getImage()
-                                .getScaledInstance(55, 55, Image.SCALE_SMOOTH);
+                                .getScaledInstance(50, 50, Image.SCALE_SMOOTH);
                 JLabel IconLabel = new JLabel();
                 IconLabel.setBounds(900, 20, 55, 55);
                 IconLabel.setIcon(new ImageIcon(AvatarIcon));
                 contentPane.add(IconLabel);
 
                 JLabel TenLabel = new JLabel(employee.getName());
-                TenLabel.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 18));
-                TenLabel.setBounds(960, 24, 125, 45);
+                TenLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
+                TenLabel.setBounds(962, 26, 125, 45);
                 contentPane.add(TenLabel);
 
                 // Thanh tim kiem
@@ -83,72 +88,104 @@ public class MainFrame extends JFrame {
                 contentPane.add(TimKiemField);
 
                 // Font cho Menu
-                Font MenuFont = new Font("Roboto", Font.PLAIN, 17);
+                Font MenuFont = new Font("Segoe UI Emoji", Font.PLAIN, 18);
+
+                // Xu ly su kien chuot
+                MainController controller = new MainController(this);
 
                 // Phan Menu
                 RoundedPanel NhanVienPanel = new RoundedPanel(20,
-                                new File("hrm/src/main/resources/img/people.png").getAbsolutePath());
+                                new File("hrm/src/main/resources/img/team.png").getAbsolutePath());
                 NhanVienPanel.setBounds(220, 235, 60, 60);
-                JLabel NhanVienLabel = new JLabel("NHAN VIEN");
-                NhanVienLabel.setBounds(215, 290, 98, 80);
+                NhanVienPanel.setName("NhanVienPanel");
+                JLabel NhanVienLabel = new JLabel("Nhan vien");
+                NhanVienLabel.setBounds(208, 272, 98, 80);
                 NhanVienLabel.setFont(MenuFont);
                 contentPane.add(NhanVienPanel);
                 contentPane.add(NhanVienLabel);
+                NhanVienPanel.addMouseListener(controller);
 
                 RoundedPanel TuyenDungPanel = new RoundedPanel(20,
-                                new File("hrm/src/main/resources/img/promotion.png").getAbsolutePath());
-                TuyenDungPanel.setBounds(440, 235, 70, 70);
-                JLabel TuyenDungLabel = new JLabel("TUYEN DUNG");
-                TuyenDungLabel.setBounds(424, 290, 110, 80);
+                                new File("hrm/src/main/resources/img/hiring.png").getAbsolutePath());
+                TuyenDungPanel.setBounds(440, 235, 60, 60);
+                TuyenDungPanel.setName("TuyenDungPanel");
+                JLabel TuyenDungLabel = new JLabel("Tuyen dung");
+                TuyenDungLabel.setBounds(420, 272, 110, 80);
                 TuyenDungLabel.setFont(MenuFont);
                 contentPane.add(TuyenDungPanel);
                 contentPane.add(TuyenDungLabel);
 
                 RoundedPanel LuongPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/financial-profit.png").getAbsolutePath());
-                LuongPanel.setBounds(660, 235, 80, 80);
-                JLabel LuongLabel = new JLabel("LUONG");
-                LuongLabel.setBounds(670, 290, 80, 80);
+                LuongPanel.setBounds(660, 235, 60, 60);
+                LuongPanel.setName("LuongPanel");
+                JLabel LuongLabel = new JLabel("Luong");
+                LuongLabel.setBounds(665, 272, 80, 80);
                 LuongLabel.setFont(MenuFont);
                 contentPane.add(LuongPanel);
                 contentPane.add(LuongLabel);
 
                 RoundedPanel ChamCongPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/business.png").getAbsolutePath());
-                ChamCongPanel.setBounds(880, 235, 80, 80);
-                JLabel ChamCongLabel = new JLabel("CHAM CONG");
+                ChamCongPanel.setBounds(880, 235, 60, 60);
+                ChamCongPanel.setName("ChamCongPanel");
+                JLabel ChamCongLabel = new JLabel("Cham cong");
                 ChamCongLabel.setFont(MenuFont);
-                ChamCongLabel.setBounds(870, 290, 110, 80);
+                ChamCongLabel.setBounds(865, 272, 100, 80);
                 contentPane.add(ChamCongPanel);
                 contentPane.add(ChamCongLabel);
+                ChamCongPanel.addMouseListener(controller);
 
                 RoundedPanel ThongKePanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/graph2.png").getAbsolutePath());
-                ThongKePanel.setBounds(220, 375, 80, 80);
-                JLabel ThongKeLabel = new JLabel("THONG KE");
-                ThongKeLabel.setBounds(218, 432, 90, 80);
+                ThongKePanel.setBounds(220, 375, 60, 60);
+                ThongKePanel.setName("ThongKePanel");
+                JLabel ThongKeLabel = new JLabel("Thong ke");
+                ThongKeLabel.setBounds(212, 412, 90, 80);
                 ThongKeLabel.setFont(MenuFont);
                 contentPane.add(ThongKePanel);
                 contentPane.add(ThongKeLabel);
 
                 RoundedPanel PhatTrienPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/promotion.png").getAbsolutePath());
-                PhatTrienPanel.setBounds(440, 375, 80, 80);
+                PhatTrienPanel.setBounds(440, 375, 60, 60);
+                PhatTrienPanel.setName("PhatTrienPanel");
+                JLabel PhatTrienLabel = new JLabel(
+                                "<html><div style='text-align: center;'>Dao tao<br>va phat trien</div></html>");
+                PhatTrienLabel.setFont(MenuFont);
+                PhatTrienLabel.setBounds(422, 422, 100, 80);
+                contentPane.add(PhatTrienLabel);
                 contentPane.add(PhatTrienPanel);
 
                 RoundedPanel CongViecPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/task.png").getAbsolutePath());
-                CongViecPanel.setBounds(660, 375, 80, 80);
+                CongViecPanel.setBounds(660, 375, 60, 60);
+                CongViecPanel.setName("CongViecPanel");
+                JLabel CongViecLabel = new JLabel("Cong viec");
+                CongViecLabel.setBounds(652, 412, 100, 80);
+                CongViecLabel.setFont(MenuFont);
+                contentPane.add(CongViecLabel);
                 contentPane.add(CongViecPanel);
 
                 RoundedPanel CaiDatPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/set-up.png").getAbsolutePath());
-                CaiDatPanel.setBounds(880, 375, 80, 80);
+                CaiDatPanel.setBounds(880, 375, 60, 60);
+                CaiDatPanel.setName("CaiDatPanel");
+                JLabel CaiDatLabel = new JLabel("Cai dat");
+                CaiDatLabel.setBounds(884, 412, 100, 80);
+                CaiDatLabel.setFont(MenuFont);
+                contentPane.add(CaiDatLabel);
                 contentPane.add(CaiDatPanel);
 
                 RoundedPanel MucTieuPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/targeted.png").getAbsolutePath());
-                MucTieuPanel.setBounds(220, 515, 80, 80);
+                MucTieuPanel.setBounds(220, 515, 60, 60);
+                MucTieuPanel.setName("MucTieuPanel");
+                JLabel MuctieuLabel = new JLabel(
+                                "<html><div style='text-align: center;'>Muc tieu<br>va danh gia</div></html>");
+                MuctieuLabel.setBounds(205, 558, 100, 80);
+                MuctieuLabel.setFont(MenuFont);
+                contentPane.add(MuctieuLabel);
                 contentPane.add(MucTieuPanel);
 
                 // Tranh focus vao JTextfield tu ban dau
@@ -158,4 +195,9 @@ public class MainFrame extends JFrame {
                 setVisible(true);
                 emptyJPanel.requestFocusInWindow();
         }
+
+        public Employee getEmployee() {
+                return employee;
+        }
+
 }

@@ -2,12 +2,15 @@ package com.hrm.view;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
 
 import javax.swing.JLabel;
@@ -132,7 +135,28 @@ public class ChamCongFrame extends JFrame {
                 TimKiemPanel.setBackground(Color.white);
                 TimKiemField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
                 TimKiemField.setPreferredSize(new Dimension(200, 20));
-                TimKiemField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+                TimKiemField.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 15));
+                TimKiemField.setText("Tim kiem");
+                TimKiemField.setForeground(Color.gray);
+                TimKiemField.addFocusListener(new FocusListener() {
+                        public void focusGained(FocusEvent e) {
+                                if (String.valueOf(TimKiemField.getText()).equals("Tim kiem")) {
+                                        TimKiemField.setText(""); // Xóa placeholder khi focus
+                                        TimKiemField.setForeground(Color.BLACK);
+                                }
+                        }
+
+                        @Override
+                        public void focusLost(FocusEvent e) {
+                                if (String.valueOf(TimKiemField.getText()).isEmpty()) {
+                                        TimKiemField.setText("Tim kiem"); // Hiển thị lại placeholder khi
+                                                                          // không có dữ liệu
+                                        TimKiemField.setForeground(Color.GRAY);
+                                }
+                        }
+
+                });
+
                 TimKiemPanel.add(timkiemLabel);
                 TimKiemPanel.add(TimKiemField);
                 TimKiemPanel.setOpaque(true);
@@ -142,8 +166,11 @@ public class ChamCongFrame extends JFrame {
                                 new File("hrm/src/main/resources/img/filter.png").getAbsolutePath())
                                 .getImage()
                                 .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+
                 JLabel FilterLabel = new JLabel(new ImageIcon(FilterIcon));
                 FilterLabel.setBounds(735, 63, 35, 35);
+                FilterLabel.setName("filter");
+                FilterLabel.addMouseListener(controller);
                 contentPane.add(FilterLabel);
 
                 RoundedPanel xuatFilePanel = new RoundedPanel(20);
@@ -164,5 +191,39 @@ public class ChamCongFrame extends JFrame {
 
         public Employee getEmployee() {
                 return employee;
+        }
+
+        public JTable getTable() {
+                return table;
+        }
+
+        public void showPopUp(JLabel label) {
+                ChamCongController controller = new ChamCongController(this);
+                JPopupMenu popupMenu = new JPopupMenu();
+                popupMenu.setPopupSize(80, 72);
+                JPanel panel = new JPanel();
+                panel.setLayout(null);
+                panel.setBounds(0, 0, 80, 80);
+                panel.setBackground(Color.white);
+                JLabel giovao = new JLabel("Gio vao");
+                JLabel giora = new JLabel("Gio ra");
+                JLabel trangthai = new JLabel("Trang thai");
+                giovao.setBounds(10, 5, 50, 14);
+                giovao.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 13));
+                giovao.setName("giovao");
+                giovao.addMouseListener(controller);
+                giora.setBounds(10, 28, 50, 14);
+                giora.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 13));
+                giora.setName("giora");
+                giora.addMouseListener(controller);
+                trangthai.setBounds(10, 50, 60, 14);
+                trangthai.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 13));
+                trangthai.setName("trangthai");
+                trangthai.addMouseListener(controller);
+                panel.add(giovao);
+                panel.add(giora);
+                panel.add(trangthai);
+                popupMenu.add(panel);
+                popupMenu.show(label, -60, label.getHeight());
         }
 }

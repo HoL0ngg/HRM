@@ -7,8 +7,8 @@ import com.hrm.view.MainFrame;
 
 public class Main {
     public static void main(String[] args) {
-        new LoginFrame();
+        // new LoginFrame();
         // new MainFrame(new Employee());
-        // new ChamCongFrame(new Employee());
+        new ChamCongFrame(new Employee());
     }
 }

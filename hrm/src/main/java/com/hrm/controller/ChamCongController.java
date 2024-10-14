@@ -4,6 +4,8 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JLabel;
+
 import com.hrm.view.ChamCongFrame;
 import com.hrm.view.MainFrame;
 
@@ -16,9 +18,12 @@ public class ChamCongController implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getComponent().getName().equals("quaylai")) {
+        String str = e.getComponent().getName();
+        if (str.equals("quaylai")) {
             new MainFrame(frame.getEmployee());
             frame.dispose();
+        } else if (str.equals("filter")) {
+            frame.showPopUp((JLabel) e.getComponent());
         }
     }
 

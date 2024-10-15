@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import com.hrm.controller.ChamCongController;
@@ -68,7 +69,15 @@ public class ChamCongFrame extends JFrame {
                         }
                 };
                 table = new JTable(tableModel);
+
+                // chinh chieu rong cot
+                setColumnWidths();
+
+                // doc data tu db
                 LoadData(tableModel);
+
+                // can giua cac cot
+                centerAlignAllColumns();
 
                 // kh cho di chuyen cac cot trong table
                 table.getTableHeader().setReorderingAllowed(false);
@@ -89,24 +98,25 @@ public class ChamCongFrame extends JFrame {
                 TenLabel.setBounds(700, 15, 100, 15);
                 navBar.add(TenLabel);
 
-                JLabel QuayLaiLabel = new JLabel("Quay lai trang truoc");
-                QuayLaiLabel.setBounds(380, 15, 150, 16);
-                QuayLaiLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
-                QuayLaiLabel.setName("quaylai");
-                QuayLaiLabel.addMouseListener(controller);
-                navBar.add(QuayLaiLabel);
+                Image BackBtn = new ImageIcon(new File("hrm/src/main/resources/img/left-arrow.png").getAbsolutePath())
+                                .getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+                JLabel BackLabel = new JLabel(new ImageIcon(BackBtn));
+                BackLabel.setBounds(10, 5, 30, 30);
+                BackLabel.setName("quaylai");
+                BackLabel.addMouseListener(controller);
+                navBar.add(BackLabel);
 
                 JLabel lblNewLabel = new JLabel("BANG CHAM CONG");
-                lblNewLabel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 15));
-                lblNewLabel.setBounds(50, 15, 160, 15);
+                lblNewLabel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 16));
+                lblNewLabel.setBounds(60, 14, 180, 18);
                 navBar.add(lblNewLabel);
 
                 JLabel lblNewLabel_2 = new JLabel("Tu ngay");
-                lblNewLabel_2.setBounds(20, 72, 80, 13);
+                lblNewLabel_2.setBounds(20, 72, 80, 14);
                 contentPane.add(lblNewLabel_2);
 
                 JLabel lblNewLabel_3 = new JLabel("Den ngay");
-                lblNewLabel_3.setBounds(240, 72, 80, 13);
+                lblNewLabel_3.setBounds(240, 72, 80, 14);
                 contentPane.add(lblNewLabel_3);
 
                 JDateChooser NgayBatDau = new JDateChooser();
@@ -241,4 +251,26 @@ public class ChamCongFrame extends JFrame {
                         tableModel.addRow(rowdata);
                 }
         }
+
+        private void setColumnWidths() {
+                // Thiết lập chiều rộng cho từng cột
+                table.getColumnModel().getColumn(0).setPreferredWidth(50); // Ma NV
+                table.getColumnModel().getColumn(1).setPreferredWidth(200); // Ho ten
+                table.getColumnModel().getColumn(2).setPreferredWidth(100); // Ngay
+                table.getColumnModel().getColumn(3).setPreferredWidth(60); // Gio vao
+                table.getColumnModel().getColumn(3).setPreferredWidth(60); // Gio ra
+                table.getColumnModel().getColumn(3).setPreferredWidth(50); // Trang thai
+                table.getColumnModel().getColumn(3).setPreferredWidth(50); // Gio lam them
+        }
+
+        private void centerAlignAllColumns() {
+                DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+                centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+                // Lặp qua tất cả các cột và thiết lập renderer
+                for (int i = 0; i < table.getColumnCount(); i++) {
+                        table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+                }
+        }
+
 }

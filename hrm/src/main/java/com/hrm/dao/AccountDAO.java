@@ -54,7 +54,7 @@ public class AccountDAO implements DAOInterface<Account> {
     }
 
     public Employee DangNhap(String user, String password) {
-        String sql = "select * from account where account_id = ?";
+        String sql = "select * from account where username = ?";
 
         Connection con = JDBCUtil.createConnection();
         Employee employee = null;
@@ -64,7 +64,7 @@ public class AccountDAO implements DAOInterface<Account> {
 
             if (rs.next()) {
                 if (password.equals(rs.getString("password"))) {
-                    employee = EmployeeDAO.getInstance().seclectByID(rs.getInt("emloyee_id"));
+                    employee = EmployeeDAO.getInstance().seclectByID(rs.getInt("employee_id"));
                 }
             }
         } catch (SQLException e) {

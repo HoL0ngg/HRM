@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import com.hrm.controller.LoginController;
-import com.hrm.dao.UserDAO;
+import com.hrm.dao.AccountDAO;
 import com.hrm.model.Employee;
 
 import java.awt.Font;
@@ -207,6 +207,6 @@ public class LoginFrame extends JFrame {
         String user = namefield.getText();
         String password = String.valueOf(pwfield.getPassword());
 
-        return UserDAO.getInstance().DangNhap(user, password);
+        return AccountDAO.getInstance().DangNhap(user, password);
     }
 }

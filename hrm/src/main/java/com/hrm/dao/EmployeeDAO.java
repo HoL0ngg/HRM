@@ -1,10 +1,10 @@
 package com.hrm.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.hrm.db.JDBCUtil;
@@ -54,12 +54,12 @@ public class EmployeeDAO implements DAOInterface<Employee> {
                 String name = rs.getString("name");
                 int positionID = rs.getInt("position_id");
                 int department_id = rs.getInt("department_id");
-                Date dob = Date.valueOf(rs.getString("date_of_birth"));
+                LocalDate dob = rs.getObject("date_of_birth", LocalDate.class);
                 Gender gender = Gender.valueOf(rs.getString("gender"));
                 String phone = rs.getString("phone_number");
                 String address = rs.getString("address");
                 String email = rs.getString("email");
-                Date hire_date = Date.valueOf(rs.getString("hire_date"));
+                LocalDate hire_date = rs.getObject("hire_date", LocalDate.class);
                 Status status = Status.valueOf(rs.getString("status"));
                 int account_bank = rs.getInt("account_bank");
                 int indentity_card = rs.getInt("identity_card");
@@ -69,6 +69,7 @@ public class EmployeeDAO implements DAOInterface<Employee> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        JDBCUtil.closeConnection(con);
         return employee;
     }
 

@@ -1,12 +1,12 @@
 package com.hrm.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Employee {
 
     public enum Gender {
-        men,
-        woman
+        male,
+        female
     }
 
     public enum Status {
@@ -14,25 +14,35 @@ public class Employee {
         off
     }
 
+    public enum Work_type {
+        full_time,
+        part_time,
+        internship,
+        on_board,
+        work_from_home
+    }
+
     private String id;
     private String name;
-    private Date dob;
+    private LocalDate dob;
     private int positionID;
     private int department_id;
     private Gender gender;
     private String phone_mumber;
     private String address;
     private String email;
-    private Date hire_date;
+    private LocalDate hire_date;
     private Status status;
     private int account_bank;
     private int indentity_card;
+    private int tax_code;
+    private int social_insurance_code;
 
     public Employee() {
     }
 
-    public Employee(String id, String name, Date dob, int positionID, int department_id, Gender gender,
-            String phone_mumber, String address, String email, Date hire_date, Status status, int account_bank,
+    public Employee(String id, String name, LocalDate dob, int positionID, int department_id, Gender gender,
+            String phone_mumber, String address, String email, LocalDate hire_date, Status status, int account_bank,
             int indentity_card) {
         this.id = id;
         this.name = name;
@@ -65,11 +75,11 @@ public class Employee {
         this.name = name;
     }
 
-    public Date getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 
@@ -121,11 +131,11 @@ public class Employee {
         this.email = email;
     }
 
-    public Date getHire_date() {
+    public LocalDate getHire_date() {
         return hire_date;
     }
 
-    public void setHire_date(Date hire_date) {
+    public void setHire_date(LocalDate hire_date) {
         this.hire_date = hire_date;
     }
 
@@ -151,5 +161,21 @@ public class Employee {
 
     public void setIndentity_card(int indentity_card) {
         this.indentity_card = indentity_card;
+    }
+
+    public int getTax_code() {
+        return tax_code;
+    }
+
+    public void setTax_code(int tax_code) {
+        this.tax_code = tax_code;
+    }
+
+    public int getSocial_insurance_code() {
+        return social_insurance_code;
+    }
+
+    public void setSocial_insurance_code(int social_insurance_code) {
+        this.social_insurance_code = social_insurance_code;
     }
 }

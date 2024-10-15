@@ -1,13 +1,13 @@
 package com.hrm.model;
 
-public class User {
+public class Account {
     private String id;
     private String password;
 
-    public User() {
+    public Account() {
     }
 
-    public User(String id, String password) {
+    public Account(String id, String password) {
         this.id = id;
         this.password = password;
     }

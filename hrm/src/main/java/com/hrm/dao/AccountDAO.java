@@ -8,47 +8,48 @@ import java.util.ArrayList;
 
 import com.hrm.db.JDBCUtil;
 import com.hrm.model.Employee;
-import com.hrm.model.User;
+import com.hrm.model.Account;
 
-public class UserDAO implements DAOInterface<User> {
+public class AccountDAO implements DAOInterface<Account> {
 
-    public static UserDAO getInstance() {
-        return new UserDAO();
+    public static AccountDAO getInstance() {
+        return new AccountDAO();
     }
 
     @Override
-    public int them(User object) {
+    public int them(Account object) {
         return 0;
     }
 
     @Override
-    public boolean xoa(User object) {
+    public boolean xoa(Account object) {
         return true;
     }
 
     @Override
-    public boolean capnhat(User object) {
+    public boolean capnhat(Account object) {
         return true;
     }
 
     @Override
-    public User seclectByID(String id) {
+    public Account seclectByID(String id) {
         String sql = "select * from account where emloyee_id = ?";
         Connection con = JDBCUtil.createConnection();
-        User user = null;
+        Account user = null;
         try (PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next())
-                user = new User(rs.getString(1), rs.getString(2));
+                user = new Account(rs.getString(1), rs.getString(2));
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        JDBCUtil.closeConnection(con);
         return user;
     }
 
     @Override
-    public ArrayList<User> seclectAll() {
+    public ArrayList<Account> seclectAll() {
         return null;
     }
 
@@ -56,21 +57,21 @@ public class UserDAO implements DAOInterface<User> {
         String sql = "select * from account where account_id = ?";
 
         Connection con = JDBCUtil.createConnection();
-
+        Employee employee = null;
         try (PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, user);
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
                 if (password.equals(rs.getString(2))) {
-                    return EmployeeDAO.getInstance().seclectByID(user);
+                    employee = EmployeeDAO.getInstance().seclectByID(user);
                 }
-                System.out.println(rs.getString(2));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        JDBCUtil.closeConnection(con);
+        return employee;
     }
 
 }

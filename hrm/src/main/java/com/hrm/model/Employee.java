@@ -22,11 +22,12 @@ public class Employee {
         work_from_home
     }
 
-    private String id;
+    private int id;
     private String name;
     private LocalDate dob;
-    private int positionID;
+    private int position_id;
     private int department_id;
+    private String previous_position;
     private Gender gender;
     private String phone_mumber;
     private String address;
@@ -34,21 +35,23 @@ public class Employee {
     private LocalDate hire_date;
     private Status status;
     private int account_bank;
-    private int indentity_card;
+    private int indentify_card;
     private int tax_code;
     private int social_insurance_code;
+    private Work_type work_type;
 
     public Employee() {
     }
 
-    public Employee(String id, String name, LocalDate dob, int positionID, int department_id, Gender gender,
-            String phone_mumber, String address, String email, LocalDate hire_date, Status status, int account_bank,
-            int indentity_card) {
+    public Employee(int id, String name, LocalDate dob, int position_id, int department_id, String previous_position,
+            Gender gender, String phone_mumber, String address, String email, LocalDate hire_date, Status status,
+            int account_bank, int indentify_card, int tax_code, int social_insurance_code, Work_type work_type) {
         this.id = id;
         this.name = name;
         this.dob = dob;
-        this.positionID = positionID;
+        this.position_id = position_id;
         this.department_id = department_id;
+        this.previous_position = previous_position;
         this.gender = gender;
         this.phone_mumber = phone_mumber;
         this.address = address;
@@ -56,14 +59,17 @@ public class Employee {
         this.hire_date = hire_date;
         this.status = status;
         this.account_bank = account_bank;
-        this.indentity_card = indentity_card;
+        this.indentify_card = indentify_card;
+        this.tax_code = tax_code;
+        this.social_insurance_code = social_insurance_code;
+        this.work_type = work_type;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -83,12 +89,12 @@ public class Employee {
         this.dob = dob;
     }
 
-    public int getPositionID() {
-        return positionID;
+    public int getPosition_id() {
+        return position_id;
     }
 
-    public void setPositionID(int positionID) {
-        this.positionID = positionID;
+    public void setPosition_id(int position_id) {
+        this.position_id = position_id;
     }
 
     public int getDepartment_id() {
@@ -155,12 +161,12 @@ public class Employee {
         this.account_bank = account_bank;
     }
 
-    public int getIndentity_card() {
-        return indentity_card;
+    public int getIndentify_card() {
+        return indentify_card;
     }
 
-    public void setIndentity_card(int indentity_card) {
-        this.indentity_card = indentity_card;
+    public void setIndentify_card(int indentify_card) {
+        this.indentify_card = indentify_card;
     }
 
     public int getTax_code() {
@@ -178,4 +184,21 @@ public class Employee {
     public void setSocial_insurance_code(int social_insurance_code) {
         this.social_insurance_code = social_insurance_code;
     }
+
+    public String getPrevious_position() {
+        return previous_position;
+    }
+
+    public void setPrevious_position(String previous_position) {
+        this.previous_position = previous_position;
+    }
+
+    public Work_type getWork_type() {
+        return work_type;
+    }
+
+    public void setWork_type(Work_type work_type) {
+        this.work_type = work_type;
+    }
+
 }

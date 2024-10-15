@@ -32,15 +32,15 @@ public class AccountDAO implements DAOInterface<Account> {
     }
 
     @Override
-    public Account seclectByID(String id) {
+    public Account seclectByID(int id) {
         String sql = "select * from account where emloyee_id = ?";
         Connection con = JDBCUtil.createConnection();
         Account user = null;
         try (PreparedStatement pst = con.prepareStatement(sql)) {
-            pst.setString(1, id);
+            pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
             if (rs.next())
-                user = new Account(rs.getString(1), rs.getString(2));
+                user = new Account(rs.getInt("emloyee_id"), rs.getString("username"), rs.getString("password"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -63,8 +63,8 @@ public class AccountDAO implements DAOInterface<Account> {
             ResultSet rs = pst.executeQuery();
 
             if (rs.next()) {
-                if (password.equals(rs.getString(2))) {
-                    employee = EmployeeDAO.getInstance().seclectByID(user);
+                if (password.equals(rs.getString("password"))) {
+                    employee = EmployeeDAO.getInstance().seclectByID(rs.getInt("emloyee_id"));
                 }
             }
         } catch (SQLException e) {

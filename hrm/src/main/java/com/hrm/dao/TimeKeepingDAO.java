@@ -24,7 +24,7 @@ public class TimeKeepingDAO {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
                 int id = rs.getInt("id");
-                int employee_id = rs.getInt("emloyee_id");
+                int employee_id = rs.getInt("employee_id");
                 LocalDate date = rs.getObject("date", LocalDate.class);
                 LocalTime check_in = rs.getObject("check_in_time", LocalTime.class);
                 LocalTime check_out = rs.getObject("check_out_time", LocalTime.class);

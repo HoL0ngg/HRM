@@ -20,12 +20,16 @@ import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
 import com.hrm.controller.ChamCongController;
+import com.hrm.dao.EmployeeDAO;
+import com.hrm.dao.TimeKeepingDAO;
 import com.hrm.model.Employee;
+import com.hrm.model.TimeKeeping;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ChamCongFrame extends JFrame {
@@ -52,23 +56,19 @@ public class ChamCongFrame extends JFrame {
 
                 ChamCongController controller = new ChamCongController(this);
 
-                table = new JTable();
-                table.setModel(new DefaultTableModel(
-                                new Object[][] {
-                                },
-                                new String[] {
-                                                "Ma NV", "Ho va ten", "Ngay", "Gio vao", "Gio ra", "So gio lam viec",
-                                                "Lam them gio"
-                                }) {
-                        Class[] columnTypes = new Class[] {
-                                        String.class, Object.class, Object.class, Object.class, Object.class,
-                                        Object.class, Object.class
-                        };
-
-                        public Class getColumnClass(int columnIndex) {
-                                return columnTypes[columnIndex];
+                String[] colName = {
+                                "Ma NV", "Ho va ten", "Ngay", "Gio vao", "Gio ra", "Trang thai",
+                                "Gio lam them"
+                };
+                DefaultTableModel tableModel = new DefaultTableModel(colName, 0) {
+                        // Khong cho chinh sua du lieu khi hien thi len Table
+                        @Override
+                        public boolean isCellEditable(int row, int column) {
+                                return false;
                         }
-                });
+                };
+                table = new JTable(tableModel);
+                LoadData(tableModel);
 
                 // kh cho di chuyen cac cot trong table
                 table.getTableHeader().setReorderingAllowed(false);
@@ -84,7 +84,6 @@ public class ChamCongFrame extends JFrame {
                 contentPane.add(navBar);
 
                 JLabel TenLabel = new JLabel();
-                // TenLabel.setText("Long cute");
                 TenLabel.setText(employee.getName());
                 TenLabel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 13));
                 TenLabel.setBounds(700, 15, 100, 15);
@@ -225,5 +224,21 @@ public class ChamCongFrame extends JFrame {
                 panel.add(trangthai);
                 popupMenu.add(panel);
                 popupMenu.show(label, -60, label.getHeight());
+        }
+
+        public void LoadData(DefaultTableModel tableModel) {
+                ArrayList<TimeKeeping> arr = TimeKeepingDAO.getInstance().selectAll();
+                tableModel.setRowCount(0);
+                for (TimeKeeping time : arr) {
+                        Object[] rowdata = {
+                                        time.getEmployee_id(),
+                                        EmployeeDAO.getInstance().seclectByID(time.getEmployee_id()).getName(),
+                                        time.getDate(),
+                                        time.getCheck_in_time(),
+                                        time.getCheck_out_time(),
+                                        time.getStatus()
+                        };
+                        tableModel.addRow(rowdata);
+                }
         }
 }

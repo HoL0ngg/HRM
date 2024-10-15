@@ -11,6 +11,6 @@ public interface DAOInterface<T> {
 
     public ArrayList<T> seclectAll();
 
-    public T seclectByID(String id);
+    public T seclectByID(int id);
 
 }

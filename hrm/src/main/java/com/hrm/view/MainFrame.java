@@ -50,23 +50,23 @@ public class MainFrame extends JFrame {
 
                 JLabel TenLabel = new JLabel(employee.getName());
                 TenLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
-                TenLabel.setBounds(962, 26, 125, 45);
+                TenLabel.setBounds(962, 26, 210, 45);
                 contentPane.add(TenLabel);
 
                 // Thanh tim kiem
                 Image TimKiemIcon = new ImageIcon(
                                 new File("hrm/src/main/resources/img/search.png").getAbsolutePath())
                                 .getImage()
-                                .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+                                .getScaledInstance(25, 25, Image.SCALE_SMOOTH);
                 JLabel timkiemLabel = new JLabel(new ImageIcon(TimKiemIcon));
-                timkiemLabel.setBounds(280, 130, 40, 40);
+                timkiemLabel.setBounds(260, 110, 50, 50);
                 contentPane.add(timkiemLabel);
                 TimKiemField = new RoundedTextField(15);
-                TimKiemField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+                TimKiemField.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
                 TimKiemField.setText("Tim kiem");
                 TimKiemField.setForeground(Color.gray);
-                TimKiemField.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 0));
-                TimKiemField.setBounds(280, 130, 650, 40);
+                TimKiemField.setBorder(BorderFactory.createEmptyBorder(5, 50, 0, 0));
+                TimKiemField.setBounds(260, 110, 660, 50);
                 TimKiemField.addFocusListener(new FocusListener() {
                         public void focusGained(FocusEvent e) {
                                 if (String.valueOf(TimKiemField.getText()).equals("Tim kiem")) {
@@ -96,10 +96,10 @@ public class MainFrame extends JFrame {
                 // Phan Menu
                 RoundedPanel NhanVienPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/team.png").getAbsolutePath());
-                NhanVienPanel.setBounds(220, 235, 60, 60);
+                NhanVienPanel.setBounds(220, 235, 65, 65);
                 NhanVienPanel.setName("NhanVienPanel");
                 JLabel NhanVienLabel = new JLabel("Nhan vien");
-                NhanVienLabel.setBounds(208, 272, 98, 80);
+                NhanVienLabel.setBounds(212, 275, 98, 80);
                 NhanVienLabel.setFont(MenuFont);
                 contentPane.add(NhanVienPanel);
                 contentPane.add(NhanVienLabel);
@@ -107,48 +107,48 @@ public class MainFrame extends JFrame {
 
                 RoundedPanel TuyenDungPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/hiring.png").getAbsolutePath());
-                TuyenDungPanel.setBounds(440, 235, 60, 60);
+                TuyenDungPanel.setBounds(440, 235, 65, 65);
                 TuyenDungPanel.setName("TuyenDungPanel");
                 JLabel TuyenDungLabel = new JLabel("Tuyen dung");
-                TuyenDungLabel.setBounds(420, 272, 110, 80);
+                TuyenDungLabel.setBounds(424, 275, 110, 80);
                 TuyenDungLabel.setFont(MenuFont);
                 contentPane.add(TuyenDungPanel);
                 contentPane.add(TuyenDungLabel);
 
                 RoundedPanel LuongPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/financial-profit.png").getAbsolutePath());
-                LuongPanel.setBounds(660, 235, 60, 60);
+                LuongPanel.setBounds(660, 235, 65, 65);
                 LuongPanel.setName("LuongPanel");
                 JLabel LuongLabel = new JLabel("Luong");
-                LuongLabel.setBounds(665, 272, 80, 80);
+                LuongLabel.setBounds(666, 275, 80, 80);
                 LuongLabel.setFont(MenuFont);
                 contentPane.add(LuongPanel);
                 contentPane.add(LuongLabel);
 
                 RoundedPanel ChamCongPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/business.png").getAbsolutePath());
-                ChamCongPanel.setBounds(880, 235, 60, 60);
+                ChamCongPanel.setBounds(880, 235, 65, 65);
                 ChamCongPanel.setName("ChamCongPanel");
                 JLabel ChamCongLabel = new JLabel("Cham cong");
                 ChamCongLabel.setFont(MenuFont);
-                ChamCongLabel.setBounds(865, 272, 100, 80);
+                ChamCongLabel.setBounds(868, 275, 100, 80);
                 contentPane.add(ChamCongPanel);
                 contentPane.add(ChamCongLabel);
                 ChamCongPanel.addMouseListener(controller);
 
                 RoundedPanel ThongKePanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/graph2.png").getAbsolutePath());
-                ThongKePanel.setBounds(220, 375, 60, 60);
+                ThongKePanel.setBounds(220, 375, 65, 65);
                 ThongKePanel.setName("ThongKePanel");
                 JLabel ThongKeLabel = new JLabel("Thong ke");
-                ThongKeLabel.setBounds(212, 412, 90, 80);
+                ThongKeLabel.setBounds(215, 415, 90, 80);
                 ThongKeLabel.setFont(MenuFont);
                 contentPane.add(ThongKePanel);
                 contentPane.add(ThongKeLabel);
 
                 RoundedPanel PhatTrienPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/promotion.png").getAbsolutePath());
-                PhatTrienPanel.setBounds(440, 375, 60, 60);
+                PhatTrienPanel.setBounds(440, 375, 65, 65);
                 PhatTrienPanel.setName("PhatTrienPanel");
                 JLabel PhatTrienLabel = new JLabel(
                                 "<html><div style='text-align: center;'>Dao tao<br>va phat trien</div></html>");
@@ -159,31 +159,31 @@ public class MainFrame extends JFrame {
 
                 RoundedPanel CongViecPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/task.png").getAbsolutePath());
-                CongViecPanel.setBounds(660, 375, 60, 60);
+                CongViecPanel.setBounds(660, 375, 65, 65);
                 CongViecPanel.setName("CongViecPanel");
                 JLabel CongViecLabel = new JLabel("Cong viec");
-                CongViecLabel.setBounds(652, 412, 100, 80);
+                CongViecLabel.setBounds(652, 415, 100, 80);
                 CongViecLabel.setFont(MenuFont);
                 contentPane.add(CongViecLabel);
                 contentPane.add(CongViecPanel);
 
                 RoundedPanel CaiDatPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/set-up.png").getAbsolutePath());
-                CaiDatPanel.setBounds(880, 375, 60, 60);
+                CaiDatPanel.setBounds(880, 375, 65, 65);
                 CaiDatPanel.setName("CaiDatPanel");
                 JLabel CaiDatLabel = new JLabel("Cai dat");
-                CaiDatLabel.setBounds(884, 412, 100, 80);
+                CaiDatLabel.setBounds(884, 415, 100, 80);
                 CaiDatLabel.setFont(MenuFont);
                 contentPane.add(CaiDatLabel);
                 contentPane.add(CaiDatPanel);
 
                 RoundedPanel MucTieuPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/targeted.png").getAbsolutePath());
-                MucTieuPanel.setBounds(220, 515, 60, 60);
+                MucTieuPanel.setBounds(220, 515, 65, 65);
                 MucTieuPanel.setName("MucTieuPanel");
                 JLabel MuctieuLabel = new JLabel(
                                 "<html><div style='text-align: center;'>Muc tieu<br>va danh gia</div></html>");
-                MuctieuLabel.setBounds(205, 558, 100, 80);
+                MuctieuLabel.setBounds(206, 562, 100, 80);
                 MuctieuLabel.setFont(MenuFont);
                 contentPane.add(MuctieuLabel);
                 contentPane.add(MucTieuPanel);

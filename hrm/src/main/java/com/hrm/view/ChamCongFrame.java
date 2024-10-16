@@ -94,8 +94,8 @@ public class ChamCongFrame extends JFrame {
 
                 JLabel TenLabel = new JLabel();
                 TenLabel.setText(employee.getName());
-                TenLabel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 13));
-                TenLabel.setBounds(700, 15, 100, 15);
+                TenLabel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 15));
+                TenLabel.setBounds(600, 15, 210, 15);
                 navBar.add(TenLabel);
 
                 Image BackBtn = new ImageIcon(new File("hrm/src/main/resources/img/left-arrow.png").getAbsolutePath())

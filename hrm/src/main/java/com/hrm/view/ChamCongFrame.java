@@ -16,7 +16,10 @@ import java.io.File;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JSpinner;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -38,6 +41,10 @@ public class ChamCongFrame extends JFrame {
         private JPanel contentPane;
         private JTable table;
         private Employee employee;
+        private JFrame chonGio;
+
+        public ChamCongFrame() {
+        }
 
         public ChamCongFrame(Employee employee) {
                 this.employee = employee;
@@ -142,7 +149,7 @@ public class ChamCongFrame extends JFrame {
                 timkiemLabel.setPreferredSize(new Dimension(35, 20));
                 JTextField TimKiemField = new JTextField();
                 TimKiemPanel.setBackground(Color.white);
-                TimKiemField.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+                TimKiemField.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
                 TimKiemField.setPreferredSize(new Dimension(200, 20));
                 TimKiemField.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 15));
                 TimKiemField.setText("Tim kiem");
@@ -209,31 +216,29 @@ public class ChamCongFrame extends JFrame {
         public void showPopUp(JLabel label) {
                 ChamCongController controller = new ChamCongController(this);
                 JPopupMenu popupMenu = new JPopupMenu();
-                popupMenu.setPopupSize(80, 72);
+                popupMenu.setPopupSize(120, 74);
                 JPanel panel = new JPanel();
                 panel.setLayout(null);
-                panel.setBounds(0, 0, 80, 80);
+                panel.setBounds(0, 0, 120, 74);
                 panel.setBackground(Color.white);
-                JLabel giovao = new JLabel("Gio vao");
-                JLabel giora = new JLabel("Gio ra");
-                JLabel trangthai = new JLabel("Trang thai");
-                giovao.setBounds(10, 5, 50, 14);
-                giovao.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 13));
-                giovao.setName("giovao");
-                giovao.addMouseListener(controller);
-                giora.setBounds(10, 28, 50, 14);
-                giora.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 13));
-                giora.setName("giora");
-                giora.addMouseListener(controller);
-                trangthai.setBounds(10, 50, 60, 14);
-                trangthai.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 13));
-                trangthai.setName("trangthai");
-                trangthai.addMouseListener(controller);
-                panel.add(giovao);
-                panel.add(giora);
-                panel.add(trangthai);
+                JLabel TheoGio = new JLabel("Theo gio");
+                JLabel TheoTrangThai = new JLabel("Theo trang thai");
+                TheoGio.setBounds(10, 10, 98, 16);
+                TheoGio.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+                TheoGio.setName("TheoGio");
+                TheoGio.addMouseListener(controller);
+                TheoTrangThai.setBounds(10, 44, 98, 16);
+                TheoTrangThai.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+                TheoTrangThai.setName("TheoTrangThai");
+                TheoTrangThai.addMouseListener(controller);
+
+                JSeparator separator = new JSeparator();
+                separator.setBounds(8, 34, 100, 12);
+                panel.add(TheoGio);
+                panel.add(separator);
+                panel.add(TheoTrangThai);
                 popupMenu.add(panel);
-                popupMenu.show(label, -60, label.getHeight());
+                popupMenu.show(label, -90, label.getHeight());
         }
 
         public void LoadData(DefaultTableModel tableModel) {
@@ -273,4 +278,32 @@ public class ChamCongFrame extends JFrame {
                 }
         }
 
+        public void chonGio() {
+                chonGio = new JFrame();
+                chonGio.setLayout(null);
+                chonGio.setSize(500, 300);
+                chonGio.setLocationRelativeTo(null);
+                chonGio.setBackground(Color.white);
+                JLabel from = new JLabel("From: ");
+                from.setBounds(50, 50, 50, 20);
+
+                JLabel to = new JLabel("To: ");
+                to.setBounds(50, 150, 50, 20);
+
+                SpinnerDateModel model = new SpinnerDateModel();
+                JSpinner timeSpinner = new JSpinner(model);
+                JSpinner.DateEditor editor = new JSpinner.DateEditor(timeSpinner, "HH:mm");
+                timeSpinner.setEditor(editor);
+
+                timeSpinner.setBounds(150, 50, 200, 20);
+
+                chonGio.add(from);
+                chonGio.add(timeSpinner);
+                chonGio.add(to);
+                chonGio.setVisible(true);
+        }
+
+        public static void main(String[] args) {
+                new ChamCongFrame(new Employee());
+        }
 }

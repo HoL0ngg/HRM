@@ -19,11 +19,26 @@ public class ChamCongController implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         String str = e.getComponent().getName();
-        if (str.equals("quaylai")) {
-            new MainFrame(frame.getEmployee());
-            frame.dispose();
-        } else if (str.equals("filter")) {
-            frame.showPopUp((JLabel) e.getComponent());
+        switch (str) {
+            case "quaylai":
+                new MainFrame(frame.getEmployee());
+                frame.dispose();
+                break;
+
+            case "filter":
+                frame.showPopUp((JLabel) e.getComponent());
+                break;
+
+            case "TheoGio":
+                frame.chonGio();
+                break;
+
+            case "TheoTrangThai":
+
+                break;
+
+            default:
+                break;
         }
     }
 

@@ -11,7 +11,11 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -34,6 +38,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ChamCongFrame extends JFrame {
@@ -80,9 +85,6 @@ public class ChamCongFrame extends JFrame {
                 // chinh chieu rong cot
                 setColumnWidths();
 
-                // doc data tu db
-                LoadData(tableModel);
-
                 // can giua cac cot
                 centerAlignAllColumns();
 
@@ -127,16 +129,53 @@ public class ChamCongFrame extends JFrame {
                 contentPane.add(lblNewLabel_3);
 
                 JDateChooser NgayBatDau = new JDateChooser();
-                NgayBatDau.setDate(new Date());
+                NgayBatDau.setDateFormatString("dd/MM/yyyy");
+
+                // Tính toán ngày mặc định (Ngay dau thang)
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                Date defaultDate = calendar.getTime();
+
+                NgayBatDau.setDate(defaultDate);
                 NgayBatDau.setBounds(75, 65, 140, 30);
 
                 contentPane.add(NgayBatDau);
 
                 JDateChooser NgayKetThuc = new JDateChooser();
+                NgayKetThuc.setDateFormatString("dd/MM/yyyy");
                 NgayKetThuc.setDate(new Date()); // Đặt ngày mặc định
                 NgayKetThuc.setBounds(300, 65, 140, 30);
 
                 contentPane.add(NgayKetThuc);
+
+                // doc data tu database len JTable
+                LoadData(tableModel, NgayBatDau.getDate(), NgayKetThuc.getDate());
+
+                // Cap nhat JTable real-time khi thay doi ngay bat dau
+                NgayBatDau.getDateEditor().addPropertyChangeListener("date", new PropertyChangeListener() {
+
+                        @Override
+                        public void propertyChange(PropertyChangeEvent evt) {
+                                if (NgayBatDau.getDate() != null) {
+                                        // Cập nhật dữ liệu của JTable
+                                        LoadData(tableModel, NgayBatDau.getDate(), NgayKetThuc.getDate());
+                                }
+
+                        }
+                });
+
+                // Cap nhat JTable real-time khi thay doi ngay ket thuc
+                NgayKetThuc.getDateEditor().addPropertyChangeListener("date", new PropertyChangeListener() {
+
+                        @Override
+                        public void propertyChange(PropertyChangeEvent evt) {
+                                if (NgayKetThuc.getDate() != null) {
+                                        // Cập nhật dữ liệu của JTable
+                                        LoadData(tableModel, NgayBatDau.getDate(), NgayKetThuc.getDate());
+                                }
+
+                        }
+                });
 
                 RoundedPanel TimKiemPanel = new RoundedPanel(20);
                 TimKiemPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -241,10 +280,13 @@ public class ChamCongFrame extends JFrame {
                 popupMenu.show(label, -90, label.getHeight());
         }
 
-        public void LoadData(DefaultTableModel tableModel) {
+        public void LoadData(DefaultTableModel tableModel, Date NgayBatDau, Date NgayKetThuc) {
                 ArrayList<TimeKeeping> arr = TimeKeepingDAO.getInstance().selectAll();
                 tableModel.setRowCount(0);
                 for (TimeKeeping time : arr) {
+                        // Chuyen du lieu tu kieu Date ve LocalDate
+                        LocalDate startLocalDate = NgayBatDau.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                        LocalDate endLocalDate = NgayKetThuc.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                         Object[] rowdata = {
                                         time.getEmployee_id(),
                                         EmployeeDAO.getInstance().seclectByID(time.getEmployee_id()).getName(),
@@ -253,7 +295,11 @@ public class ChamCongFrame extends JFrame {
                                         time.getCheck_out_time(),
                                         time.getStatus()
                         };
-                        tableModel.addRow(rowdata);
+                        if ((time.getDate().isEqual(startLocalDate) || time.getDate().isAfter(startLocalDate)) &&
+                                        (time.getDate().isEqual(endLocalDate)
+                                                        || time.getDate().isBefore(endLocalDate))) {
+                                tableModel.addRow(rowdata);
+                        }
                 }
         }
 

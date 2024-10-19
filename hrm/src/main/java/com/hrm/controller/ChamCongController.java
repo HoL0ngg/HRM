@@ -4,8 +4,6 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JLabel;
-
 import com.hrm.view.ChamCongFrame;
 import com.hrm.view.MainFrame;
 
@@ -26,13 +24,8 @@ public class ChamCongController implements MouseListener {
                 break;
 
             case "filter":
-                frame.showPopUp((JLabel) e.getComponent());
-                break;
-
-            case "TheoGio":
                 frame.chonGio();
                 break;
-
             case "TheoTrangThai":
 
                 break;

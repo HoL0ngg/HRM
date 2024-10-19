@@ -2,7 +2,6 @@ package com.hrm.view;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,6 +13,8 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
@@ -21,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
+import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JSpinner;
@@ -36,6 +38,7 @@ import com.toedter.calendar.JDateChooser;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -252,33 +255,33 @@ public class ChamCongFrame extends JFrame {
                 return table;
         }
 
-        public void showPopUp(JLabel label) {
-                ChamCongController controller = new ChamCongController(this);
-                JPopupMenu popupMenu = new JPopupMenu();
-                popupMenu.setPopupSize(120, 74);
-                JPanel panel = new JPanel();
-                panel.setLayout(null);
-                panel.setBounds(0, 0, 120, 74);
-                panel.setBackground(Color.white);
-                JLabel TheoGio = new JLabel("Theo gio");
-                JLabel TheoTrangThai = new JLabel("Theo trang thai");
-                TheoGio.setBounds(10, 10, 98, 16);
-                TheoGio.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
-                TheoGio.setName("TheoGio");
-                TheoGio.addMouseListener(controller);
-                TheoTrangThai.setBounds(10, 44, 98, 16);
-                TheoTrangThai.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
-                TheoTrangThai.setName("TheoTrangThai");
-                TheoTrangThai.addMouseListener(controller);
+        // public void showPopUp(JLabel label) {
+        // ChamCongController controller = new ChamCongController(this);
+        // JPopupMenu popupMenu = new JPopupMenu();
+        // popupMenu.setPopupSize(120, 74);
+        // JPanel panel = new JPanel();
+        // panel.setLayout(null);
+        // panel.setBounds(0, 0, 120, 74);
+        // panel.setBackground(Color.white);
+        // JLabel TheoGio = new JLabel("Theo gio");
+        // JLabel TheoTrangThai = new JLabel("Theo trang thai");
+        // TheoGio.setBounds(10, 10, 98, 16);
+        // TheoGio.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+        // TheoGio.setName("TheoGio");
+        // TheoGio.addMouseListener(controller);
+        // TheoTrangThai.setBounds(10, 44, 98, 16);
+        // TheoTrangThai.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+        // TheoTrangThai.setName("TheoTrangThai");
+        // TheoTrangThai.addMouseListener(controller);
 
-                JSeparator separator = new JSeparator();
-                separator.setBounds(8, 34, 100, 12);
-                panel.add(TheoGio);
-                panel.add(separator);
-                panel.add(TheoTrangThai);
-                popupMenu.add(panel);
-                popupMenu.show(label, -90, label.getHeight());
-        }
+        // JSeparator separator = new JSeparator();
+        // separator.setBounds(8, 34, 100, 12);
+        // panel.add(TheoGio);
+        // panel.add(separator);
+        // panel.add(TheoTrangThai);
+        // popupMenu.add(panel);
+        // popupMenu.show(label, -90, label.getHeight());
+        // }
 
         public void LoadData(DefaultTableModel tableModel, Date NgayBatDau, Date NgayKetThuc) {
                 ArrayList<TimeKeeping> arr = TimeKeepingDAO.getInstance().selectAll();
@@ -326,27 +329,167 @@ public class ChamCongFrame extends JFrame {
 
         public void chonGio() {
                 chonGio = new JFrame();
-                chonGio.setLayout(null);
-                chonGio.setSize(500, 300);
-                chonGio.setLocationRelativeTo(null);
-                chonGio.setBackground(Color.white);
+                chonGio.setSize(555, 440);
+                chonGio.setTitle("Filter");
+                JPanel contentPane = new JPanel();
+                chonGio.setContentPane(contentPane);
+                contentPane.setBackground(new Color(245, 143, 82));
+                contentPane.setLayout(null);
+
+                Font font = new Font("Segoe UI Emoji", Font.PLAIN, 14);
+
+                JLabel ChonGioLabel = new JLabel("THOI GIAN");
+                ChonGioLabel.setBounds(65, 30, 140, 20);
+                ChonGioLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 17));
+                contentPane.add(ChonGioLabel);
+
+                JLabel ChonTrangThaiLabel = new JLabel("TRANG THAI");
+                ChonTrangThaiLabel.setBounds(65, 200, 160, 20);
+                ChonTrangThaiLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 17));
+                contentPane.add(ChonTrangThaiLabel);
+
+                // Panel chon gio
+                JPanel ChonGioPanel = new JPanel();
+                ChonGioPanel.setLayout(null);
+                ChonGioPanel.setBounds(20, 30, 500, 140);
+                ChonGioPanel.setBackground(Color.white);
+
+                JSeparator up1 = new JSeparator();
+                up1.setBounds(5, 8, 40, 2);
+                JSeparator up2 = new JSeparator();
+                up2.setBounds(130, 8, 366, 2);
+                JSeparator right = new JSeparator(SwingConstants.VERTICAL);
+                right.setBounds(496, 8, 2, 128);
+                JSeparator down = new JSeparator();
+                down.setBounds(4, 136, 492, 2);
+                JSeparator left = new JSeparator(SwingConstants.VERTICAL);
+                left.setBounds(4, 8, 2, 128);
+
                 JLabel from = new JLabel("From: ");
-                from.setBounds(50, 50, 50, 20);
+                from.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+                from.setBounds(20, 30, 100, 20);
+
+                JSpinner GioBatDau = new JSpinner(new SpinnerDateModel());
+
+                // Định dạng hiển thị cho JSpinner theo kiểu "HH:mm"
+                JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(GioBatDau, "HH:mm");
+                GioBatDau.setEditor(timeEditor);
+                GioBatDau.setBounds(70, 30, 60, 20);
+                GioBatDau.setFont(font);
+
+                // Đặt giá trị mặc định là 7g sang
+                try {
+                        GioBatDau.setValue(new SimpleDateFormat("HH:mm").parse("8:00"));
+                } catch (ParseException e) {
+                        e.printStackTrace();
+                }
 
                 JLabel to = new JLabel("To: ");
-                to.setBounds(50, 150, 50, 20);
+                to.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
+                to.setBounds(20, 60, 50, 20);
 
-                SpinnerDateModel model = new SpinnerDateModel();
-                JSpinner timeSpinner = new JSpinner(model);
-                JSpinner.DateEditor editor = new JSpinner.DateEditor(timeSpinner, "HH:mm");
-                timeSpinner.setEditor(editor);
+                JSpinner GioKetThuc = new JSpinner(new SpinnerDateModel());
 
-                timeSpinner.setBounds(150, 50, 200, 20);
+                JSpinner.DateEditor timeEditor2 = new JSpinner.DateEditor(GioBatDau, "HH:mm");
+                GioKetThuc.setEditor(timeEditor2);
+                GioKetThuc.setBounds(70, 60, 60, 20);
+                GioKetThuc.setFont(font);
 
-                chonGio.add(from);
-                chonGio.add(timeSpinner);
-                chonGio.add(to);
+                // Đặt giá trị mặc định là 7g sang
+                try {
+                        GioKetThuc.setValue(new SimpleDateFormat("HH:mm").parse("16:00"));
+                } catch (ParseException e) {
+                        e.printStackTrace();
+                }
+
+                ChonGioPanel.add(from);
+                ChonGioPanel.add(GioBatDau);
+                ChonGioPanel.add(GioKetThuc);
+                ChonGioPanel.add(up1);
+                ChonGioPanel.add(up2);
+                ChonGioPanel.add(right);
+                ChonGioPanel.add(down);
+                ChonGioPanel.add(left);
+                ChonGioPanel.add(to);
+                contentPane.add(ChonGioPanel);
+
+                // Panel chon trang thai
+                JPanel ChonTrangThaiPanel = new JPanel();
+                ChonTrangThaiPanel.setLayout(null);
+                ChonTrangThaiPanel.setBounds(20, 200, 500, 140);
+                ChonTrangThaiPanel.setBackground(Color.white);
+
+                JCheckBox checkBox1 = new JCheckBox("Di tre ve som");
+                checkBox1.setBounds(40, 25, 150, 16);
+                checkBox1.setFont(font);
+                checkBox1.setBackground(Color.white);
+                JCheckBox checkBox2 = new JCheckBox("Di tre ve dung gio");
+                checkBox2.setBounds(40, 55, 150, 16);
+                checkBox2.setFont(font);
+                checkBox2.setBackground(Color.white);
+                JCheckBox checkBox3 = new JCheckBox("Di dung gio ve som");
+                checkBox3.setBounds(40, 85, 150, 16);
+                checkBox3.setFont(font);
+                checkBox3.setBackground(Color.white);
+                JCheckBox checkBox4 = new JCheckBox("Di dung gio");
+                checkBox4.setBounds(300, 25, 150, 16);
+                checkBox4.setFont(font);
+                checkBox4.setBackground(Color.white);
+                JCheckBox checkBox5 = new JCheckBox("Tang ca (di tre)");
+                checkBox5.setBounds(300, 55, 150, 16);
+                checkBox5.setFont(font);
+                checkBox5.setBackground(Color.white);
+                JCheckBox checkBox6 = new JCheckBox("Tang ca (di dung gio)");
+                checkBox6.setBounds(300, 85, 180, 16);
+                checkBox6.setFont(font);
+                checkBox6.setBackground(Color.white);
+
+                JSeparator up3 = new JSeparator();
+                up3.setBounds(5, 8, 40, 2);
+                JSeparator up4 = new JSeparator();
+                up4.setBounds(142, 8, 354, 2);
+                JSeparator right2 = new JSeparator(SwingConstants.VERTICAL);
+                right2.setBounds(496, 8, 2, 128);
+                JSeparator down2 = new JSeparator();
+                down2.setBounds(4, 136, 492, 2);
+                JSeparator left2 = new JSeparator(SwingConstants.VERTICAL);
+                left2.setBounds(4, 8, 2, 128);
+
+                ChonTrangThaiPanel.add(checkBox1);
+                ChonTrangThaiPanel.add(checkBox2);
+                ChonTrangThaiPanel.add(checkBox3);
+                ChonTrangThaiPanel.add(checkBox4);
+                ChonTrangThaiPanel.add(checkBox5);
+                ChonTrangThaiPanel.add(checkBox6);
+                ChonTrangThaiPanel.add(up3);
+                ChonTrangThaiPanel.add(up4);
+                ChonTrangThaiPanel.add(right2);
+                ChonTrangThaiPanel.add(down2);
+                ChonTrangThaiPanel.add(left2);
+                contentPane.add(ChonTrangThaiPanel);
+
+                // Nut reset
+                RoundedPanel ResetPanel = new RoundedPanel(20);
+                ResetPanel.setBackground(Color.white);
+                ResetPanel.setBounds(350, 350, 80, 30);
+                ResetPanel.add(new JLabel("DAT LAI"));
+                contentPane.add(ResetPanel);
+
+                // Nut dong y
+                RoundedPanel DongYPanel = new RoundedPanel(20);
+                DongYPanel.setBackground(Color.white);
+                DongYPanel.setBounds(440, 350, 80, 30);
+                DongYPanel.add(new JLabel("DONG Y"));
+                contentPane.add(DongYPanel);
+
+                chonGio.setLocationRelativeTo(null);
+
+                // Tranh focus vao JTextfield tu ban dau
+                JPanel emptyJPanel = new JPanel();
+                emptyJPanel.setBounds(0, 0, 0, 0);
+                contentPane.add(emptyJPanel);
                 chonGio.setVisible(true);
+                emptyJPanel.requestFocusInWindow();
         }
 
         public static void main(String[] args) {

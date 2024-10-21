@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -39,6 +40,7 @@ import com.hrm.dao.EmployeeDAO;
 import com.hrm.dao.TimeKeepingDAO;
 import com.hrm.model.Employee;
 import com.hrm.model.TimeKeeping;
+import com.hrm.model.TimeKeeping.Status;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.BorderFactory;
@@ -104,7 +106,7 @@ public class ChamCongFrame extends JFrame {
                 table.getTableHeader().setReorderingAllowed(false);
 
                 JScrollPane scrollPane = new JScrollPane(table);
-                scrollPane.setBounds(0, 150, 800, 550);
+                scrollPane.setBounds(0, 150, 800, 514);
                 contentPane.add(scrollPane);
 
                 JPanel navBar = new JPanel();
@@ -314,7 +316,8 @@ public class ChamCongFrame extends JFrame {
                                         time.getDate(),
                                         time.getCheck_in_time(),
                                         time.getCheck_out_time(),
-                                        time.getStatus()
+                                        time.getStatus(),
+                                        time.getEmployee_id()
                         };
                         if ((time.getDate().isEqual(startLocalDate) || time.getDate().isAfter(startLocalDate)) &&
                                         (time.getDate().isEqual(endLocalDate)
@@ -322,17 +325,52 @@ public class ChamCongFrame extends JFrame {
                                 tableModel.addRow(rowdata);
                         }
                 }
+                table.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+                        @Override
+                        public Component getTableCellRendererComponent(JTable table, Object value,
+                                        boolean isSelected,
+                                        boolean hasFocus, int row, int column) {
+                                Component cell = super.getTableCellRendererComponent(table, value,
+                                                isSelected, hasFocus,
+                                                row,
+                                                column);
+
+                                if (value instanceof Status) {
+                                        Status status = (Status) value;
+                                        // Thay đổi màu nền dựa trên trạng thái
+                                        switch (status) {
+                                                case Late_arrival_early_departure:
+                                                        cell.setBackground(Color.red);
+                                                        break;
+                                                case Late_arrival_on_time_departure:
+                                                case Overtime_late_arrival:
+                                                        cell.setBackground(Color.orange);
+                                                        break;
+                                                case On_time_arrival_early_departure:
+                                                        cell.setBackground(Color.yellow);
+                                                        break;
+                                                case On_time_arrival_on_time_departure:
+                                                case Overtime_on_time_arrival:
+                                                        cell.setBackground(Color.green);
+                                                        break;
+                                        }
+                                } else {
+                                        cell.setBackground(Color.WHITE); // Mặc định là màu trắng
+                                }
+                                return cell;
+                        }
+                });
         }
 
         private void setColumnWidths() {
                 // Thiết lập chiều rộng cho từng cột
-                table.getColumnModel().getColumn(0).setPreferredWidth(50); // Ma NV
-                table.getColumnModel().getColumn(1).setPreferredWidth(200); // Ho ten
-                table.getColumnModel().getColumn(2).setPreferredWidth(100); // Ngay
-                table.getColumnModel().getColumn(3).setPreferredWidth(60); // Gio vao
-                table.getColumnModel().getColumn(3).setPreferredWidth(60); // Gio ra
-                table.getColumnModel().getColumn(3).setPreferredWidth(50); // Trang thai
-                table.getColumnModel().getColumn(3).setPreferredWidth(50); // Gio lam them
+                table.getColumnModel().getColumn(0).setPreferredWidth(30); // Ma NV
+                table.getColumnModel().getColumn(1).setPreferredWidth(120); // Ho ten
+                table.getColumnModel().getColumn(2).setPreferredWidth(60); // Ngay
+                table.getColumnModel().getColumn(3).setPreferredWidth(50); // Gio vao
+                table.getColumnModel().getColumn(4).setPreferredWidth(50); // Gio ra
+                table.getColumnModel().getColumn(5).setPreferredWidth(120); // Trang thai
+                table.getColumnModel().getColumn(6).setPreferredWidth(50); // Gio lam them
         }
 
         private void centerAlignAllColumns() {

@@ -13,6 +13,7 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ import java.time.ZoneId;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
@@ -28,8 +30,11 @@ import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.hrm.controller.ChamCongController;
+import com.hrm.controller.EnterController;
 import com.hrm.dao.EmployeeDAO;
 import com.hrm.dao.TimeKeepingDAO;
 import com.hrm.model.Employee;
@@ -71,6 +76,7 @@ public class ChamCongFrame extends JFrame {
                 contentPane.setLayout(null);
 
                 ChamCongController controller = new ChamCongController(this);
+                EnterController con = new EnterController();
 
                 String[] colName = {
                                 "Ma NV", "Ho va ten", "Ngay", "Gio vao", "Gio ra", "Trang thai",
@@ -84,6 +90,9 @@ public class ChamCongFrame extends JFrame {
                         }
                 };
                 table = new JTable(tableModel);
+
+                TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
+                table.setRowSorter(sorter);
 
                 // chinh chieu rong cot
                 setColumnWidths();
@@ -132,6 +141,7 @@ public class ChamCongFrame extends JFrame {
                 contentPane.add(lblNewLabel_3);
 
                 JDateChooser NgayBatDau = new JDateChooser();
+                con.addTransferFocusListener(NgayBatDau);
                 NgayBatDau.setDateFormatString("dd/MM/yyyy");
 
                 // Tính toán ngày mặc định (Ngay dau thang)
@@ -145,6 +155,7 @@ public class ChamCongFrame extends JFrame {
                 contentPane.add(NgayBatDau);
 
                 JDateChooser NgayKetThuc = new JDateChooser();
+                con.addTransferFocusListener(NgayKetThuc);
                 NgayKetThuc.setDateFormatString("dd/MM/yyyy");
                 NgayKetThuc.setDate(new Date()); // Đặt ngày mặc định
                 NgayKetThuc.setBounds(300, 65, 140, 30);
@@ -163,7 +174,6 @@ public class ChamCongFrame extends JFrame {
                                         // Cập nhật dữ liệu của JTable
                                         LoadData(tableModel, NgayBatDau.getDate(), NgayKetThuc.getDate());
                                 }
-
                         }
                 });
 
@@ -176,7 +186,6 @@ public class ChamCongFrame extends JFrame {
                                         // Cập nhật dữ liệu của JTable
                                         LoadData(tableModel, NgayBatDau.getDate(), NgayKetThuc.getDate());
                                 }
-
                         }
                 });
 
@@ -193,7 +202,7 @@ public class ChamCongFrame extends JFrame {
                 TimKiemPanel.setBackground(Color.white);
                 TimKiemField.setBorder(BorderFactory.createEmptyBorder(3, 0, 0, 0));
                 TimKiemField.setPreferredSize(new Dimension(200, 20));
-                TimKiemField.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 15));
+                TimKiemField.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
                 TimKiemField.setText("Tim kiem");
                 TimKiemField.setForeground(Color.gray);
                 TimKiemField.addFocusListener(new FocusListener() {
@@ -206,14 +215,47 @@ public class ChamCongFrame extends JFrame {
 
                         @Override
                         public void focusLost(FocusEvent e) {
-                                if (String.valueOf(TimKiemField.getText()).isEmpty()) {
+                                // Bỏ những khoảng trắng
+                                String text = TimKiemField.getText().trim();
+                                filterTable(text);
+                                if (text.length() == 0) {
                                         TimKiemField.setText("Tim kiem"); // Hiển thị lại placeholder khi
                                                                           // không có dữ liệu
                                         TimKiemField.setForeground(Color.GRAY);
                                 }
                         }
 
+                        private void filterTable(String text) {
+                                text = buildVietnameseRegex(text);
+                                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 1));
+                        }
+
+                        private String buildVietnameseRegex(String input) {
+                                // Loại bỏ dấu khỏi chuỗi nhập để so sánh
+                                String normalized = Normalizer.normalize(input, Normalizer.Form.NFD)
+                                                .replaceAll("\\p{M}", "");
+
+                                // Tạo biểu thức regex với các chữ cái tiếng Việt có dấu tương ứng
+                                String[][] vietnameseCharMap = {
+                                                { "a", "[aáàạảãâấầậẩẫăắằặẳẵ]" },
+                                                { "d", "[dđ]" },
+                                                { "e", "[eéèẹẻẽêếềệểễ]" },
+                                                { "i", "[iíìịỉĩ]" },
+                                                { "o", "[oóòọỏõôốồộổỗơớờợởỡ]" },
+                                                { "u", "[uúùụủũưứừựửữ]" },
+                                                { "y", "[yýỳỵỷỹ]" }
+                                };
+
+                                // Thay thế các ký tự không dấu bằng các biểu thức regex tương ứng
+                                for (String[] map : vietnameseCharMap) {
+                                        normalized = normalized.replaceAll(map[0], map[1]);
+                                }
+
+                                // Chặn giới hạn 2 đâu
+                                return "\\b" + normalized + "\\b";
+                        }
                 });
+                con.addTransferFocusListener(TimKiemField);
 
                 TimKiemPanel.add(timkiemLabel);
                 TimKiemPanel.add(TimKiemField);
@@ -225,16 +267,19 @@ public class ChamCongFrame extends JFrame {
                                 .getImage()
                                 .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 
-                JLabel FilterLabel = new JLabel(new ImageIcon(FilterIcon));
+                JLabel FilterLabel = new JLabel(new ImageIcon(
+                                FilterIcon));
                 FilterLabel.setBounds(735, 63, 35, 35);
                 FilterLabel.setName("filter");
                 FilterLabel.addMouseListener(controller);
                 contentPane.add(FilterLabel);
 
-                RoundedPanel xuatFilePanel = new RoundedPanel(20);
+                RoundedPanel xuatFilePanel = new RoundedPanel(
+                                20);
                 xuatFilePanel.setBounds(660, 110, 100, 25);
                 xuatFilePanel.setBackground(Color.white);
-                JLabel xuatFile = new JLabel("Xuat file");
+                JLabel xuatFile = new JLabel(
+                                "Xuat file");
                 xuatFile.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
                 xuatFilePanel.add(xuatFile);
                 contentPane.add(xuatFilePanel);
@@ -243,6 +288,7 @@ public class ChamCongFrame extends JFrame {
                 JPanel emptyJPanel = new JPanel();
                 emptyJPanel.setBounds(0, 0, 0, 0);
                 contentPane.add(emptyJPanel);
+
                 setVisible(true);
                 emptyJPanel.requestFocusInWindow();
         }
@@ -254,34 +300,6 @@ public class ChamCongFrame extends JFrame {
         public JTable getTable() {
                 return table;
         }
-
-        // public void showPopUp(JLabel label) {
-        // ChamCongController controller = new ChamCongController(this);
-        // JPopupMenu popupMenu = new JPopupMenu();
-        // popupMenu.setPopupSize(120, 74);
-        // JPanel panel = new JPanel();
-        // panel.setLayout(null);
-        // panel.setBounds(0, 0, 120, 74);
-        // panel.setBackground(Color.white);
-        // JLabel TheoGio = new JLabel("Theo gio");
-        // JLabel TheoTrangThai = new JLabel("Theo trang thai");
-        // TheoGio.setBounds(10, 10, 98, 16);
-        // TheoGio.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
-        // TheoGio.setName("TheoGio");
-        // TheoGio.addMouseListener(controller);
-        // TheoTrangThai.setBounds(10, 44, 98, 16);
-        // TheoTrangThai.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
-        // TheoTrangThai.setName("TheoTrangThai");
-        // TheoTrangThai.addMouseListener(controller);
-
-        // JSeparator separator = new JSeparator();
-        // separator.setBounds(8, 34, 100, 12);
-        // panel.add(TheoGio);
-        // panel.add(separator);
-        // panel.add(TheoTrangThai);
-        // popupMenu.add(panel);
-        // popupMenu.show(label, -90, label.getHeight());
-        // }
 
         public void LoadData(DefaultTableModel tableModel, Date NgayBatDau, Date NgayKetThuc) {
                 ArrayList<TimeKeeping> arr = TimeKeepingDAO.getInstance().selectAll();
@@ -390,12 +408,12 @@ public class ChamCongFrame extends JFrame {
 
                 JSpinner GioKetThuc = new JSpinner(new SpinnerDateModel());
 
-                JSpinner.DateEditor timeEditor2 = new JSpinner.DateEditor(GioBatDau, "HH:mm");
+                JSpinner.DateEditor timeEditor2 = new JSpinner.DateEditor(GioKetThuc, "HH:mm");
                 GioKetThuc.setEditor(timeEditor2);
                 GioKetThuc.setBounds(70, 60, 60, 20);
                 GioKetThuc.setFont(font);
 
-                // Đặt giá trị mặc định là 7g sang
+                // Đặt giá trị mặc định là 6g chieu
                 try {
                         GioKetThuc.setValue(new SimpleDateFormat("HH:mm").parse("16:00"));
                 } catch (ParseException e) {
@@ -420,27 +438,27 @@ public class ChamCongFrame extends JFrame {
                 ChonTrangThaiPanel.setBackground(Color.white);
 
                 JCheckBox checkBox1 = new JCheckBox("Di tre ve som");
-                checkBox1.setBounds(40, 25, 150, 16);
+                checkBox1.setBounds(40, 30, 150, 16);
                 checkBox1.setFont(font);
                 checkBox1.setBackground(Color.white);
                 JCheckBox checkBox2 = new JCheckBox("Di tre ve dung gio");
-                checkBox2.setBounds(40, 55, 150, 16);
+                checkBox2.setBounds(40, 60, 150, 16);
                 checkBox2.setFont(font);
                 checkBox2.setBackground(Color.white);
                 JCheckBox checkBox3 = new JCheckBox("Di dung gio ve som");
-                checkBox3.setBounds(40, 85, 150, 16);
+                checkBox3.setBounds(40, 90, 150, 16);
                 checkBox3.setFont(font);
                 checkBox3.setBackground(Color.white);
                 JCheckBox checkBox4 = new JCheckBox("Di dung gio");
-                checkBox4.setBounds(300, 25, 150, 16);
+                checkBox4.setBounds(300, 30, 150, 16);
                 checkBox4.setFont(font);
                 checkBox4.setBackground(Color.white);
                 JCheckBox checkBox5 = new JCheckBox("Tang ca (di tre)");
-                checkBox5.setBounds(300, 55, 150, 16);
+                checkBox5.setBounds(300, 60, 150, 16);
                 checkBox5.setFont(font);
                 checkBox5.setBackground(Color.white);
                 JCheckBox checkBox6 = new JCheckBox("Tang ca (di dung gio)");
-                checkBox6.setBounds(300, 85, 180, 16);
+                checkBox6.setBounds(300, 90, 180, 16);
                 checkBox6.setFont(font);
                 checkBox6.setBackground(Color.white);
 

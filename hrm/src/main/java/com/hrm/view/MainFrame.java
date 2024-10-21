@@ -15,6 +15,7 @@ import java.awt.Font;
 
 import javax.swing.border.EmptyBorder;
 
+import com.hrm.controller.EnterController;
 import com.hrm.controller.MainController;
 import com.hrm.model.Employee;
 
@@ -47,6 +48,12 @@ public class MainFrame extends JFrame {
                 IconLabel.setBounds(900, 20, 55, 55);
                 IconLabel.setIcon(new ImageIcon(AvatarIcon));
                 contentPane.add(IconLabel);
+
+                // Xu ly su kien chuot
+                MainController controller = new MainController(this);
+
+                // Xu ly su kien nhan phim Enter
+                EnterController con = new EnterController();
 
                 JLabel TenLabel = new JLabel(employee.getName());
                 TenLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
@@ -85,13 +92,11 @@ public class MainFrame extends JFrame {
                         }
 
                 });
+                con.addTransferFocusListener(TimKiemField);
                 contentPane.add(TimKiemField);
 
                 // Font cho Menu
                 Font MenuFont = new Font("Segoe UI Emoji", Font.PLAIN, 18);
-
-                // Xu ly su kien chuot
-                MainController controller = new MainController(this);
 
                 // Phan Menu
                 RoundedPanel NhanVienPanel = new RoundedPanel(20,

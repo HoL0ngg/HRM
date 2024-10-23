@@ -14,6 +14,8 @@ import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,6 +23,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
@@ -33,6 +36,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.hrm.controller.ChamCongController;
 import com.hrm.controller.EnterController;
@@ -57,6 +66,12 @@ public class ChamCongFrame extends JFrame {
         private JTable table;
         private Employee employee;
         private JFrame chonGio;
+        private JCheckBox checkBox1;
+        private JCheckBox checkBox2;
+        private JCheckBox checkBox3;
+        private JCheckBox checkBox4;
+        private JCheckBox checkBox5;
+        private JCheckBox checkBox6;
 
         public ChamCongFrame() {
         }
@@ -284,6 +299,8 @@ public class ChamCongFrame extends JFrame {
                                 "Xuat file");
                 xuatFile.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
                 xuatFilePanel.add(xuatFile);
+                xuatFilePanel.setName("XuatFile");
+                xuatFilePanel.addMouseListener(controller);
                 contentPane.add(xuatFilePanel);
 
                 // Tranh focus vao JTextfield tu ban dau
@@ -392,6 +409,8 @@ public class ChamCongFrame extends JFrame {
                 contentPane.setBackground(new Color(245, 143, 82));
                 contentPane.setLayout(null);
 
+                ChamCongController controller = new ChamCongController(this);
+
                 Font font = new Font("Segoe UI Emoji", Font.PLAIN, 14);
 
                 JLabel ChonGioLabel = new JLabel("THOI GIAN");
@@ -475,27 +494,27 @@ public class ChamCongFrame extends JFrame {
                 ChonTrangThaiPanel.setBounds(20, 200, 500, 140);
                 ChonTrangThaiPanel.setBackground(Color.white);
 
-                JCheckBox checkBox1 = new JCheckBox("Di tre ve som");
+                checkBox1 = new JCheckBox("Di tre ve som");
                 checkBox1.setBounds(40, 30, 150, 16);
                 checkBox1.setFont(font);
                 checkBox1.setBackground(Color.white);
-                JCheckBox checkBox2 = new JCheckBox("Di tre ve dung gio");
+                checkBox2 = new JCheckBox("Di tre ve dung gio");
                 checkBox2.setBounds(40, 60, 150, 16);
                 checkBox2.setFont(font);
                 checkBox2.setBackground(Color.white);
-                JCheckBox checkBox3 = new JCheckBox("Di dung gio ve som");
+                checkBox3 = new JCheckBox("Di dung gio ve som");
                 checkBox3.setBounds(40, 90, 150, 16);
                 checkBox3.setFont(font);
                 checkBox3.setBackground(Color.white);
-                JCheckBox checkBox4 = new JCheckBox("Di dung gio");
+                checkBox4 = new JCheckBox("Di dung gio");
                 checkBox4.setBounds(300, 30, 150, 16);
                 checkBox4.setFont(font);
                 checkBox4.setBackground(Color.white);
-                JCheckBox checkBox5 = new JCheckBox("Tang ca (di tre)");
+                checkBox5 = new JCheckBox("Tang ca (di tre)");
                 checkBox5.setBounds(300, 60, 150, 16);
                 checkBox5.setFont(font);
                 checkBox5.setBackground(Color.white);
-                JCheckBox checkBox6 = new JCheckBox("Tang ca (di dung gio)");
+                checkBox6 = new JCheckBox("Tang ca (di dung gio)");
                 checkBox6.setBounds(300, 90, 180, 16);
                 checkBox6.setFont(font);
                 checkBox6.setBackground(Color.white);
@@ -529,6 +548,8 @@ public class ChamCongFrame extends JFrame {
                 ResetPanel.setBackground(Color.white);
                 ResetPanel.setBounds(350, 350, 80, 30);
                 ResetPanel.add(new JLabel("DAT LAI"));
+                ResetPanel.setName("Reset");
+                ResetPanel.addMouseListener(controller);
                 contentPane.add(ResetPanel);
 
                 // Nut dong y
@@ -546,6 +567,56 @@ public class ChamCongFrame extends JFrame {
                 contentPane.add(emptyJPanel);
                 chonGio.setVisible(true);
                 emptyJPanel.requestFocusInWindow();
+        }
+
+        // Nut Reset
+        public void ResetButton() {
+                checkBox1.setSelected(false);
+                checkBox2.setSelected(false);
+                checkBox3.setSelected(false);
+                checkBox4.setSelected(false);
+                checkBox5.setSelected(false);
+                checkBox6.setSelected(false);
+        }
+
+        // Xuat file Excel
+        public void xuatFileExcel(JTable table, String filePath) {
+                Workbook workbook = new XSSFWorkbook();
+                Sheet sheet = workbook.createSheet("Data");
+
+                TableModel model = table.getModel();
+
+                // Ghi tiêu đề cột
+                Row headerRow = sheet.createRow(0);
+                for (int i = 0; i < model.getColumnCount(); i++) {
+                        Cell cell = headerRow.createCell(i);
+                        cell.setCellValue(model.getColumnName(i));
+                }
+
+                // Ghi dữ liệu vào các hàng
+                for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
+                        Row row = sheet.createRow(rowIndex + 1);
+                        for (int colIndex = 0; colIndex < model.getColumnCount(); colIndex++) {
+                                Cell cell = row.createCell(colIndex);
+                                Object value = model.getValueAt(rowIndex, colIndex);
+                                cell.setCellValue(value != null ? value.toString() : "");
+                        }
+                }
+
+                // Ghi file Excel ra đĩa
+                try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
+                        workbook.write(fileOut);
+                        JOptionPane.showMessageDialog(null, "Xuất file Excel thành công!");
+                } catch (IOException e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Lỗi khi xuất file Excel: " + e.getMessage());
+                } finally {
+                        try {
+                                workbook.close();
+                        } catch (IOException e) {
+                                e.printStackTrace();
+                        }
+                }
         }
 
         public static void main(String[] args) {

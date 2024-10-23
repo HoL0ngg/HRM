@@ -29,7 +29,12 @@ public class ChamCongController implements MouseListener {
             case "TheoTrangThai":
 
                 break;
-
+            case "XuatFile":
+                frame.xuatFileExcel(frame.getTable(), "D:/data.xlsx");
+                break;
+            case "Reset":
+                frame.ResetButton();
+                break;
             default:
                 break;
         }
@@ -47,10 +52,12 @@ public class ChamCongController implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        e.getComponent().setBackground(e.getComponent().getBackground().darker());
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        e.getComponent().setBackground(e.getComponent().getBackground().brighter());
     }
 
 }

@@ -20,6 +20,7 @@ import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 
 import javax.swing.JLabel;
@@ -64,6 +65,7 @@ public class ChamCongFrame extends JFrame {
 
         private JPanel contentPane;
         private JTable table;
+        private DefaultTableModel tableModel;
         private Employee employee;
         private JFrame chonGio;
         private JCheckBox checkBox1;
@@ -72,6 +74,10 @@ public class ChamCongFrame extends JFrame {
         private JCheckBox checkBox4;
         private JCheckBox checkBox5;
         private JCheckBox checkBox6;
+        private JSpinner GioVaoBatDau;
+        private JSpinner GioRaBatDau;
+        private JSpinner GioVaoKetThuc;
+        private JSpinner GioRaKetThuc;
 
         public ChamCongFrame() {
         }
@@ -99,7 +105,7 @@ public class ChamCongFrame extends JFrame {
                                 "Ma NV", "Ho va ten", "Ngay", "Gio vao", "Gio ra", "Trang thai",
                                 "Gio lam them"
                 };
-                DefaultTableModel tableModel = new DefaultTableModel(colName, 0) {
+                tableModel = new DefaultTableModel(colName, 0) {
                         // Khong cho chinh sua du lieu khi hien thi len Table
                         @Override
                         public boolean isCellEditable(int row, int column) {
@@ -121,7 +127,7 @@ public class ChamCongFrame extends JFrame {
                 table.getTableHeader().setReorderingAllowed(false);
 
                 JScrollPane scrollPane = new JScrollPane(table);
-                scrollPane.setBounds(0, 150, 800, 514);
+                scrollPane.setBounds(0, 150, 790, 514);
                 contentPane.add(scrollPane);
 
                 JPanel navBar = new JPanel();
@@ -414,12 +420,12 @@ public class ChamCongFrame extends JFrame {
                 Font font = new Font("Segoe UI Emoji", Font.PLAIN, 14);
 
                 JLabel ChonGioLabel = new JLabel("THOI GIAN");
-                ChonGioLabel.setBounds(65, 30, 140, 20);
+                ChonGioLabel.setBounds(65, 34, 140, 20);
                 ChonGioLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 17));
                 contentPane.add(ChonGioLabel);
 
                 JLabel ChonTrangThaiLabel = new JLabel("TRANG THAI");
-                ChonTrangThaiLabel.setBounds(65, 200, 160, 20);
+                ChonTrangThaiLabel.setBounds(65, 204, 160, 20);
                 ChonTrangThaiLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 17));
                 contentPane.add(ChonTrangThaiLabel);
 
@@ -430,62 +436,90 @@ public class ChamCongFrame extends JFrame {
                 ChonGioPanel.setBackground(Color.white);
 
                 JSeparator up1 = new JSeparator();
-                up1.setBounds(5, 8, 40, 2);
+                up1.setBounds(5, 12, 40, 2);
                 JSeparator up2 = new JSeparator();
-                up2.setBounds(130, 8, 366, 2);
+                up2.setBounds(130, 12, 366, 2);
                 JSeparator right = new JSeparator(SwingConstants.VERTICAL);
-                right.setBounds(496, 8, 2, 128);
+                right.setBounds(496, 12, 2, 124);
                 JSeparator down = new JSeparator();
                 down.setBounds(4, 136, 492, 2);
                 JSeparator left = new JSeparator(SwingConstants.VERTICAL);
-                left.setBounds(4, 8, 2, 128);
+                left.setBounds(4, 12, 2, 124);
 
-                JLabel from = new JLabel("From: ");
-                from.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
-                from.setBounds(20, 30, 100, 20);
+                JLabel GioVao = new JLabel("Gio vao: ");
+                GioVao.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
+                GioVao.setBounds(20, 42, 100, 20);
 
-                JSpinner GioBatDau = new JSpinner(new SpinnerDateModel());
+                GioVaoBatDau = new JSpinner(new SpinnerDateModel());
 
                 // Định dạng hiển thị cho JSpinner theo kiểu "HH:mm"
-                JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(GioBatDau, "HH:mm");
-                GioBatDau.setEditor(timeEditor);
-                GioBatDau.setBounds(70, 30, 60, 20);
-                GioBatDau.setFont(font);
+                JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(GioVaoBatDau, "HH:mm");
+                GioVaoBatDau.setEditor(timeEditor);
+                GioVaoBatDau.setBounds(90, 40, 60, 22);
+                GioVaoBatDau.setFont(font);
 
-                // Đặt giá trị mặc định là 7g sang
+                GioVaoKetThuc = new JSpinner(new SpinnerDateModel());
+
+                JSpinner.DateEditor timeEditor3 = new JSpinner.DateEditor(GioVaoKetThuc, "HH:mm");
+                GioVaoKetThuc.setEditor(timeEditor3);
+                GioVaoKetThuc.setBounds(180, 40, 60, 22);
+                GioVaoKetThuc.setFont(font);
+
+                // Đặt giá trị mặc định là 7g30 den 8g30 sang
                 try {
-                        GioBatDau.setValue(new SimpleDateFormat("HH:mm").parse("8:00"));
+                        GioVaoBatDau.setValue(new SimpleDateFormat("HH:mm").parse("7:30"));
+                        GioVaoKetThuc.setValue(new SimpleDateFormat("HH:mm").parse("8:30"));
                 } catch (ParseException e) {
                         e.printStackTrace();
                 }
 
-                JLabel to = new JLabel("To: ");
-                to.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 14));
-                to.setBounds(20, 60, 50, 20);
+                JLabel jdo = new JLabel("-");
+                jdo.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
+                jdo.setBounds(160, 42, 20, 20);
 
-                JSpinner GioKetThuc = new JSpinner(new SpinnerDateModel());
+                JLabel GioRa = new JLabel("Gio ra: ");
+                GioRa.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
+                GioRa.setBounds(20, 82, 60, 20);
 
-                JSpinner.DateEditor timeEditor2 = new JSpinner.DateEditor(GioKetThuc, "HH:mm");
-                GioKetThuc.setEditor(timeEditor2);
-                GioKetThuc.setBounds(70, 60, 60, 20);
-                GioKetThuc.setFont(font);
+                GioRaBatDau = new JSpinner(new SpinnerDateModel());
+
+                JSpinner.DateEditor timeEditor2 = new JSpinner.DateEditor(GioRaBatDau, "HH:mm");
+                GioRaBatDau.setEditor(timeEditor2);
+                GioRaBatDau.setBounds(90, 80, 60, 22);
+                GioRaBatDau.setFont(font);
+
+                GioRaKetThuc = new JSpinner(new SpinnerDateModel());
+
+                JSpinner.DateEditor timeEditor4 = new JSpinner.DateEditor(GioRaKetThuc, "HH:mm");
+                GioRaKetThuc.setEditor(timeEditor4);
+                GioRaKetThuc.setBounds(180, 80, 60, 22);
+                GioRaKetThuc.setFont(font);
 
                 // Đặt giá trị mặc định là 6g chieu
                 try {
-                        GioKetThuc.setValue(new SimpleDateFormat("HH:mm").parse("16:00"));
+                        GioRaBatDau.setValue(new SimpleDateFormat("HH:mm").parse("16:00"));
+                        GioRaKetThuc.setValue(new SimpleDateFormat("HH:mm").parse("17:00"));
                 } catch (ParseException e) {
                         e.printStackTrace();
                 }
 
-                ChonGioPanel.add(from);
-                ChonGioPanel.add(GioBatDau);
-                ChonGioPanel.add(GioKetThuc);
+                JLabel aibic = new JLabel("-");
+                aibic.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
+                aibic.setBounds(160, 82, 20, 20);
+
+                ChonGioPanel.add(GioVao);
+                ChonGioPanel.add(GioVaoBatDau);
+                ChonGioPanel.add(jdo);
+                ChonGioPanel.add(GioVaoKetThuc);
+                ChonGioPanel.add(GioRaBatDau);
+                ChonGioPanel.add(aibic);
+                ChonGioPanel.add(GioRaKetThuc);
                 ChonGioPanel.add(up1);
                 ChonGioPanel.add(up2);
                 ChonGioPanel.add(right);
                 ChonGioPanel.add(down);
                 ChonGioPanel.add(left);
-                ChonGioPanel.add(to);
+                ChonGioPanel.add(GioRa);
                 contentPane.add(ChonGioPanel);
 
                 // Panel chon trang thai
@@ -495,40 +529,40 @@ public class ChamCongFrame extends JFrame {
                 ChonTrangThaiPanel.setBackground(Color.white);
 
                 checkBox1 = new JCheckBox("Di tre ve som");
-                checkBox1.setBounds(40, 30, 150, 16);
+                checkBox1.setBounds(40, 35, 150, 14);
                 checkBox1.setFont(font);
                 checkBox1.setBackground(Color.white);
                 checkBox2 = new JCheckBox("Di tre ve dung gio");
-                checkBox2.setBounds(40, 60, 150, 16);
+                checkBox2.setBounds(40, 65, 150, 14);
                 checkBox2.setFont(font);
                 checkBox2.setBackground(Color.white);
                 checkBox3 = new JCheckBox("Di dung gio ve som");
-                checkBox3.setBounds(40, 90, 150, 16);
+                checkBox3.setBounds(40, 95, 150, 14);
                 checkBox3.setFont(font);
                 checkBox3.setBackground(Color.white);
                 checkBox4 = new JCheckBox("Di dung gio");
-                checkBox4.setBounds(300, 30, 150, 16);
+                checkBox4.setBounds(300, 35, 150, 14);
                 checkBox4.setFont(font);
                 checkBox4.setBackground(Color.white);
                 checkBox5 = new JCheckBox("Tang ca (di tre)");
-                checkBox5.setBounds(300, 60, 150, 16);
+                checkBox5.setBounds(300, 65, 150, 14);
                 checkBox5.setFont(font);
                 checkBox5.setBackground(Color.white);
                 checkBox6 = new JCheckBox("Tang ca (di dung gio)");
-                checkBox6.setBounds(300, 90, 180, 16);
+                checkBox6.setBounds(300, 95, 180, 14);
                 checkBox6.setFont(font);
                 checkBox6.setBackground(Color.white);
 
                 JSeparator up3 = new JSeparator();
-                up3.setBounds(5, 8, 40, 2);
+                up3.setBounds(5, 12, 40, 2);
                 JSeparator up4 = new JSeparator();
-                up4.setBounds(142, 8, 354, 2);
+                up4.setBounds(142, 12, 354, 2);
                 JSeparator right2 = new JSeparator(SwingConstants.VERTICAL);
-                right2.setBounds(496, 8, 2, 128);
+                right2.setBounds(496, 12, 2, 124);
                 JSeparator down2 = new JSeparator();
                 down2.setBounds(4, 136, 492, 2);
                 JSeparator left2 = new JSeparator(SwingConstants.VERTICAL);
-                left2.setBounds(4, 8, 2, 128);
+                left2.setBounds(4, 12, 2, 124);
 
                 ChonTrangThaiPanel.add(checkBox1);
                 ChonTrangThaiPanel.add(checkBox2);
@@ -557,6 +591,8 @@ public class ChamCongFrame extends JFrame {
                 DongYPanel.setBackground(Color.white);
                 DongYPanel.setBounds(440, 350, 80, 30);
                 DongYPanel.add(new JLabel("DONG Y"));
+                DongYPanel.setName("DongY");
+                DongYPanel.addMouseListener(controller);
                 contentPane.add(DongYPanel);
 
                 chonGio.setLocationRelativeTo(null);
@@ -571,6 +607,16 @@ public class ChamCongFrame extends JFrame {
 
         // Nut Reset
         public void ResetButton() {
+                try {
+                        GioVaoBatDau.setValue(new SimpleDateFormat("HH:mm").parse("7:30"));
+                        GioVaoKetThuc.setValue(new SimpleDateFormat("HH:mm").parse("8:30"));
+
+                        GioRaBatDau.setValue(new SimpleDateFormat("HH:mm").parse("16:00"));
+                        GioRaKetThuc.setValue(new SimpleDateFormat("HH:mm").parse("17:00"));
+                } catch (ParseException e) {
+                        e.printStackTrace();
+                }
+
                 checkBox1.setSelected(false);
                 checkBox2.setSelected(false);
                 checkBox3.setSelected(false);
@@ -619,7 +665,88 @@ public class ChamCongFrame extends JFrame {
                 }
         }
 
+        public void filterTable(JTable table, DefaultTableModel tableModel) {
+                TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+                table.setRowSorter(sorter);
+
+                RowFilter<DefaultTableModel, Object> filter = new RowFilter<DefaultTableModel, Object>() {
+
+                        @Override
+                        public boolean include(Entry<? extends DefaultTableModel, ? extends Object> entry) {
+                                LocalTime giovao = (LocalTime) entry.getValue(3); // Cột thứ 4 la gio vao
+                                LocalTime giora = (LocalTime) entry.getValue(4); // Cột thứ 5 la gio ra
+                                Status status = (Status) entry.getValue(5);
+
+                                Date VaobatdauDate = (Date) GioVaoBatDau.getValue();
+                                LocalTime VaoBatDauTime = VaobatdauDate.toInstant()
+                                                .atZone(ZoneId.systemDefault())
+                                                .toLocalTime();
+                                Date VaokethucDate = (Date) GioVaoKetThuc.getValue();
+                                LocalTime VaoKetThucTime = VaokethucDate.toInstant()
+                                                .atZone(ZoneId.systemDefault())
+                                                .toLocalTime();
+
+                                Date RabatdauDate = (Date) GioVaoBatDau.getValue();
+                                LocalTime RaBatDauTime = RabatdauDate.toInstant()
+                                                .atZone(ZoneId.systemDefault())
+                                                .toLocalTime();
+                                Date RakethucDate = (Date) GioVaoKetThuc.getValue();
+                                LocalTime RaKetThucTime = RakethucDate.toInstant()
+                                                .atZone(ZoneId.systemDefault())
+                                                .toLocalTime();
+
+                                boolean time = (!giovao.isBefore(VaoBatDauTime)
+                                                && !giovao.isAfter(VaoKetThucTime))
+                                                || (!giora.isBefore(RaBatDauTime)
+                                                                && !giora.isAfter(RaKetThucTime));
+
+                                boolean trangthai = false;
+                                int cnt = 0;
+                                if (checkBox1.isSelected()) {
+                                        trangthai |= status == Status.Late_arrival_early_departure;
+                                        ++cnt;
+                                }
+                                if (checkBox2.isSelected()) {
+                                        trangthai |= status == Status.Late_arrival_on_time_departure;
+                                        ++cnt;
+                                }
+                                if (checkBox3.isSelected()) {
+                                        trangthai |= status == Status.On_time_arrival_early_departure;
+                                        ++cnt;
+                                }
+                                if (checkBox4.isSelected()) {
+                                        trangthai |= status == Status.On_time_arrival_on_time_departure;
+                                        ++cnt;
+                                }
+                                if (checkBox5.isSelected()) {
+                                        trangthai |= status == Status.Overtime_late_arrival;
+                                        ++cnt;
+                                }
+                                if (checkBox6.isSelected()) {
+                                        trangthai |= status == Status.Overtime_on_time_arrival;
+                                        ++cnt;
+                                }
+
+                                if (cnt == 0)
+                                        trangthai = true;
+
+                                return time && trangthai;
+                        }
+
+                };
+
+                sorter.setRowFilter(filter);
+        }
+
         public static void main(String[] args) {
                 new ChamCongFrame(new Employee());
+        }
+
+        public DefaultTableModel getTableModel() {
+                return tableModel;
+        }
+
+        public JFrame getChonGio() {
+                return chonGio;
         }
 }

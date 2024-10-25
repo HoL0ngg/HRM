@@ -35,6 +35,9 @@ public class ChamCongController implements MouseListener {
             case "Reset":
                 frame.ResetButton();
                 break;
+            case "DongY":
+                frame.filterTable(frame.getTable(), frame.getTableModel());
+                frame.getChonGio().dispose();
             default:
                 break;
         }

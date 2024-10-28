@@ -6,12 +6,12 @@ import java.time.LocalTime;
 public class TimeKeeping {
 
     public enum Status {
-        Late_arrival_early_departure,
-        Late_arrival_on_time_departure,
-        On_time_arrival_early_departure,
-        On_time_arrival_on_time_departure,
-        Overtime_late_arrival,
-        Overtime_on_time_arrival
+        di_tre_ve_som,
+        di_tre_ve_dung_gio,
+        di_dung_gio_ve_som,
+        di_dung_gio_ve_dung_gio,
+        tang_ca_di_tre,
+        tang_ca_di_dung_gio
     }
 
     private int id;

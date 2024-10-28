@@ -251,6 +251,7 @@ public class ChamCongFrame extends JFrame {
                         private void filterTable(String text) {
                                 text = buildVietnameseRegex(text);
                                 sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 1));
+                                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 0));
                         }
 
                         private String buildVietnameseRegex(String input) {
@@ -327,6 +328,12 @@ public class ChamCongFrame extends JFrame {
                 } catch (ParseException e) {
                         e.printStackTrace();
                 }
+                checkBox1 = new JCheckBox("Di tre ve som");
+                checkBox2 = new JCheckBox("Di tre ve dung gio");
+                checkBox3 = new JCheckBox("Di dung gio ve som");
+                checkBox4 = new JCheckBox("Di dung gio");
+                checkBox5 = new JCheckBox("Tang ca (di tre)");
+                checkBox6 = new JCheckBox("Tang ca (di dung gio)");
 
                 setVisible(true);
                 emptyJPanel.requestFocusInWindow();
@@ -376,23 +383,32 @@ public class ChamCongFrame extends JFrame {
                                         Status status = (Status) value;
                                         // Thay đổi màu nền dựa trên trạng thái
                                         switch (status) {
-                                                case Late_arrival_early_departure:
+                                                case di_tre_ve_som:
                                                         cell.setBackground(Color.red);
+                                                        // tableModel.setValueAt("Di tre ve som", row, column);
                                                         break;
-                                                case Late_arrival_on_time_departure:
-                                                case Overtime_late_arrival:
+                                                case di_tre_ve_dung_gio:
+                                                        // tableModel.setValueAt("Di tre ve dung gio", row, column);
                                                         cell.setBackground(Color.orange);
                                                         break;
-                                                case On_time_arrival_early_departure:
+                                                case tang_ca_di_tre:
+                                                        cell.setBackground(Color.orange);
+                                                        // tableModel.setValueAt("Tang ca - di tre", row, column);
+                                                        break;
+                                                case di_dung_gio_ve_som:
+                                                        // tableModel.setValueAt("Di dung gio - ve tre", row, column);
                                                         cell.setBackground(Color.yellow);
                                                         break;
-                                                case On_time_arrival_on_time_departure:
-                                                case Overtime_on_time_arrival:
+                                                case di_dung_gio_ve_dung_gio:
+                                                        // tableModel.setValueAt("Di dung gio - ve dung gio", row,
+                                                        // column);
+                                                        cell.setBackground(Color.green);
+                                                        break;
+                                                case tang_ca_di_dung_gio:
+                                                        // tableModel.setValueAt("Tang ca - di dung gio", row, column);
                                                         cell.setBackground(Color.green);
                                                         break;
                                         }
-                                } else {
-                                        cell.setBackground(Color.WHITE); // Mặc định là màu trắng
                                 }
                                 return cell;
                         }
@@ -518,27 +534,21 @@ public class ChamCongFrame extends JFrame {
                 ChonTrangThaiPanel.setBounds(20, 200, 500, 140);
                 ChonTrangThaiPanel.setBackground(Color.white);
 
-                checkBox1 = new JCheckBox("Di tre ve som");
                 checkBox1.setBounds(40, 35, 150, 14);
                 checkBox1.setFont(font);
                 checkBox1.setBackground(Color.white);
-                checkBox2 = new JCheckBox("Di tre ve dung gio");
                 checkBox2.setBounds(40, 65, 150, 14);
                 checkBox2.setFont(font);
                 checkBox2.setBackground(Color.white);
-                checkBox3 = new JCheckBox("Di dung gio ve som");
                 checkBox3.setBounds(40, 95, 150, 14);
                 checkBox3.setFont(font);
                 checkBox3.setBackground(Color.white);
-                checkBox4 = new JCheckBox("Di dung gio");
                 checkBox4.setBounds(300, 35, 150, 14);
                 checkBox4.setFont(font);
                 checkBox4.setBackground(Color.white);
-                checkBox5 = new JCheckBox("Tang ca (di tre)");
                 checkBox5.setBounds(300, 65, 150, 14);
                 checkBox5.setFont(font);
                 checkBox5.setBackground(Color.white);
-                checkBox6 = new JCheckBox("Tang ca (di dung gio)");
                 checkBox6.setBounds(300, 95, 180, 14);
                 checkBox6.setFont(font);
                 checkBox6.setBackground(Color.white);
@@ -693,27 +703,27 @@ public class ChamCongFrame extends JFrame {
                                 boolean trangthai = false;
                                 int cnt = 0;
                                 if (checkBox1.isSelected()) {
-                                        trangthai |= status == Status.Late_arrival_early_departure;
+                                        trangthai |= status == Status.di_tre_ve_som;
                                         ++cnt;
                                 }
                                 if (checkBox2.isSelected()) {
-                                        trangthai |= status == Status.Late_arrival_on_time_departure;
+                                        trangthai |= status == Status.di_tre_ve_dung_gio;
                                         ++cnt;
                                 }
                                 if (checkBox3.isSelected()) {
-                                        trangthai |= status == Status.On_time_arrival_early_departure;
+                                        trangthai |= status == Status.di_dung_gio_ve_som;
                                         ++cnt;
                                 }
                                 if (checkBox4.isSelected()) {
-                                        trangthai |= status == Status.On_time_arrival_on_time_departure;
+                                        trangthai |= status == Status.di_dung_gio_ve_dung_gio;
                                         ++cnt;
                                 }
                                 if (checkBox5.isSelected()) {
-                                        trangthai |= status == Status.Overtime_late_arrival;
+                                        trangthai |= status == Status.tang_ca_di_tre;
                                         ++cnt;
                                 }
                                 if (checkBox6.isSelected()) {
-                                        trangthai |= status == Status.Overtime_on_time_arrival;
+                                        trangthai |= status == Status.tang_ca_di_dung_gio;
                                         ++cnt;
                                 }
 

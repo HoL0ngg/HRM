@@ -193,6 +193,17 @@ public class MainFrame extends JFrame {
                 contentPane.add(MuctieuLabel);
                 contentPane.add(MucTieuPanel);
 
+                RoundedPanel ExitPanel = new RoundedPanel(20,
+                                new File("hrm/src/main/resources/img/exit.png").getAbsolutePath());
+                ExitPanel.setBounds(440, 515, 65, 65);
+                ExitPanel.setName("DangXuatPanel");
+                JLabel ExitLabel = new JLabel("Dang xuat");
+                ExitLabel.setBounds(435, 560, 90, 80);
+                ExitLabel.setFont(MenuFont);
+                contentPane.add(ExitLabel);
+                contentPane.add(ExitPanel);
+                ExitPanel.addMouseListener(controller);
+
                 // Tranh focus vao JTextfield tu ban dau
                 JPanel emptyJPanel = new JPanel();
                 emptyJPanel.setBounds(0, 0, 0, 0);

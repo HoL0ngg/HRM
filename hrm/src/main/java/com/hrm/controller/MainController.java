@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 
 import com.hrm.view.ChamCongFrame;
+import com.hrm.view.LoginFrame;
 import com.hrm.view.MainFrame;
 
 public class MainController implements MouseListener {
@@ -19,9 +20,18 @@ public class MainController implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         JPanel src = (JPanel) e.getSource();
-        if (src.getName().equals("ChamCongPanel")) {
-            new ChamCongFrame(mainFrame.getEmployee());
-            mainFrame.setVisible(false);
+        String name = src.getName();
+        switch (name) {
+            case "ChamCongPanel":
+                new ChamCongFrame(mainFrame.getEmployee());
+                mainFrame.dispose();
+                ;
+                break;
+            case "DangXuatPanel":
+                new LoginFrame();
+                mainFrame.dispose();
+            default:
+                break;
         }
     }
 

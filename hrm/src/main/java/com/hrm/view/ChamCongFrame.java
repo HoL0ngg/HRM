@@ -314,6 +314,20 @@ public class ChamCongFrame extends JFrame {
                 emptyJPanel.setBounds(0, 0, 0, 0);
                 contentPane.add(emptyJPanel);
 
+                // Đặt giá trị mặc định cho filter
+                GioVaoBatDau = new JSpinner(new SpinnerDateModel());
+                GioVaoKetThuc = new JSpinner(new SpinnerDateModel());
+                GioRaBatDau = new JSpinner(new SpinnerDateModel());
+                GioRaKetThuc = new JSpinner(new SpinnerDateModel());
+                try {
+                        GioVaoBatDau.setValue(new SimpleDateFormat("HH:mm").parse("7:30"));
+                        GioVaoKetThuc.setValue(new SimpleDateFormat("HH:mm").parse("8:30"));
+                        GioRaBatDau.setValue(new SimpleDateFormat("HH:mm").parse("16:00"));
+                        GioRaKetThuc.setValue(new SimpleDateFormat("HH:mm").parse("17:00"));
+                } catch (ParseException e) {
+                        e.printStackTrace();
+                }
+
                 setVisible(true);
                 emptyJPanel.requestFocusInWindow();
         }
@@ -450,28 +464,16 @@ public class ChamCongFrame extends JFrame {
                 GioVao.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
                 GioVao.setBounds(20, 42, 100, 20);
 
-                GioVaoBatDau = new JSpinner(new SpinnerDateModel());
-
                 // Định dạng hiển thị cho JSpinner theo kiểu "HH:mm"
                 JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(GioVaoBatDau, "HH:mm");
                 GioVaoBatDau.setEditor(timeEditor);
                 GioVaoBatDau.setBounds(90, 40, 60, 22);
                 GioVaoBatDau.setFont(font);
 
-                GioVaoKetThuc = new JSpinner(new SpinnerDateModel());
-
                 JSpinner.DateEditor timeEditor3 = new JSpinner.DateEditor(GioVaoKetThuc, "HH:mm");
                 GioVaoKetThuc.setEditor(timeEditor3);
                 GioVaoKetThuc.setBounds(180, 40, 60, 22);
                 GioVaoKetThuc.setFont(font);
-
-                // Đặt giá trị mặc định là 7g30 den 8g30 sang
-                try {
-                        GioVaoBatDau.setValue(new SimpleDateFormat("HH:mm").parse("7:30"));
-                        GioVaoKetThuc.setValue(new SimpleDateFormat("HH:mm").parse("8:30"));
-                } catch (ParseException e) {
-                        e.printStackTrace();
-                }
 
                 JLabel jdo = new JLabel("-");
                 jdo.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
@@ -481,27 +483,15 @@ public class ChamCongFrame extends JFrame {
                 GioRa.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
                 GioRa.setBounds(20, 82, 60, 20);
 
-                GioRaBatDau = new JSpinner(new SpinnerDateModel());
-
                 JSpinner.DateEditor timeEditor2 = new JSpinner.DateEditor(GioRaBatDau, "HH:mm");
                 GioRaBatDau.setEditor(timeEditor2);
                 GioRaBatDau.setBounds(90, 80, 60, 22);
                 GioRaBatDau.setFont(font);
 
-                GioRaKetThuc = new JSpinner(new SpinnerDateModel());
-
                 JSpinner.DateEditor timeEditor4 = new JSpinner.DateEditor(GioRaKetThuc, "HH:mm");
                 GioRaKetThuc.setEditor(timeEditor4);
                 GioRaKetThuc.setBounds(180, 80, 60, 22);
                 GioRaKetThuc.setFont(font);
-
-                // Đặt giá trị mặc định là 6g chieu
-                try {
-                        GioRaBatDau.setValue(new SimpleDateFormat("HH:mm").parse("16:00"));
-                        GioRaKetThuc.setValue(new SimpleDateFormat("HH:mm").parse("17:00"));
-                } catch (ParseException e) {
-                        e.printStackTrace();
-                }
 
                 JLabel aibic = new JLabel("-");
                 aibic.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));

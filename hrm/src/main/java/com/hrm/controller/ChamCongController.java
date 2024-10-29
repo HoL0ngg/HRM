@@ -4,8 +4,6 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JLabel;
-
 import com.hrm.view.ChamCongFrame;
 import com.hrm.view.MainFrame;
 
@@ -26,17 +24,20 @@ public class ChamCongController implements MouseListener {
                 break;
 
             case "filter":
-                frame.showPopUp((JLabel) e.getComponent());
-                break;
-
-            case "TheoGio":
                 frame.chonGio();
                 break;
-
             case "TheoTrangThai":
 
                 break;
-
+            case "XuatFile":
+                frame.xuatFileExcel(frame.getTable(), "D:/data.xlsx");
+                break;
+            case "Reset":
+                frame.ResetButton();
+                break;
+            case "DongY":
+                frame.filterTable(frame.getTable(), frame.getTableModel());
+                frame.getChonGio().dispose();
             default:
                 break;
         }
@@ -54,10 +55,12 @@ public class ChamCongController implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        e.getComponent().setBackground(e.getComponent().getBackground().darker());
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        e.getComponent().setBackground(e.getComponent().getBackground().brighter());
     }
 
 }

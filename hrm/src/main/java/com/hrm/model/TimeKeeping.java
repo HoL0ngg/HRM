@@ -9,6 +9,16 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class TimeKeeping {
+
+    public enum Status {
+        Late_arrival_early_departure,
+        Late_arrival_on_time_departure,
+        On_time_arrival_early_departure,
+        On_time_arrival_on_time_departure,
+        Overtime_late_arrival,
+        Overtime_on_time_arrival
+    }
+
     private int id;
     private int employee_id;
     private LocalDate date;

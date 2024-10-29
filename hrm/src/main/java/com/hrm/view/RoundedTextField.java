@@ -7,7 +7,7 @@ import javax.swing.border.EmptyBorder;
 
 public class RoundedTextField extends JTextField {
 
-    private int radius;
+    private final int radius;
 
     public RoundedTextField(int radius) {
         this.radius = radius;

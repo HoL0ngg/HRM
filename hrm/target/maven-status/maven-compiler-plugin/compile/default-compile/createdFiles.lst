@@ -23,16 +23,19 @@ com\hrm\view\SalaryUpdateDialog$2.class
 com\hrm\view\SalaryFrame$7.class
 com\hrm\model\Department.class
 com\hrm\model\Salary.class
+com\hrm\view\ChamCongFrame$7.class
 com\hrm\controller\LoginController.class
 com\hrm\model\Account.class
 com\hrm\view\ChamCongFrame$4.class
 com\hrm\view\RoundedTextField.class
+com\hrm\controller\EnterController.class
 com\hrm\controller\ChamCongController.class
 com\hrm\view\LoginFrame$2.class
 com\hrm\view\SalaryDetailDialog.class
 com\hrm\view\ChamCongFrame$1.class
 com\hrm\view\SalaryFrame$8.class
 com\hrm\model\Position.class
+com\hrm\view\ChamCongFrame$5.class
 com\hrm\model\Employee$Status.class
 com\hrm\model\TimeKeeping.class
 com\hrm\view\SalaryUpdateDialog$3.class
@@ -44,6 +47,7 @@ com\hrm\model\TimeKeeping$Status.class
 com\hrm\view\SalaryFrame$2.class
 com\hrm\view\ChamCongFrame$2.class
 com\hrm\dao\EmployeeDAO.class
+com\hrm\view\ChamCongFrame$6.class
 com\hrm\view\RoundedButton.class
 com\hrm\view\LoginFrame$1.class
 com\hrm\dao\DAOInterface.class

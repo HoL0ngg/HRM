@@ -20,7 +20,7 @@ public class SalaryStatusRenderer extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int size = Math.min(this.getWidth(), this.getHeight()) - 10;
+        int size = Math.min(this.getWidth(), this.getHeight()) - 4;
         int x = (this.getWidth() - size) / 2;
         int y = (this.getHeight() - size) / 2;
         g.setColor(this.color);

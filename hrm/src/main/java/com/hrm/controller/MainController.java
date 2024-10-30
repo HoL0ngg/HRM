@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import com.hrm.view.ChamCongFrame;
 import com.hrm.view.LoginFrame;
 import com.hrm.view.MainFrame;
+import com.hrm.view.SalaryFrame;
 
 public class MainController implements MouseListener {
     private MainFrame mainFrame;
@@ -25,12 +26,14 @@ public class MainController implements MouseListener {
             case "ChamCongPanel":
                 new ChamCongFrame(mainFrame.getEmployee());
                 mainFrame.dispose();
-                ;
                 break;
             case "DangXuatPanel":
                 new LoginFrame();
                 mainFrame.dispose();
-            default:
+                break;
+            case "LuongPanel":
+                new SalaryFrame().setVisible(true);
+                mainFrame.dispose();
                 break;
         }
     }

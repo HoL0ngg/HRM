@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -51,6 +50,7 @@ import com.hrm.dao.TimeKeepingDAO;
 import com.hrm.model.Employee;
 import com.hrm.model.TimeKeeping;
 import com.hrm.model.TimeKeeping.Status;
+import com.hrm.utils.StatusRenderer;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.BorderFactory;
@@ -369,50 +369,8 @@ public class ChamCongFrame extends JFrame {
                                 tableModel.addRow(rowdata);
                         }
                 }
-                table.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
-                        @Override
-                        public Component getTableCellRendererComponent(JTable table, Object value,
-                                        boolean isSelected,
-                                        boolean hasFocus, int row, int column) {
-                                Component cell = super.getTableCellRendererComponent(table, value,
-                                                isSelected, hasFocus,
-                                                row,
-                                                column);
+                table.getColumnModel().getColumn(5).setCellRenderer(new StatusRenderer());
 
-                                if (value instanceof Status) {
-                                        Status status = (Status) value;
-                                        // Thay đổi màu nền dựa trên trạng thái
-                                        switch (status) {
-                                                case di_tre_ve_som:
-                                                        cell.setBackground(Color.red);
-                                                        // tableModel.setValueAt("Di tre ve som", row, column);
-                                                        break;
-                                                case di_tre_ve_dung_gio:
-                                                        // tableModel.setValueAt("Di tre ve dung gio", row, column);
-                                                        cell.setBackground(Color.orange);
-                                                        break;
-                                                case tang_ca_di_tre:
-                                                        cell.setBackground(Color.orange);
-                                                        // tableModel.setValueAt("Tang ca - di tre", row, column);
-                                                        break;
-                                                case di_dung_gio_ve_som:
-                                                        // tableModel.setValueAt("Di dung gio - ve tre", row, column);
-                                                        cell.setBackground(Color.yellow);
-                                                        break;
-                                                case di_dung_gio_ve_dung_gio:
-                                                        // tableModel.setValueAt("Di dung gio - ve dung gio", row,
-                                                        // column);
-                                                        cell.setBackground(Color.green);
-                                                        break;
-                                                case tang_ca_di_dung_gio:
-                                                        // tableModel.setValueAt("Tang ca - di dung gio", row, column);
-                                                        cell.setBackground(Color.green);
-                                                        break;
-                                        }
-                                }
-                                return cell;
-                        }
-                });
         }
 
         private void setColumnWidths() {
@@ -422,7 +380,7 @@ public class ChamCongFrame extends JFrame {
                 table.getColumnModel().getColumn(2).setPreferredWidth(60); // Ngay
                 table.getColumnModel().getColumn(3).setPreferredWidth(50); // Gio vao
                 table.getColumnModel().getColumn(4).setPreferredWidth(50); // Gio ra
-                table.getColumnModel().getColumn(5).setPreferredWidth(120); // Trang thai
+                table.getColumnModel().getColumn(5).setPreferredWidth(30); // Trang thai
                 table.getColumnModel().getColumn(6).setPreferredWidth(50); // Gio lam them
         }
 

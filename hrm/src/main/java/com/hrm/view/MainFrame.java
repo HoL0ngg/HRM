@@ -129,6 +129,7 @@ public class MainFrame extends JFrame {
                 LuongLabel.setFont(MenuFont);
                 contentPane.add(LuongPanel);
                 contentPane.add(LuongLabel);
+                LuongPanel.addMouseListener(controller);
 
                 RoundedPanel ChamCongPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/business.png").getAbsolutePath());

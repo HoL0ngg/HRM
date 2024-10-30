@@ -109,10 +109,9 @@ public class EmployeeDAO implements DAOInterface<Employee> {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            JDBCUtil.closeConnection(con);
         }
 
+        JDBCUtil.closeConnection(con);
         return employee;
     }
 }

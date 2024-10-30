@@ -38,13 +38,13 @@ public class EmployeeDAO implements DAOInterface<Employee> {
     }
 
     @Override
-    public ArrayList<Employee> seclectAll() {
+    public ArrayList<Employee> selectAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'seclectAll'");
     }
 
     @Override
-    public Employee seclectByID(int id) {
+    public Employee selectByID(int id) {
         String sql = "select * from employee where id = ?";
         Connection con = JDBCUtil.createConnection();
         Employee employee = null;

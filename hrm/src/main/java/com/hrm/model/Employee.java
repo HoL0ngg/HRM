@@ -43,6 +43,7 @@ public class Employee {
     private Work_type work_type;
 
     // Constructor không đối số
+    // Constructor không đối số
     public Employee() {
     }
 

@@ -1,3 +1,8 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package com.hrm.model;
 
 import java.time.LocalDate;
@@ -8,10 +13,10 @@ public class TimeKeeping {
     public enum Status {
         di_tre_ve_som,
         di_tre_ve_dung_gio,
-        di_dung_gio_ve_som,
         di_dung_gio_ve_dung_gio,
-        tang_ca_di_tre,
-        tang_ca_di_dung_gio
+        di_dung_gio_ve_som,
+        tang_ca_di_dung_gio,
+        tang_ca_di_tre
     }
 
     private int id;
@@ -35,7 +40,7 @@ public class TimeKeeping {
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -43,7 +48,7 @@ public class TimeKeeping {
     }
 
     public int getEmployee_id() {
-        return employee_id;
+        return this.employee_id;
     }
 
     public void setEmployee_id(int employee_id) {
@@ -51,7 +56,7 @@ public class TimeKeeping {
     }
 
     public LocalDate getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(LocalDate date) {
@@ -59,7 +64,7 @@ public class TimeKeeping {
     }
 
     public LocalTime getCheck_in_time() {
-        return check_in_time;
+        return this.check_in_time;
     }
 
     public void setCheck_in_time(LocalTime check_in_time) {
@@ -67,7 +72,7 @@ public class TimeKeeping {
     }
 
     public LocalTime getCheck_out_time() {
-        return check_out_time;
+        return this.check_out_time;
     }
 
     public void setCheck_out_time(LocalTime check_out_time) {
@@ -75,7 +80,7 @@ public class TimeKeeping {
     }
 
     public Status getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(Status status) {

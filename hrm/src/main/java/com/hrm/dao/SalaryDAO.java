@@ -222,5 +222,4 @@ public class SalaryDAO implements DAOInterface<Salary> {
 
         return salaryList;
     }
-
 }

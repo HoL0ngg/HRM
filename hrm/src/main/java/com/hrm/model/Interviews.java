@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package tuyenDung;
+package com.hrm.model;
 
 import java.time.LocalDate;
 
@@ -15,7 +15,10 @@ public class Interviews {
     private int job_open_id;
     private int applicants_id;
     private LocalDate interviews_date;
-    private enum interviews_stage {};
+
+    private enum interviews_stage {
+    };
+
     private String note;
 
     public Interviews(int id, int job_open_id, int applicants_id, LocalDate interviews_date, String note) {
@@ -65,6 +68,5 @@ public class Interviews {
     public void setNote(String note) {
         this.note = note;
     }
-    
-    
+
 }

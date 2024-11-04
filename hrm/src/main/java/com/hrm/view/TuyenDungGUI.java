@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public class TuyenDungGUI extends JPanel {
     private ApplicantsBUS applicantsBus = new ApplicantsBUS();
     private JobOpeningsBUS jobBus = new JobOpeningsBUS();
-    
+
     private ArrayList<JobOpenings> jobList;
     private ArrayList<Applicants> applicantList;
-    
+
     public TuyenDungGUI() {
         jobList = new ArrayList<>();
         applicantList = new ArrayList<>();
@@ -28,20 +28,20 @@ public class TuyenDungGUI extends JPanel {
         setLayout(new BorderLayout());
 
         JPanel headBar = new JPanel(new BorderLayout());
-        
+
         JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton addPostBtn = new JButton("Thêm bài đăng");
         JButton applicantListBtn = new JButton("Danh sách ứng viên");
         JButton scheduleBtn = new JButton("Lịch phỏng vấn");
-        
+
         JPanel searchField = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JTextField search = new JTextField(20);
         JButton previousBtn = new JButton("<");
         JButton nextBtn = new JButton(">");
         JLabel pageCurrent = new JLabel("9");
-        ImageIcon filterIcon = new ImageIcon ("icons8-filter-24.png");
-        JButton filterBtn = new JButton("",filterIcon);
-        
+        ImageIcon filterIcon = new ImageIcon("icons8-filter-24.png");
+        JButton filterBtn = new JButton("", filterIcon);
+
         toolBar.add(addPostBtn);
         toolBar.add(applicantListBtn);
         toolBar.add(scheduleBtn);
@@ -50,12 +50,12 @@ public class TuyenDungGUI extends JPanel {
         searchField.add(pageCurrent);
         searchField.add(nextBtn);
         searchField.add(filterBtn);
-        
-        headBar.add(toolBar,BorderLayout.NORTH);
-        headBar.add(searchField,BorderLayout.CENTER);
+
+        headBar.add(toolBar, BorderLayout.NORTH);
+        headBar.add(searchField, BorderLayout.CENTER);
         JPanel recentPanel = createSectionPanel("Gần đây nhất");
         recentPanel.add(createJobCard("Senior IT Business Analyst", "Hồ Chí Minh", "Thương lượng"));
-        
+
         JPanel olderPanel = createSectionPanel("Cũ nhất");
         olderPanel.add(createJobCard("Senior IT Business Analyst", "Hồ Chí Minh", "Thương lượng"));
 
@@ -68,6 +68,7 @@ public class TuyenDungGUI extends JPanel {
         add(headBar, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
     }
+
     public JPanel createSectionPanel(String title, List<JobOpenings> jobs) {
         jobList = new ArrayList<>();
         JPanel sectionPanel = new JPanel(new BorderLayout());
@@ -80,13 +81,13 @@ public class TuyenDungGUI extends JPanel {
         header.setBackground(Color.orange);
         sectionPanel.add(header, BorderLayout.NORTH);
 
-        JPanel jobsGrid = new JPanel(new GridLayout(3, 3, 10, 10)); 
+        JPanel jobsGrid = new JPanel(new GridLayout(3, 3, 10, 10));
         sectionPanel.add(jobsGrid, BorderLayout.CENTER);
         return sectionPanel;
-        
+
         for (JobOpenings job : jobList) {
-        JPanel jobCard = createJobCard(job.getPosition(), job.getStatus());
-        jobsGrid.add(jobCard);
+            JPanel jobCard = createJobCard(job.getPosition(), job.getStatus());
+            jobsGrid.add(jobCard);
         }
     }
 
@@ -105,7 +106,7 @@ public class TuyenDungGUI extends JPanel {
         infoPanel.add(titleLabel);
         infoPanel.add(locationLabel);
         infoPanel.add(salaryLabel);
-        
+
         jobCard.add(infoPanel, BorderLayout.CENTER);
         jobCard.add(updateButton, BorderLayout.SOUTH);
         return jobCard;

@@ -15,9 +15,11 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.Normalizer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -354,6 +356,15 @@ public class ChamCongFrame extends JFrame {
                         // Chuyen du lieu tu kieu Date ve LocalDate
                         LocalDate startLocalDate = NgayBatDau.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                         LocalDate endLocalDate = NgayKetThuc.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                        long sogiolamthem = 0;
+                        if (!time.getCheck_out_time().isAfter(LocalTime.of(17, 0)))
+                                sogiolamthem = 0;
+                        else
+                                sogiolamthem = Duration.between(LocalTime.of(17, 0), time.getCheck_out_time())
+                                                .toMinutes();
+                        double hihi = sogiolamthem * 1.0 / 60;
+                        DecimalFormat df = new DecimalFormat("#.##");
+                        String num = df.format(hihi);
                         Object[] rowdata = {
                                         time.getEmployee_id(),
                                         EmployeeDAO.getInstance().selectByID(time.getEmployee_id()).getName(),
@@ -361,7 +372,7 @@ public class ChamCongFrame extends JFrame {
                                         time.getCheck_in_time(),
                                         time.getCheck_out_time(),
                                         time.getStatus(),
-                                        time.getEmployee_id()
+                                        num
                         };
                         if ((time.getDate().isEqual(startLocalDate) || time.getDate().isAfter(startLocalDate)) &&
                                         (time.getDate().isEqual(endLocalDate)

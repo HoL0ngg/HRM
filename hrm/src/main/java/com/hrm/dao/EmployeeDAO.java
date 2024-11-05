@@ -114,4 +114,24 @@ public class EmployeeDAO implements DAOInterface<Employee> {
         JDBCUtil.closeConnection(con);
         return employee;
     }
+
+    public Employee getNamebyId(int id) {
+        String sql = "select employee.name from employee where employee.id = ?";
+        Connection con = JDBCUtil.createConnection();
+        Employee employee = null;
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                employee = new Employee(id, rs.getString("name"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        JDBCUtil.closeConnection(con);
+        return employee;
+    }
 }

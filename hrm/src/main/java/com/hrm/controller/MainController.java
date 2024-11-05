@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
+import com.hrm.dao.EmployeeDAO;
 import com.hrm.view.ChamCongFrame;
 import com.hrm.view.CongViecFrame;
 import com.hrm.view.LoginFrame;
@@ -23,6 +24,8 @@ public class MainController implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         JPanel src = (JPanel) e.getSource();
         String name = src.getName();
+        // Employee employee =
+        // EmployeeDAO.getInstance().selectByID(mainFrame.getEmployee().getId());
         switch (name) {
             case "ChamCongPanel":
                 new ChamCongFrame(mainFrame.getEmployee());
@@ -37,7 +40,7 @@ public class MainController implements MouseListener {
                 mainFrame.dispose();
                 break;
             case "CongViecPanel":
-                new CongViecFrame(mainFrame.getEmployee());
+                new CongViecFrame(EmployeeDAO.getInstance().selectByID(mainFrame.getEmployee().getId()));
                 mainFrame.dispose();
                 break;
         }

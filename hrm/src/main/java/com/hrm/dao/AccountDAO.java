@@ -88,7 +88,7 @@ public class AccountDAO implements DAOInterface<Account> {
 
             if (rs.next()) {
                 if (password.equals(rs.getString("password"))) {
-                    employee = EmployeeDAO.getInstance().selectByID(rs.getInt("employee_id"));
+                    employee = EmployeeDAO.getInstance().getNamebyId(rs.getInt("employee_id"));
                 }
             }
 

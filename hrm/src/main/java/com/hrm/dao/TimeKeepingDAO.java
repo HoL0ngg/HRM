@@ -21,7 +21,7 @@ public class TimeKeepingDAO {
     }
 
     public ArrayList<TimeKeeping> selectAll() {
-        ArrayList<TimeKeeping> arr = new ArrayList();
+        ArrayList<TimeKeeping> arr = new ArrayList<TimeKeeping>();
         String sql = "select * from timekeeping";
         Connection con = JDBCUtil.createConnection();
 
@@ -31,7 +31,7 @@ public class TimeKeepingDAO {
             try {
                 ResultSet rs = st.executeQuery(sql);
 
-                while(true) {
+                while (true) {
                     if (!rs.next()) {
                         rs.close();
                         break;
@@ -39,9 +39,9 @@ public class TimeKeepingDAO {
 
                     int id = rs.getInt("id");
                     int employee_id = rs.getInt("employee_id");
-                    LocalDate date = (LocalDate)rs.getObject("date", LocalDate.class);
-                    LocalTime check_in = (LocalTime)rs.getObject("check_in_time", LocalTime.class);
-                    LocalTime check_out = (LocalTime)rs.getObject("check_out_time", LocalTime.class);
+                    LocalDate date = (LocalDate) rs.getObject("date", LocalDate.class);
+                    LocalTime check_in = (LocalTime) rs.getObject("check_in_time", LocalTime.class);
+                    LocalTime check_out = (LocalTime) rs.getObject("check_out_time", LocalTime.class);
                     TimeKeeping.Status status = Status.valueOf(rs.getString("status"));
                     arr.add(new TimeKeeping(id, employee_id, date, check_in, check_out, status));
                 }

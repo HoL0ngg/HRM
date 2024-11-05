@@ -7,6 +7,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 
 import com.hrm.view.ChamCongFrame;
+import com.hrm.view.CongViecFrame;
 import com.hrm.view.LoginFrame;
 import com.hrm.view.MainFrame;
 import com.hrm.view.SalaryFrame;
@@ -33,6 +34,10 @@ public class MainController implements MouseListener {
                 break;
             case "LuongPanel":
                 new SalaryFrame().setVisible(true);
+                mainFrame.dispose();
+                break;
+            case "CongViecPanel":
+                new CongViecFrame(mainFrame.getEmployee());
                 mainFrame.dispose();
                 break;
         }

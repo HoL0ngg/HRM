@@ -138,6 +138,16 @@ public class ChamCongFrame extends JFrame {
                 navBar.setBounds(0, 0, 800, 40);
                 contentPane.add(navBar);
 
+                Image AvaIcon = new ImageIcon(
+                                new File("hrm/src/main/resources/img/profile.png").getAbsolutePath())
+                                .getImage()
+                                .getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+
+                JLabel AvaLabel = new JLabel(new ImageIcon(
+                                AvaIcon));
+                AvaLabel.setBounds(560, 5, 30, 30);
+                navBar.add(AvaLabel);
+
                 JLabel TenLabel = new JLabel();
                 TenLabel.setText(employee.getName());
                 TenLabel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 15));

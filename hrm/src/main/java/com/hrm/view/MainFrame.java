@@ -172,6 +172,7 @@ public class MainFrame extends JFrame {
                 CongViecLabel.setFont(MenuFont);
                 contentPane.add(CongViecLabel);
                 contentPane.add(CongViecPanel);
+                CongViecPanel.addMouseListener(controller);
 
                 RoundedPanel CaiDatPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/set-up.png").getAbsolutePath());

@@ -15,5 +15,6 @@
             "database": "quanlynhansu",
             "password": ""
         }
-    ]
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
 }

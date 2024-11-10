@@ -222,4 +222,42 @@ public class SalaryDAO implements DAOInterface<Salary> {
 
         return salaryList;
     }
+    public boolean updateSalary(int employeeID, double bonus, double attendance, double deductions, String note, LocalDate payday) {
+    String sql = "UPDATE salaries SET bonus = ?, attendance = ?, deductions = ?, note = ?, payday = ? WHERE employee_id = ?";
+    Connection con = JDBCUtil.createConnection(); // Kết nối tới cơ sở dữ liệu
+    boolean updated = false;
+
+    try {
+        PreparedStatement pst = con.prepareStatement(sql);
+        try {
+            pst.setDouble(1, bonus);
+            pst.setDouble(2, attendance);
+            pst.setDouble(3, deductions);
+            pst.setString(4, note);
+            pst.setDate(5, java.sql.Date.valueOf(payday));
+            pst.setInt(6, employeeID);
+            updated = pst.executeUpdate() > 0; // Kiểm tra xem có bản ghi nào được cập nhật không
+        } catch (Throwable ex) {
+            if (pst != null) {
+                try {
+                    pst.close();
+                } catch (Throwable suppressed) {
+                    ex.addSuppressed(suppressed);
+                }
+            }
+            throw ex;
+        }
+
+        if (pst != null) {
+            pst.close();
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        JDBCUtil.closeConnection(con); // Đóng kết nối sau khi hoàn tất
+    }
+
+    return updated;
+}
+
 }

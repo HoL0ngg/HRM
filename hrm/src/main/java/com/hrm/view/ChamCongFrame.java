@@ -261,9 +261,20 @@ public class ChamCongFrame extends JFrame {
                         }
 
                         private void filterTable(String text) {
-                                text = buildVietnameseRegex(text);
-                                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 1));
-                                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 0));
+                                boolean isNumeric;
+                                try {
+                                        Integer.parseInt(text); // hoặc Double.parseDouble(str) nếu cần hỗ trợ số thực
+                                        isNumeric = true;
+                                } catch (NumberFormatException e) {
+                                        isNumeric = false;
+                                }
+
+                                if (isNumeric)
+                                        sorter.setRowFilter(RowFilter.regexFilter('^' + text + '$', 0));
+                                else {
+                                        text = buildVietnameseRegex(text);
+                                        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 1));
+                                }
                         }
 
                         private String buildVietnameseRegex(String input) {

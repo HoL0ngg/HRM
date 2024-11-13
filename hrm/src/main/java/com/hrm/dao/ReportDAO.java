@@ -20,10 +20,10 @@ public class ReportDAO {
                        "SUM(CASE WHEN hire_date >= CURDATE() - INTERVAL 1 MONTH THEN 1 ELSE 0 END) AS new_employees, " +
                        "SUM(CASE WHEN status = 'off' THEN 1 ELSE 0 END) AS resigned_employees " +
                        "FROM employee " +
-                       "GROUP BY MONTH(hire_date)";
-        
-        try (Connection connection = mySQL.getConnection(); // Use the getConnection() method
-             Statement stmt = connection.createStatement();
+                       "GROUP BY DATE_FORMAT(hire_date, '%M')";  // Sửa chỗ này
+
+        try (Connection connection = mySQL.getConnection(); 
+             Statement stmt = connection.createStatement(); 
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
                 String month = rs.getString("month");

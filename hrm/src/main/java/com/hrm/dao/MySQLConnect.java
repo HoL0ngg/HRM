@@ -26,7 +26,7 @@ public class MySQLConnect {
     public void Connect()
     {
          try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url, user, password);
         } catch (ClassNotFoundException | SQLException ex) {
 //            Logger.getLogger(NhanVienDAO.class.getName()).log(Level.SEVERE, null, ex);

@@ -4,20 +4,37 @@
  */
 package com.hrm.view;
 
+import com.hrm.dao.DepartmentDAO;
 import com.hrm.dao.EmployeeDAO;
 import com.hrm.dao.SalaryChangeHistoryDAO;
 import com.hrm.dao.SalaryDAO;
+import com.hrm.model.Department;
 import com.hrm.model.Employee;
 import com.hrm.model.Salary;
 import com.hrm.model.SalaryChangeHistory;
 import com.hrm.utils.StatusRenderer;
+import java.awt.BorderLayout;
 import java.awt.Frame;
+import java.awt.GridLayout;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,8 +42,18 @@ import javax.swing.table.DefaultTableModel;
  * @author Hoang Vu
  */
 public class SalaryFrame extends javax.swing.JFrame {
+      private JPopupMenu filterMenu;
+    
+    // Biến lưu giá trị lọc
+    private String selectedDepartment = null; // Phòng ban
+    //private String selectedStatus = null;     // Trạng thái (On/Off)
+    private String selectedWorkType = null;   // Hình thức làm việc (Part-time/Full-time)
+    private BigDecimal  selecedSalaryMin = null;
+    private BigDecimal  selecedSalaryMax = null;
+    
+    
 
-        /**
+        /*
          * Creates new form Salarytest
          */
         public SalaryFrame() {
@@ -85,6 +112,8 @@ public class SalaryFrame extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         txtThuong = new javax.swing.JTextField();
         txtKhauTru = new javax.swing.JTextField();
+        lblTax = new javax.swing.JLabel();
+        lblSocial_insurance = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCapNhapPhieuLuong = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
@@ -92,14 +121,28 @@ public class SalaryFrame extends javax.swing.JFrame {
         tblDanhSachLuong = new javax.swing.JTable();
         cbbThang = new javax.swing.JComboBox<>();
         btnListSalaries = new javax.swing.JButton();
+        jLabel19 = new javax.swing.JLabel();
+        txtSearch = new javax.swing.JTextField();
+        lableFilter = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        TangDan = new javax.swing.JLabel();
+        GiamDan = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblYeuCauTangLuong = new javax.swing.JTable();
         btnRefreshDataYeuCauThayDoi = new javax.swing.JButton();
+        txtSearch1 = new javax.swing.JTextField();
+        cbbThang1 = new javax.swing.JComboBox<>();
+        jLabel21 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        tblYeuCauTangLuongDaXem = new javax.swing.JTable();
+        jPanel8 = new javax.swing.JPanel();
         btnRefreshDataYeuCauDaXem = new javax.swing.JButton();
+        txtSearch2 = new javax.swing.JTextField();
+        cbbThang2 = new javax.swing.JComboBox<>();
+        jLabel22 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tblYeuCauTangLuong1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,14 +194,6 @@ public class SalaryFrame extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel7.setText("Hình thức làm việc");
 
-        lblPhongBan.setText("jLabel19");
-
-        lblViTri.setText("jLabel20");
-
-        lblHinhThucLamViec.setText("jLabel21");
-
-        lblHoVaTen.setText("jLabel29");
-
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -184,7 +219,7 @@ public class SalaryFrame extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
                 .addComponent(lblHinhThucLamViec)
-                .addContainerGap(122, Short.MAX_VALUE))
+                .addContainerGap(296, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,23 +274,12 @@ public class SalaryFrame extends javax.swing.JFrame {
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel18.setText("Ghi chú");
 
-        lblTongLuongTheoGio.setText("jLabel22");
-
-        lblTongLuongTangCa.setText("..............................");
-
-        lblChuyenCan.setText("............................");
-
-        jLabel25.setText("jLabel25");
-
-        jLabel26.setText("jLabel26");
-
-        lblTongLuong.setText("..........................................");
-
         txtGhiChu.setColumns(20);
         txtGhiChu.setRows(5);
         jScrollPane2.setViewportView(txtGhiChu);
 
         jButton1.setText("jButton1");
+        jButton1.setBorderPainted(false);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -280,8 +304,8 @@ public class SalaryFrame extends javax.swing.JFrame {
                             .addComponent(lblTongLuongTangCa)
                             .addComponent(lblTongLuongTheoGio)
                             .addComponent(lblChuyenCan)
-                            .addComponent(txtThuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(72, 72, 72)
+                            .addComponent(txtThuong, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(61, 61, 61)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addComponent(jLabel16)
@@ -298,20 +322,24 @@ public class SalaryFrame extends javax.swing.JFrame {
                                     .addComponent(jLabel13)
                                     .addComponent(jLabel15))
                                 .addGap(27, 27, 27)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel26)
+                                    .addComponent(jLabel25)
+                                    .addComponent(lblSocial_insurance, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lblTax, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel6Layout.createSequentialGroup()
+                                        .addGap(85, 85, 85)
                                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel26)
-                                            .addComponent(jLabel25))
-                                        .addGap(55, 55, 55)
-                                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jLabel18)
                                             .addComponent(jLabel17)))
-                                    .addComponent(txtKhauTru, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel6Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtKhauTru, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addGap(0, 63, Short.MAX_VALUE)
                                         .addComponent(dataChooseNgayHieuLuc, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel6Layout.createSequentialGroup()
                                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -328,7 +356,8 @@ public class SalaryFrame extends javax.swing.JFrame {
                         .addComponent(jLabel13)
                         .addComponent(jLabel17)
                         .addComponent(lblTongLuongTheoGio)
-                        .addComponent(jLabel26))
+                        .addComponent(jLabel26)
+                        .addComponent(lblSocial_insurance))
                     .addComponent(dataChooseNgayHieuLuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -345,7 +374,8 @@ public class SalaryFrame extends javax.swing.JFrame {
                             .addComponent(jLabel15)
                             .addComponent(lblChuyenCan)
                             .addComponent(txtKhauTru, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTax))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
@@ -380,8 +410,8 @@ public class SalaryFrame extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel8))
-                        .addGap(0, 676, Short.MAX_VALUE))
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 817, Short.MAX_VALUE))
+                        .addGap(0, 775, Short.MAX_VALUE))
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -397,7 +427,7 @@ public class SalaryFrame extends javax.swing.JFrame {
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(149, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Tạo phiếu lương", jPanel1);
@@ -420,6 +450,7 @@ public class SalaryFrame extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tblDanhSachLuong);
 
+        cbbThang.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         cbbThang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
         cbbThang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -434,29 +465,103 @@ public class SalaryFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel19.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
+        jLabel19.setText("Tháng");
+
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
+        lableFilter.setText("Lọc");
+        lableFilter.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lableFilterMouseClicked(evt);
+            }
+        });
+        lableFilter.setVisible(false);
+
+        jPanel7.setVisible(false);
+
+        TangDan.setText("Tăng dần");
+        TangDan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TangDanMouseClicked(evt);
+            }
+        });
+
+        GiamDan.setText("Giảm dần");
+        GiamDan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                GiamDanMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TangDan, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GiamDan))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(TangDan)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(GiamDan))
+        );
+
+        jLabel20.setText("Sắp xếp");
+        jLabel20.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel20MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 829, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(150, 150, 150)
+                .addGap(44, 44, 44)
+                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbbThang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnListSalaries)
-                .addGap(69, 69, 69))
+                .addGap(45, 45, 45)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lableFilter)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnListSalaries, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(267, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(cbbThang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
-                .addComponent(btnListSalaries)
-                .addGap(35, 35, 35)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbbThang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel19)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lableFilter)
+                    .addComponent(btnListSalaries)
+                    .addComponent(jLabel20))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Danh sách nhân viên", jPanel2);
@@ -486,31 +591,79 @@ public class SalaryFrame extends javax.swing.JFrame {
             }
         });
 
+        txtSearch1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearch1ActionPerformed(evt);
+            }
+        });
+
+        cbbThang1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbbThang1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
+        cbbThang1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbbThang1ActionPerformed(evt);
+            }
+        });
+
+        jLabel21.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
+        jLabel21.setText("Tháng");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(58, 58, 58)
+                .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbbThang1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(txtSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(111, 111, 111)
                 .addComponent(btnRefreshDataYeuCauThayDoi)
-                .addGap(89, 89, 89))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 927, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 120, Short.MAX_VALUE)
-                .addComponent(btnRefreshDataYeuCauThayDoi)
-                .addGap(42, 42, 42)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbbThang1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel21)
+                    .addComponent(txtSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRefreshDataYeuCauThayDoi))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPane1.addTab("Yêu cầu thay đổi", jPanel3);
 
-        tblYeuCauTangLuongDaXem.setModel(new javax.swing.table.DefaultTableModel(
+        btnRefreshDataYeuCauDaXem.setText("Refresh Data");
+        btnRefreshDataYeuCauDaXem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshDataYeuCauDaXemActionPerformed(evt);
+            }
+        });
+
+        txtSearch2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearch2ActionPerformed(evt);
+            }
+        });
+
+        cbbThang2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbbThang2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
+        cbbThang2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbbThang2ActionPerformed(evt);
+            }
+        });
+
+        jLabel22.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
+        jLabel22.setText("Tháng");
+
+        tblYeuCauTangLuong1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -521,32 +674,69 @@ public class SalaryFrame extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane5.setViewportView(tblYeuCauTangLuongDaXem);
-
-        btnRefreshDataYeuCauDaXem.setText("Refresh Data");
-        btnRefreshDataYeuCauDaXem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshDataYeuCauDaXemActionPerformed(evt);
+        tblYeuCauTangLuong1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblYeuCauTangLuong1MouseClicked(evt);
             }
         });
+        jScrollPane5.setViewportView(tblYeuCauTangLuong1);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(58, 58, 58)
+                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbbThang2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
+                .addComponent(txtSearch2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(103, 103, 103)
+                .addComponent(btnRefreshDataYeuCauDaXem)
+                .addContainerGap(196, Short.MAX_VALUE))
+            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel8Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 915, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbbThang2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel22)
+                            .addComponent(txtSearch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(btnRefreshDataYeuCauDaXem)))
+                .addContainerGap(564, Short.MAX_VALUE))
+            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel8Layout.createSequentialGroup()
+                    .addGap(104, 104, 104)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(63, Short.MAX_VALUE)))
+        );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 829, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRefreshDataYeuCauDaXem)
-                .addGap(73, 73, 73))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(0, 120, Short.MAX_VALUE)
-                .addComponent(btnRefreshDataYeuCauDaXem)
-                .addGap(42, 42, 42)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Lịch sử thay đổi", jPanel4);
@@ -556,37 +746,471 @@ public class SalaryFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1))
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addComponent(jTabbedPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 664, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(37, Short.MAX_VALUE))
         );
+
+        jTabbedPane1.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-        private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-                try {
+    private void lableFilterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lableFilterMouseClicked
+
+        if (filterMenu == null) {
+            initializeFilterMenu();
+        }
+        // Hiển thị menu ngay dưới nút bộ lọc
+        filterMenu.show(lableFilter, 0, lableFilter.getHeight());
+        System.out.println("Filter menu displayed");
+    }//GEN-LAST:event_lableFilterMouseClicked
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        SalaryDAO salaryDAO = SalaryDAO.getInstance();
+        int selectedid = Integer.parseInt(txtSearch.getText().trim());
+        ArrayList<Salary> salaryList = salaryDAO.selectByEmployeeIdforDanhSachLuong(selectedid);
+        // Sử dụng phương thức selectByEmployeeID thay vì selectByID
+        //        Salary salary = salaryDAO.selectByEmployeeId(selectedid);
+
+        // Nếu tìm thấy Salary, cập nhật bảng dữ liệu
+        if (salaryList != null) {
+            Object[][] tableData = new Object[1][9]; // Chỉ có một dòng vì chỉ tìm một nhân viên
+
+            for (int i = 0; i < salaryList.size(); ++i) {
+                Salary salary = (Salary) salaryList.get(i);
+                tableData[i][0] = salary.getEmployee().getId();
+                tableData[i][1] = salary.getEmployee().getName();
+                tableData[i][2] = salary.getPosition().getName();
+                tableData[i][3] = salary.getPositionSalary();
+                tableData[i][4] = salary.getOvertimeSalary();
+                tableData[i][5] = salary.getAttendance();
+                tableData[i][6] = salary.getBonus();
+                tableData[i][7] = salary.getDeductions();
+                tableData[i][8] = salary.getnet_salary();
+            }
+            // Tạo model cho bảng và cập nhật
+            DefaultTableModel model = new DefaultTableModel(tableData,
+                new String[] { "Mã nhân viên", "Họ và tên", "Vị trí",
+                    "Lương theo giờ", "Lương tăng ca", "Chuyên cần", "Thưởng", "Khấu trừ",
+                    "Tổng lương" });
+            this.tblDanhSachLuong.setModel(model);
+        } else {
+            // Nếu không tìm thấy thông tin lương, có thể hiển thị thông báo hoặc để trống bảng
+            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin lương cho nhân viên này!");
+        }
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void btnListSalariesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListSalariesActionPerformed
+        loadListSalariesToTable();
+    }//GEN-LAST:event_btnListSalariesActionPerformed
+
+    private void cbbThangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbThangActionPerformed
+        int selectedMonth = this.cbbThang.getSelectedIndex() + 1;
+                SalaryDAO salaryDAO = SalaryDAO.getInstance();
+                ArrayList<Salary> salaryList = salaryDAO.selectByMonth(selectedMonth);
+                Object[][] tableData = new Object[salaryList.size()][9];
+
+                for (int i = 0; i < salaryList.size(); ++i) {
+                        Salary salary = (Salary) salaryList.get(i);
+                        tableData[i][0] = salary.getEmployee().getId();
+                        tableData[i][1] = salary.getEmployee().getName();
+                        tableData[i][2] = salary.getPosition().getName();
+                        tableData[i][3] = salary.getPositionSalary();
+                        tableData[i][4] = salary.getOvertimeSalary();
+                        tableData[i][5] = salary.getAttendance();
+                        tableData[i][6] = salary.getBonus();
+                        tableData[i][7] = salary.getDeductions();
+                        tableData[i][8] = salary.getnet_salary();
+                }
+
+                DefaultTableModel model = new DefaultTableModel(tableData,
+                                new String[] { "Mã nhân viên", "Họ và tên", "Vị trí",
+                                                "Lương theo giờ", "Lương tăng ca", "Chuyên cần", "Thưởng", "Khấu trừ",
+                                                "Tổng lương" });
+                this.tblDanhSachLuong.setModel(model);
+    }//GEN-LAST:event_cbbThangActionPerformed
+
+    private void tblDanhSachLuongMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachLuongMouseClicked
+        int selectedRow = this.tblDanhSachLuong.getSelectedRow();
+                if (selectedRow >= 0) {
+                        String employeeName = this.tblDanhSachLuong.getValueAt(selectedRow, 1).toString();
+                        String position = this.tblDanhSachLuong.getValueAt(selectedRow, 2).toString();
+                        String totalSalary = this.tblDanhSachLuong.getValueAt(selectedRow, 8).toString();
+                        String overtimeSalary = this.tblDanhSachLuong.getValueAt(selectedRow, 4).toString();
+                        String bonus = this.tblDanhSachLuong.getValueAt(selectedRow, 6).toString();
+                        String deductions = this.tblDanhSachLuong.getValueAt(selectedRow, 7).toString();
+                        String note = "";
+                        SalaryDetailDialog.showSalaryDetailDialog((JFrame) null, employeeName, position, totalSalary,
+                                        overtimeSalary, bonus, deductions, note);
+                }
+    }//GEN-LAST:event_tblDanhSachLuongMouseClicked
+
+    private void TangDanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TangDanMouseClicked
+        SalaryDAO salaryDAO = SalaryDAO.getInstance();
+    ArrayList<Salary> salaryList = salaryDAO.selectAll(); // selectAll thay vì selectByMonth
+    
+    // Sắp xếp danh sách salaryList theo netSalary tăng dần
+    Collections.sort(salaryList, (Salary s1, Salary s2) -> s1.getnet_salary().compareTo(s2.getnet_salary()) // So sánh getnet_salary theo thứ tự tăng dần
+        );
+    
+    // Tạo dữ liệu cho bảng
+    Object[][] tableData = new Object[salaryList.size()][9];
+    for (int i = 0; i < salaryList.size(); ++i) {
+        Salary salary = salaryList.get(i);
+        tableData[i][0] = salary.getEmployee().getId();
+        tableData[i][1] = salary.getEmployee().getName();
+        tableData[i][2] = salary.getPosition().getName();
+        tableData[i][3] = salary.getPositionSalary();
+        tableData[i][4] = salary.getOvertimeSalary();
+        tableData[i][5] = salary.getAttendance();
+        tableData[i][6] = salary.getBonus();
+        tableData[i][7] = salary.getDeductions();
+        tableData[i][8] = salary.getnet_salary();
+    }
+
+    // Cập nhật lại bảng với dữ liệu đã sắp xếp
+    DefaultTableModel model = new DefaultTableModel(tableData,
+            new String[] { "Mã nhân viên", "Họ và tên", "Vị trí", 
+                          "Lương theo giờ", "Lương tăng ca", "Chuyên cần", 
+                          "Thưởng", "Khấu trừ", "Tổng lương" });
+    this.tblDanhSachLuong.setModel(model);
+    }//GEN-LAST:event_TangDanMouseClicked
+
+    private void GiamDanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GiamDanMouseClicked
+        SalaryDAO salaryDAO = SalaryDAO.getInstance();
+    ArrayList<Salary> salaryList = salaryDAO.selectAll(); // selectAll thay vì selectByMonth
+    
+    // Sắp xếp danh sách salaryList theo netSalary giảm dần
+    Collections.sort(salaryList, (Salary s1, Salary s2) -> s2.getnet_salary().compareTo(s1.getnet_salary()) // So sánh netSalary theo thứ tự giảm dần
+        );
+    
+    // Tạo dữ liệu cho bảng
+    Object[][] tableData = new Object[salaryList.size()][9];
+    for (int i = 0; i < salaryList.size(); ++i) {
+        Salary salary = salaryList.get(i);
+        tableData[i][0] = salary.getEmployee().getId();
+        tableData[i][1] = salary.getEmployee().getName();
+        tableData[i][2] = salary.getPosition().getName();
+        tableData[i][3] = salary.getPositionSalary();
+        tableData[i][4] = salary.getOvertimeSalary();
+        tableData[i][5] = salary.getAttendance();
+        tableData[i][6] = salary.getBonus();
+        tableData[i][7] = salary.getDeductions();
+        tableData[i][8] = salary.getnet_salary();
+    }
+
+    // Cập nhật lại bảng với dữ liệu đã sắp xếp
+    DefaultTableModel model = new DefaultTableModel(tableData,
+            new String[] { "Mã nhân viên", "Họ và tên", "Vị trí", 
+                          "Lương theo giờ", "Lương tăng ca", "Chuyên cần", 
+                          "Thưởng", "Khấu trừ", "Tổng lương" });
+    this.tblDanhSachLuong.setModel(model);
+    }//GEN-LAST:event_GiamDanMouseClicked
+
+    private void jLabel20MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel20MouseClicked
+        if(jPanel7.isVisible()){
+            jPanel7.setVisible(false);
+        } else {
+            jPanel7.setVisible(true);
+        }
+        revalidate();
+        repaint();
+    }//GEN-LAST:event_jLabel20MouseClicked
+
+    private void txtSearch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearch1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearch1ActionPerformed
+
+    private void cbbThang1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbThang1ActionPerformed
+               int selectedMonth = this.cbbThang1.getSelectedIndex() + 1;
+
+                this.tblYeuCauTangLuong.setRowHeight(30);
+
+                SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
+                // Sử dụng đúng kiểu dữ liệu cho danh sách SalaryChangeHistory
+                ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectByMonth(selectedMonth); 
+                Object[][] tableData = new Object[salaryChangeList.size()][7];
+
+                for (int i = 0; i < salaryChangeList.size(); ++i) {
+                    SalaryChangeHistory history = salaryChangeList.get(i); // Không cần ép kiểu nữa vì đã khai báo đúng kiểu
+                    tableData[i][0] = history.getId();
+                    tableData[i][1] = history.getEmployeeName();  // Sử dụng employeeName thay vì getEmployee().getName()
+                    tableData[i][2] = history.getOldSalary();
+                    tableData[i][3] = history.getNewSalary();
+                    tableData[i][4] = history.getChangeDate();
+                    tableData[i][5] = history.getReasons();
+                    tableData[i][6] = history.getStatus();
+                }
+
+                DefaultTableModel model = new DefaultTableModel(tableData,
+                    new String[] { "ID", "Nhân viên", "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", "Lý do", "Trạng thái" });
+                this.tblYeuCauTangLuong.setModel(model);
+                this.tblYeuCauTangLuong.getColumnModel().getColumn(6).setCellRenderer(new StatusRenderer());
+
+    }//GEN-LAST:event_cbbThang1ActionPerformed
+
+    private void btnRefreshDataYeuCauDaXemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshDataYeuCauDaXemActionPerformed
+        loadDataToYeuCauTangLuongDaXemTable();
+    }//GEN-LAST:event_btnRefreshDataYeuCauDaXemActionPerformed
+
+    private void txtSearch2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearch2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearch2ActionPerformed
+
+    private void cbbThang2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbThang2ActionPerformed
+         int selectedMonth = this.cbbThang2.getSelectedIndex() + 1;
+    this.tblYeuCauTangLuong1.setRowHeight(30);
+
+    // Lấy danh sách yêu cầu tăng lương theo tháng
+    SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
+    ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectByMonthdaxem(selectedMonth);
+
+    // Tạo bảng dữ liệu cho JTable
+    Object[][] tableData = new Object[salaryChangeList.size()][8];
+
+    for (int i = 0; i < salaryChangeList.size(); ++i) {
+        SalaryChangeHistory history = salaryChangeList.get(i);
+
+        // Gán dữ liệu vào các cột của bảng
+        tableData[i][0] = history.getId();
+        tableData[i][1] = history.getEmployeeName();  // Họ và tên
+        tableData[i][2] = history.getOldSalary();     // Lương hiện tại
+        tableData[i][3] = history.getNewSalary();     // Lương đề xuất
+        tableData[i][4] = history.getReasons();       // Lý do yêu cầu
+        tableData[i][5] = history.getChangeDate();    // Ngày thay đổi
+        tableData[i][6] = history.getApprovedBy();    // Người duyệt
+        tableData[i][7] = history.getComments();      // Phản hồi
+    }
+
+    // Tạo model cho bảng và hiển thị trên JTable
+    DefaultTableModel model = new DefaultTableModel(tableData, new String[] {
+        "Mã nhân viên", "Họ và tên", "Lương hiện tại", "Lương đề xuất", 
+        "Lý do yêu cầu", "Ngày thay đổi", "Người duyệt", "Phản hồi"
+    });
+
+    // Cập nhật bảng với model mới
+    this.tblYeuCauTangLuong1.setModel(model);
+
+    }//GEN-LAST:event_cbbThang2ActionPerformed
+
+    private void tblYeuCauTangLuong1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblYeuCauTangLuong1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblYeuCauTangLuong1MouseClicked
+    
+    
+                                          
+    private void initializeFilterMenu() {
+    filterMenu = new JPopupMenu();
+
+    // Tạo các radio button
+    JRadioButtonMenuItem rbPhongBan = new JRadioButtonMenuItem("Phòng ban");
+    JRadioButtonMenuItem rbMucLuong = new JRadioButtonMenuItem("Mức lương");
+    JRadioButtonMenuItem rbHinhThucLamViec = new JRadioButtonMenuItem("Hình thức làm việc");
+
+    // Thêm radio button vào menu
+    filterMenu.add(rbPhongBan);
+    filterMenu.add(rbMucLuong);
+    filterMenu.add(rbHinhThucLamViec);
+
+    // Đảm bảo chỉ chọn được một radio button tại một thời điểm
+    ButtonGroup group = new ButtonGroup();
+    group.add(rbPhongBan);
+    group.add(rbMucLuong);
+    group.add(rbHinhThucLamViec);
+
+    // Gán sự kiện cho từng radio button
+    rbPhongBan.addActionListener(e -> showDialogWithDepartments("Chọn Phòng Ban"));
+    rbMucLuong.addActionListener(e -> showSalaryDialog("Chọn Mức Lương"));
+    rbHinhThucLamViec.addActionListener(e -> showDialog("Chọn Hình Thức Làm Việc", new String[]{"Part-time", "Full-time"}));
+}
+
+// Hàm hiển thị dialog cho mức lương
+private void showSalaryDialog(String title) {
+    JDialog dialog = new JDialog(this, title, true);
+    dialog.setSize(400, 200);
+    dialog.setLocationRelativeTo(null);
+
+    JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
+    JLabel lblFrom = new JLabel("Từ mức lương:");
+    JTextField txtFrom = new JTextField();
+    JLabel lblTo = new JLabel("Đến mức lương:");
+    JTextField txtTo = new JTextField();
+
+    JButton btnOK = new JButton("Xác nhận");
+    btnOK.addActionListener(e -> {
+        try {
+            // Chuyển đổi đầu vào thành BigDecimal thay vì double
+            BigDecimal fromSalary = new BigDecimal(txtFrom.getText());
+            BigDecimal toSalary = new BigDecimal(txtTo.getText());
+
+            if (fromSalary.compareTo(toSalary) > 0) {
+                JOptionPane.showMessageDialog(dialog, "Mức lương 'Từ' không được lớn hơn 'Đến'.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } else {
+                selecedSalaryMin = fromSalary;
+                selecedSalaryMax = toSalary;
+                dialog.dispose();
+                // Gọi lại loadListSalariesToTableforFilter với các tham số đã chọn
+                loadListSalariesToTableforFilter(selectedDepartment, selecedSalaryMin, selecedSalaryMax, selectedWorkType);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(dialog, "Vui lòng nhập số hợp lệ cho mức lương.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    });
+
+    panel.add(lblFrom);
+    panel.add(txtFrom);
+    panel.add(lblTo);
+    panel.add(txtTo);
+    panel.add(new JLabel()); // Ô trống
+    panel.add(btnOK);
+
+    dialog.add(panel);
+    dialog.setVisible(true);
+}
+
+private void showDialogWithDepartments(String title) {
+    // Lấy danh sách phòng ban từ cơ sở dữ liệu
+    ArrayList<Department> departmentList = DepartmentDAO.getInstance().selectAll();
+
+    // Chuyển danh sách phòng ban thành mảng String để đổ vào JComboBox
+    String[] options = departmentList.stream()
+            .map(Department::getName) // Lấy tên phòng ban
+            .toArray(String[]::new);
+
+    // Gọi hàm showDialog để hiển thị dialog
+    showDialog(title, options);
+}
+
+// Hàm hiển thị chung cho ComboBox (Phòng ban, Hình thức làm việc)
+private void showDialog(String title, String[] options) {
+    JDialog dialog = new JDialog(this, title, true);
+    dialog.setSize(300, 150);
+    dialog.setLocationRelativeTo(null);
+
+    JPanel panel = new JPanel();
+    panel.setLayout(new BorderLayout());
+
+    JComboBox<String> comboBox = new JComboBox<>(options);
+    JButton btnOK = new JButton("Xác nhận");
+
+    btnOK.addActionListener(e -> {
+        String selectedValue = (String) comboBox.getSelectedItem();
+        switch (title) {
+            case "Chọn Phòng Ban":
+                selectedDepartment = selectedValue;  // Lưu phòng ban đã chọn
+                break;
+            
+            case "Chọn Hình Thức Làm Việc":
+                selectedWorkType = selectedValue.equals("Part-time") ? "part_time" : "full_time";
+                break;
+        }
+        dialog.dispose();
+        // Gọi lại loadListSalariesToTableforFilter với các tham số đã chọn
+        loadListSalariesToTableforFilter(selectedDepartment, selecedSalaryMin, selecedSalaryMax, selectedWorkType);
+    });
+
+    panel.add(comboBox, BorderLayout.CENTER);
+    panel.add(btnOK, BorderLayout.SOUTH);
+
+    dialog.add(panel);
+    dialog.setVisible(true);
+}
+
+private void loadListSalariesToTableforFilter(String selectedDepartment, BigDecimal selectedSalaryMin, 
+                                               BigDecimal selectedSalaryMax, String selectedWorkType) {
+    // Lấy danh sách lương từ database
+    SalaryDAO salaryDAO = SalaryDAO.getInstance();
+    ArrayList<Salary> salaryList = salaryDAO.selectAll();
+    
+    // Lọc các dữ liệu dựa trên các tiêu chí đã chọn
+    Object[][] tableData = new Object[salaryList.size()][9];
+    int index = 0; // Biến đếm vị trí trong mảng tableData
+
+    for (Salary salary : salaryList) {
+        boolean matchesFilter = true;
+
+        // Lọc theo phòng ban
+        if (selectedDepartment != null && !salary.getEmployee().getDepartment().getName().equals(selectedDepartment)) {
+            matchesFilter = false;
+        }
+
+        // Lọc theo mức lương
+        if (selectedSalaryMin != null && salary.getnet_salary().compareTo(selectedSalaryMin) < 0) {
+            matchesFilter = false;
+        }
+        if (selectedSalaryMax != null && salary.getnet_salary().compareTo(selectedSalaryMax) > 0) {
+            matchesFilter = false;
+        }
+
+        // Lọc theo loại hình làm việc
+        if (selectedWorkType != null) {
+            String workTypeString = selectedWorkType.equals("full-time") ? "full_time" : 
+                                    (selectedWorkType.equals("part-time") ? "part_time" : null);
+            if (workTypeString != null && !salary.getEmployee().getWork_type().name().equals(workTypeString)) {
+                matchesFilter = false;
+            }
+        }
+
+        // Nếu thỏa mãn tất cả các điều kiện lọc, thêm vào dữ liệu bảng
+        if (matchesFilter) {
+            tableData[index][0] = salary.getEmployee().getId();
+            tableData[index][1] = salary.getEmployee().getName();
+            tableData[index][2] = salary.getPosition().getName();
+            tableData[index][3] = salary.getPositionSalary();
+            tableData[index][4] = salary.getOvertimeSalary();
+            tableData[index][5] = salary.getAttendance();
+            tableData[index][6] = salary.getBonus();
+            tableData[index][7] = salary.getDeductions();
+            tableData[index][8] = salary.getnet_salary();
+            index++;
+        }
+    }
+
+    // Tạo model bảng với dữ liệu đã lọc
+    DefaultTableModel model = new DefaultTableModel(tableData,
+            new String[] { "Mã nhân viên", "Họ và tên", "Vị trí", "Lương theo giờ", "Lương tăng ca", 
+                          "Chuyên cần", "Thưởng", "Khấu trừ", "Tổng lương" });
+
+    this.tblDanhSachLuong.setModel(model);
+}
+
+
+
+
+
+
+private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
+                 try {
         // Lấy dữ liệu từ giao diện
         int employeeID = Integer.parseInt(txtIDEmployee.getText());
-        double bonus = Double.parseDouble(txtThuong.getText());
-        double attendance = Double.parseDouble(lblChuyenCan.getText());
-        double deductions = Double.parseDouble(txtKhauTru.getText());
+        BigDecimal bonus = new BigDecimal(txtThuong.getText());
+        BigDecimal attendance = new BigDecimal(lblChuyenCan.getText());
+        BigDecimal deductions = new BigDecimal(txtKhauTru.getText());
         String note = txtGhiChu.getText();
+        
+        // Lấy thông tin lương theo giờ, tăng ca, thuế và bảo hiểm xã hội
+        BigDecimal hourlySalary = new BigDecimal(lblTongLuongTheoGio.getText()); // Lương theo giờ
+        BigDecimal overtimeSalary = new BigDecimal(lblTongLuongTangCa.getText()); // Lương tăng ca
+        BigDecimal tax = new BigDecimal(lblTax.getText()); // Thuế
+        BigDecimal socialInsurance = new BigDecimal(lblSocial_insurance.getText()); // Bảo hiểm xã hội
+
+        // Tính tổng lương
+        BigDecimal net_salary = hourlySalary.add(overtimeSalary).add(bonus).subtract(deductions).subtract(tax).subtract(socialInsurance);
         
         // Lấy ngày hiệu lực từ JDateChooser
         java.util.Date date = dataChooseNgayHieuLuc.getDate();
         LocalDate payday = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
+        lblTongLuong.setText(net_salary.toString());
         // Tạo đối tượng SalaryDAO và gọi phương thức updateSalary
         SalaryDAO salaryDAO = new SalaryDAO();
-        boolean updated = salaryDAO.updateSalary(employeeID, bonus, attendance, deductions, note, payday);
+        boolean updated = salaryDAO.updateSalary(employeeID, bonus, attendance, deductions, note, payday, net_salary);
 
         if (updated) {
             JOptionPane.showMessageDialog(this, "Dữ liệu đã được cập nhật thành công!");
@@ -615,7 +1239,7 @@ public class SalaryFrame extends javax.swing.JFrame {
                     attendance, // Chuyên cần
                     bonus, // Thưởng
                     deductions, // Khấu trừ
-                    salary.getNetSalary() // Tổng lương
+                    net_salary // Tổng lương sau khi tính toán
                 });
             } else {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin lương cho nhân viên với ID: " + employeeID, "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -646,19 +1270,22 @@ public class SalaryFrame extends javax.swing.JFrame {
                                 this.lblHinhThucLamViec.setText("" + String.valueOf(employee.getWork_type()));
                                 this.lblHoVaTen.setText(employee.getName());
                                 this.lblTongLuongTheoGio.setText(salary.getPositionSalary() + "");
-                                this.txtGhiChu.setText(salary.getNote());
-                                this.txtKhauTru.setText(salary.getDeductions() + "");
-                                this.txtThuong.setText(salary.getBonus() + "");
+//                                this.txtGhiChu.setText(salary.getNote());
+//                                this.txtKhauTru.setText(salary.getDeductions() + "");
+//                                this.txtThuong.setText(salary.getBonus() + "");
                                 this.lblChuyenCan.setText(salary.getAttendance() + "");
-                                this.lblTongLuong.setText(salary.getNetSalary() + "");
-                                
+                                //this.lblTongLuong.setText(salary.getNetSalary() + "");
+//                                this.lblTax.setText(salary.gettax()+ "");
+//                                this.lblSocial_insurance.setText(salary.getsocial_insurance()+ "");
                                 this.lblTongLuongTangCa.setText(salary.getOvertimeSalary() + "");
-
+                                this.lblTax.setText(salary.getTax()+"");
+                                this.lblSocial_insurance.setText(salary.getSocialInsurance()+"");
+//                                this.lblTongLuong.setText (salary.getnet_salary()+"");
                                 LocalDate payday = salary.getPayday();
                                 Date date = java.util.Date
                                                 .from(payday.atStartOfDay(ZoneId.systemDefault()).toInstant());
                                 // Thiết lập ngày cho JDateChooser
-                                this.dataChooseNgayHieuLuc.setDate(date);
+//                                this.dataChooseNgayHieuLuc.setDate(date);
                         }
                 } catch (NumberFormatException var7) {
                         JOptionPane.showMessageDialog(this, "ID không hợp lệ. Vui lòng nhập số nguyên.", "Lỗi", 0);
@@ -669,35 +1296,8 @@ public class SalaryFrame extends javax.swing.JFrame {
                 }
         }// GEN-LAST:event_txtIDEmployeeActionPerformed
 
-        private void cbbThangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbbThangActionPerformed
-                int selectedMonth = this.cbbThang.getSelectedIndex() + 1;
-                SalaryDAO salaryDAO = SalaryDAO.getInstance();
-                ArrayList<Salary> salaryList = salaryDAO.selectByMonth(selectedMonth);
-                Object[][] tableData = new Object[salaryList.size()][9];
-
-                for (int i = 0; i < salaryList.size(); ++i) {
-                        Salary salary = (Salary) salaryList.get(i);
-                        tableData[i][0] = salary.getEmployee().getId();
-                        tableData[i][1] = salary.getEmployee().getName();
-                        tableData[i][2] = salary.getPosition().getName();
-                        tableData[i][3] = salary.getPositionSalary();
-                        tableData[i][4] = salary.getOvertimeSalary();
-                        tableData[i][5] = salary.getAttendance();
-                        tableData[i][6] = salary.getBonus();
-                        tableData[i][7] = salary.getDeductions();
-                        tableData[i][8] = salary.getNetSalary();
-                }
-
-                DefaultTableModel model = new DefaultTableModel(tableData,
-                                new String[] { "Mã nhân viên", "Họ và tên", "Vị trí",
-                                                "Lương theo giờ", "Lương tăng ca", "Chuyên cần", "Thưởng", "Khấu trừ",
-                                                "Tổng lương" });
-                this.tblDanhSachLuong.setModel(model);
-        }// GEN-LAST:event_cbbThangActionPerformed
-
-        private void btnListSalariesActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnListSalariesActionPerformed
-                loadListSalariesToTable();
-        }// GEN-LAST:event_btnListSalariesActionPerformed
+       
+        
 
         private void btnRefreshDataYeuCauThayDoiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnRefreshDataYeuCauThayDoiActionPerformed
                 loadDataToYeuCauTangLuongTable();
@@ -714,24 +1314,9 @@ public class SalaryFrame extends javax.swing.JFrame {
                 }
         }// GEN-LAST:event_tblYeuCauTangLuongMouseClicked
 
-        private void btnRefreshDataYeuCauDaXemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnRefreshDataYeuCauDaXemActionPerformed
-                loadDataToYeuCauTangLuongDaXemTable();
-        }// GEN-LAST:event_btnRefreshDataYeuCauDaXemActionPerformed
+       // GEN-LAST:event_btnRefreshDataYeuCauDaXemActionPerformed
 
-        private void tblDanhSachLuongMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tblDanhSachLuongMouseClicked
-                int selectedRow = this.tblDanhSachLuong.getSelectedRow();
-                if (selectedRow >= 0) {
-                        String employeeName = this.tblDanhSachLuong.getValueAt(selectedRow, 1).toString();
-                        String position = this.tblDanhSachLuong.getValueAt(selectedRow, 2).toString();
-                        String totalSalary = this.tblDanhSachLuong.getValueAt(selectedRow, 8).toString();
-                        String overtimeSalary = this.tblDanhSachLuong.getValueAt(selectedRow, 4).toString();
-                        String bonus = this.tblDanhSachLuong.getValueAt(selectedRow, 6).toString();
-                        String deductions = this.tblDanhSachLuong.getValueAt(selectedRow, 7).toString();
-                        String note = "";
-                        SalaryDetailDialog.showSalaryDetailDialog((JFrame) null, employeeName, position, totalSalary,
-                                        overtimeSalary, bonus, deductions, note);
-                }
-        }// GEN-LAST:event_tblDanhSachLuongMouseClicked
+        // GEN-LAST:event_tblDanhSachLuongMouseClicked
 
         /**
          * @param args the command line arguments
@@ -785,10 +1370,14 @@ public class SalaryFrame extends javax.swing.JFrame {
         }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel GiamDan;
+    private javax.swing.JLabel TangDan;
     private javax.swing.JButton btnListSalaries;
     private javax.swing.JButton btnRefreshDataYeuCauDaXem;
     private javax.swing.JButton btnRefreshDataYeuCauThayDoi;
     private javax.swing.JComboBox<String> cbbThang;
+    private javax.swing.JComboBox<String> cbbThang1;
+    private javax.swing.JComboBox<String> cbbThang2;
     private com.toedter.calendar.JDateChooser dataChooseNgayHieuLuc;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -801,7 +1390,11 @@ public class SalaryFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
@@ -817,16 +1410,21 @@ public class SalaryFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel lableFilter;
     private javax.swing.JLabel lblChuyenCan;
     private javax.swing.JLabel lblHinhThucLamViec;
     private javax.swing.JLabel lblHoVaTen;
     private javax.swing.JLabel lblPhongBan;
+    private javax.swing.JLabel lblSocial_insurance;
+    private javax.swing.JLabel lblTax;
     private javax.swing.JLabel lblTongLuong;
     private javax.swing.JLabel lblTongLuongTangCa;
     private javax.swing.JLabel lblTongLuongTheoGio;
@@ -835,13 +1433,16 @@ public class SalaryFrame extends javax.swing.JFrame {
     private javax.swing.JTable tblCapNhapPhieuLuong;
     private javax.swing.JTable tblDanhSachLuong;
     private javax.swing.JTable tblYeuCauTangLuong;
-    private javax.swing.JTable tblYeuCauTangLuongDaXem;
+    private javax.swing.JTable tblYeuCauTangLuong1;
     private javax.swing.JTextArea txtGhiChu;
     private javax.swing.JTextField txtIDEmployee;
     private javax.swing.JTextField txtKhauTru;
+    private javax.swing.JTextField txtSearch;
+    private javax.swing.JTextField txtSearch1;
+    private javax.swing.JTextField txtSearch2;
     private javax.swing.JTextField txtThuong;
     // End of variables declaration//GEN-END:variables
-
+        
         private void loadListSalariesToTable() {
             
        
@@ -859,7 +1460,7 @@ public class SalaryFrame extends javax.swing.JFrame {
                         tableData[i][5] = salary.getAttendance();
                         tableData[i][6] = salary.getBonus();
                         tableData[i][7] = salary.getDeductions();
-                        tableData[i][8] = salary.getNetSalary();
+                        tableData[i][8] = salary.getnet_salary();
                 }
 
                 DefaultTableModel model = new DefaultTableModel(tableData,
@@ -868,8 +1469,9 @@ public class SalaryFrame extends javax.swing.JFrame {
                                                 "Tổng lương" });
                 this.tblDanhSachLuong.setModel(model);
         }
+        
         private void loadDataSalariesToTable(int employeeId) {
-            DefaultTableModel model = (DefaultTableModel) tblCapNhapPhieuLuong.getModel();
+            DefaultTableModel model = (DefaultTableModel) tblDanhSachLuong.getModel();
             model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
 
             SalaryDAO salaryDAO = new SalaryDAO();
@@ -883,7 +1485,7 @@ public class SalaryFrame extends javax.swing.JFrame {
                     salary.getPositionSalary(),
                     salary.getBonus(),
                     salary.getDeductions(),
-                    salary.getNetSalary(),
+                    salary.getnet_salary(),
                     salary.getOvertimeSalary(),
                     salary.getPayday(),
                     salary.getNote(),
@@ -941,8 +1543,9 @@ public class SalaryFrame extends javax.swing.JFrame {
                 DefaultTableModel model = new DefaultTableModel(tableData, new String[] { "Mã nhân viên", "Họ và tên",
                                 "Lương hiện tại", "Lương đề xuất", "Lý do yêu cầu", "Ngày thay đổi", "Người duyệt",
                                 "Phản hồi" });
-                this.tblYeuCauTangLuongDaXem.setModel(model);
+                this.tblYeuCauTangLuong1.setModel(model);
         }
+        
 }
 /*
  * private void cbbThangActionPerformed(ActionEvent evt) {

@@ -58,7 +58,7 @@ public class SalaryDAO implements DAOInterface<Salary> {
                     BigDecimal positionSalary = rs.getBigDecimal("position_salary");
                     BigDecimal bonus = rs.getBigDecimal("bonus");
                     BigDecimal deductions = rs.getBigDecimal("deductions");
-                    BigDecimal netSalary = rs.getBigDecimal("net_salary");
+                    BigDecimal net_salary = rs.getBigDecimal("net_salary");
                     BigDecimal overtimeSalary = rs.getBigDecimal("overtime_salary");
                     LocalDate payday = (LocalDate) rs.getObject("payday", LocalDate.class);
                     String note = rs.getString("note");
@@ -76,8 +76,10 @@ public class SalaryDAO implements DAOInterface<Salary> {
                     int positionId = rs.getInt("position_id");
                     String positionName = rs.getString("position_name");
                     Position position = new Position(positionId, 0, positionName);
-                    Salary salary = new Salary(id, employee, positionSalary, bonus, deductions, netSalary,
-                            overtimeSalary, payday, note, attendance, position);
+                    BigDecimal tax= rs.getBigDecimal("tax");
+                    BigDecimal social_insurance= rs.getBigDecimal("social_insurance");
+                    Salary salary = new Salary(id, employee, positionSalary, bonus, deductions, net_salary,
+                            overtimeSalary, payday, note, attendance, position,tax,social_insurance);
                     salaryList.add(salary);
                 }
             } catch (Throwable var31) {
@@ -121,13 +123,15 @@ public class SalaryDAO implements DAOInterface<Salary> {
                     BigDecimal positionSalary = rs.getBigDecimal("position_salary");
                     BigDecimal bonus = rs.getBigDecimal("bonus");
                     BigDecimal deductions = rs.getBigDecimal("deductions");
-                    BigDecimal netSalary = rs.getBigDecimal("net_salary");
+                    BigDecimal net_salary = rs.getBigDecimal("net_salary");
                     BigDecimal overtimeSalary = rs.getBigDecimal("overtime_salary");
                     LocalDate payday = (LocalDate) rs.getObject("payday", LocalDate.class);
                     String note = rs.getString("note");
                     int attendance = rs.getInt("attendance");
-                    salary = new Salary(id, employeeId, positionSalary, bonus, deductions, netSalary, overtimeSalary,
-                            payday, note, attendance);
+                    BigDecimal tax= rs.getBigDecimal("tax");
+                    BigDecimal social_insurance= rs.getBigDecimal("social_insurance");
+                    salary = new Salary(id, employeeId, positionSalary, bonus, deductions, net_salary, overtimeSalary,
+                            payday, note, attendance,tax,social_insurance);
                 }
             } catch (Throwable var22) {
                 if (pst != null) {
@@ -176,7 +180,7 @@ public class SalaryDAO implements DAOInterface<Salary> {
                     BigDecimal positionSalary = rs.getBigDecimal("position_salary");
                     BigDecimal bonus = rs.getBigDecimal("bonus");
                     BigDecimal deductions = rs.getBigDecimal("deductions");
-                    BigDecimal netSalary = rs.getBigDecimal("net_salary");
+                    BigDecimal net_salary = rs.getBigDecimal("net_salary");
                     BigDecimal overtimeSalary = rs.getBigDecimal("overtime_salary");
                     LocalDate payday = (LocalDate) rs.getObject("payday", LocalDate.class);
                     String note = rs.getString("note");
@@ -193,9 +197,11 @@ public class SalaryDAO implements DAOInterface<Salary> {
                     employee.setPhone_mumber(phoneNumber);
                     int positionId = rs.getInt("position_id");
                     String positionName = rs.getString("position_name");
+                    BigDecimal tax= rs.getBigDecimal("tax");
+                    BigDecimal social_insurance= rs.getBigDecimal("social_insurance");
                     Position position = new Position(positionId, 0, positionName);
-                    Salary salary = new Salary(id, employee, positionSalary, bonus, deductions, netSalary,
-                            overtimeSalary, payday, note, attendance, position);
+                    Salary salary = new Salary(id, employee, positionSalary, bonus, deductions, net_salary,
+                            overtimeSalary, payday, note, attendance, position,tax,social_insurance);
                     salaryList.add(salary);
                 }
             } catch (Throwable var32) {
@@ -222,22 +228,29 @@ public class SalaryDAO implements DAOInterface<Salary> {
 
         return salaryList;
     }
-    public boolean updateSalary(int employeeID, double bonus, double attendance, double deductions, String note, LocalDate payday) {
-    String sql = "UPDATE salaries SET bonus = ?, attendance = ?, deductions = ?, note = ?, payday = ? WHERE employee_id = ?";
-    Connection con = JDBCUtil.createConnection(); // Kết nối tới cơ sở dữ liệu
+public boolean updateSalary(int employeeID, BigDecimal bonus, BigDecimal attendance, BigDecimal deductions, String note, LocalDate payday, BigDecimal net_salary) {
+    // Câu lệnh SQL để cập nhật thông tin lương
+    String sql = "UPDATE salaries SET bonus = ?, attendance = ?, deductions = ?, note = ?, payday = ?, net_salary = ? WHERE employee_id = ?";
+    Connection con = JDBCUtil.createConnection(); // Kết nối đến cơ sở dữ liệu
     boolean updated = false;
 
     try {
+        // Chuẩn bị câu truy vấn
         PreparedStatement pst = con.prepareStatement(sql);
         try {
-            pst.setDouble(1, bonus);
-            pst.setDouble(2, attendance);
-            pst.setDouble(3, deductions);
-            pst.setString(4, note);
-            pst.setDate(5, java.sql.Date.valueOf(payday));
-            pst.setInt(6, employeeID);
-            updated = pst.executeUpdate() > 0; // Kiểm tra xem có bản ghi nào được cập nhật không
+            // Thiết lập các tham số cho câu truy vấn
+            pst.setBigDecimal(1, bonus); // Thưởng
+            pst.setBigDecimal(2, attendance); // Chuyên cần
+            pst.setBigDecimal(3, deductions); // Khấu trừ
+            pst.setString(4, note); // Ghi chú
+            pst.setDate(5, java.sql.Date.valueOf(payday)); // Ngày hiệu lực (payday)
+            pst.setBigDecimal(6, net_salary); // Tổng lương sau khi tính toán
+            pst.setInt(7, employeeID); // ID của nhân viên
+            
+            // Thực thi câu truy vấn và kiểm tra xem có bản ghi nào bị ảnh hưởng không
+            updated = pst.executeUpdate() > 0;
         } catch (Throwable ex) {
+            // Đảm bảo rằng PreparedStatement được đóng đúng cách nếu có lỗi xảy ra
             if (pst != null) {
                 try {
                     pst.close();
@@ -248,16 +261,108 @@ public class SalaryDAO implements DAOInterface<Salary> {
             throw ex;
         }
 
+        // Đảm bảo đóng PreparedStatement nếu không có lỗi
         if (pst != null) {
             pst.close();
         }
     } catch (SQLException e) {
         e.printStackTrace();
     } finally {
-        JDBCUtil.closeConnection(con); // Đóng kết nối sau khi hoàn tất
+        // Đóng kết nối sau khi hoàn thành
+        JDBCUtil.closeConnection(con);
     }
 
+    // Trả về true nếu cập nhật thành công, ngược lại trả về false
     return updated;
+}
+
+
+public ArrayList<Salary> selectByEmployeeIdforDanhSachLuong(int employeeId) {
+    // Câu truy vấn SQL
+    String sql = "SELECT s.*, e.id as employee_id, e.name as employee_name, e.gender, e.phone_number, " +
+                 "p.id as position_id, p.name as position_name " +
+                 "FROM salaries s " +
+                 "JOIN employee e ON s.employee_id = e.id " +
+                 "JOIN position p ON e.position_id = p.id " +
+                 "WHERE s.employee_id = ?";
+
+    // Khởi tạo kết nối và danh sách kết quả
+    Connection con = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    ArrayList<Salary> salaryList = new ArrayList<>();
+
+    try {
+        // Tạo kết nối
+        con = JDBCUtil.createConnection();
+
+        // Chuẩn bị câu truy vấn
+        pst = con.prepareStatement(sql);
+        pst.setInt(1, employeeId); // Thiết lập employeeId vào câu truy vấn
+
+        // Thực thi truy vấn
+        rs = pst.executeQuery();
+
+        // Lặp qua kết quả
+        while (rs.next()) {
+            // Lấy thông tin từ ResultSet
+            int id = rs.getInt("id");
+            BigDecimal positionSalary = rs.getBigDecimal("position_salary");
+            BigDecimal bonus = rs.getBigDecimal("bonus");
+            BigDecimal deductions = rs.getBigDecimal("deductions");
+            BigDecimal net_salary = rs.getBigDecimal("net_salary");
+            BigDecimal overtimeSalary = rs.getBigDecimal("overtime_salary");
+            LocalDate payday = rs.getObject("payday", LocalDate.class);
+            String note = rs.getString("note");
+            int attendance = rs.getInt("attendance");
+            int employeeIdResult = rs.getInt("employee_id");
+            String employeeName = rs.getString("employee_name");
+            String genderStr = rs.getString("gender").toLowerCase();
+            Employee.Gender gender = Employee.Gender.valueOf(genderStr); // Chuyển đổi giới tính
+            String phoneNumber = rs.getString("phone_number");
+            
+            BigDecimal tax= rs.getBigDecimal("tax");
+            BigDecimal social_insurance= rs.getBigDecimal("social_insurance");
+            // Tạo đối tượng Employee
+            Employee employee = new Employee();
+            employee.setId(employeeIdResult);
+            employee.setName(employeeName);
+            employee.setGender(gender);
+            employee.setPhone_mumber(phoneNumber);
+
+            // Tạo đối tượng Position
+            int positionId = rs.getInt("position_id");
+            String positionName = rs.getString("position_name");
+            Position position = new Position(positionId, 0, positionName);
+
+            // Tạo đối tượng Salary và thêm vào danh sách
+            Salary salary = new Salary(id, employee, positionSalary, bonus, deductions, net_salary, overtimeSalary, payday, note, attendance, position,tax,social_insurance);
+            salaryList.add(salary);
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace(); // In ra thông báo lỗi SQL nếu có
+    } finally {
+        // Đóng kết nối và các đối tượng liên quan
+        JDBCUtil.closeConnection(con);
+        closeResources(pst, rs);
+    }
+
+    // Trả về danh sách lương
+    return salaryList;
+}
+
+// Hàm đóng PreparedStatement và ResultSet
+private void closeResources(PreparedStatement pst, ResultSet rs) {
+    try {
+        if (rs != null) {
+            rs.close();
+        }
+        if (pst != null) {
+            pst.close();
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
 }
 
 }

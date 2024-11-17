@@ -18,7 +18,7 @@ public class SalaryChangeHistory {
     private Employee approvedBy;
     private String comments;
     private String status;
-
+   private String employeeName;
     public SalaryChangeHistory() {
     }
 
@@ -33,7 +33,12 @@ public class SalaryChangeHistory {
         this.comments = comments;
         this.status = status;
     }
-
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+    public String getEmployeeName() {
+        return this.employeeName;
+    }
     public int getId() {
         return this.id;
     }
@@ -110,5 +115,9 @@ public class SalaryChangeHistory {
     public String toString() {
         int var10000 = this.id;
         return "SalaryChangeHistory{id=" + var10000 + ", employee=" + this.employee.getName() + ", oldSalary=" + String.valueOf(this.oldSalary) + ", newSalary=" + String.valueOf(this.newSalary) + ", reasons='" + this.reasons + "', changeDate=" + String.valueOf(this.changeDate) + ", approvedBy=" + this.approvedBy.getName() + ", comments='" + this.comments + "', status='" + this.status + "'}";
+    }
+
+    public void setApprovedBy(String approvedBy) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -14,7 +14,7 @@ public class JDBCUtil {
 
         try {
             DriverManager.registerDriver(new Driver());
-            String url = "jdbc:mySQL://localhost:3306/quanlynhansu";
+            String url = "jdbc:mySQL://localhost:3306/quanlynhansu1";
             String user = "root";
             String pass = "";
             con = DriverManager.getConnection(url, user, pass);

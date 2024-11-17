@@ -142,15 +142,15 @@ public class MainFrame extends JFrame {
                 contentPane.add(ChamCongLabel);
                 ChamCongPanel.addMouseListener(controller);
 
-                RoundedPanel ThongKePanel = new RoundedPanel(20,
+                RoundedPanel BaoCaoPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/graph2.png").getAbsolutePath());
-                ThongKePanel.setBounds(220, 375, 65, 65);
-                ThongKePanel.setName("ThongKePanel");
-                JLabel ThongKeLabel = new JLabel("Thong ke");
-                ThongKeLabel.setBounds(215, 415, 90, 80);
-                ThongKeLabel.setFont(MenuFont);
-                contentPane.add(ThongKePanel);
-                contentPane.add(ThongKeLabel);
+                BaoCaoPanel.setBounds(220, 375, 65, 65);
+                BaoCaoPanel.setName("BaoCaoPanel");
+                JLabel BaoCaoLabel = new JLabel("Bao cao");
+                BaoCaoLabel.setBounds(222, 415, 90, 80);
+                BaoCaoLabel.setFont(MenuFont);
+                contentPane.add(BaoCaoPanel);
+                contentPane.add(BaoCaoLabel);
 
                 RoundedPanel PhatTrienPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/promotion.png").getAbsolutePath());

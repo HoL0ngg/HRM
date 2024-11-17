@@ -4,9 +4,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFileChooser;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 public class ReportDAO {
@@ -15,22 +22,25 @@ public class ReportDAO {
     // Phương thức lấy danh sách dữ liệu
     public List<Object[]> getEmployeeReport() {
         List<Object[]> reportData = new ArrayList<>();
-        String query = "SELECT DATE_FORMAT(hire_date, '%M') AS month, " +
+        String query = "SELECT YEAR(hire_date) AS year, " +
+                       "MONTH(hire_date) AS month, " +
                        "COUNT(*) AS total_employees, " +
                        "SUM(CASE WHEN hire_date >= CURDATE() - INTERVAL 1 MONTH THEN 1 ELSE 0 END) AS new_employees, " +
                        "SUM(CASE WHEN status = 'off' THEN 1 ELSE 0 END) AS resigned_employees " +
                        "FROM employee " +
-                       "GROUP BY DATE_FORMAT(hire_date, '%M')";  // Sửa chỗ này
+                       "GROUP BY YEAR(hire_date), MONTH(hire_date) " +  // Nhóm theo năm và tháng
+                       "ORDER BY year, month";  // Sắp xếp theo năm và tháng
 
         try (Connection connection = mySQL.getConnection(); 
              Statement stmt = connection.createStatement(); 
              ResultSet rs = stmt.executeQuery(query)) {
             while (rs.next()) {
-                String month = rs.getString("month");
+                int year = rs.getInt("year");
+                int month = rs.getInt("month");
                 int totalEmployees = rs.getInt("total_employees");
                 int newEmployees = rs.getInt("new_employees");
                 int resignedEmployees = rs.getInt("resigned_employees");
-                reportData.add(new Object[]{month, totalEmployees, newEmployees, resignedEmployees});
+                reportData.add(new Object[]{year, month, totalEmployees, newEmployees, resignedEmployees});
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -38,35 +48,76 @@ public class ReportDAO {
         return reportData;
     }
 
+    // Phương thức lấy dữ liệu báo cáo theo năm và tháng
+    public List<Object[]> getEmployeeReportByMonthRange(int year, int monthFrom, int monthTo) {
+        List<Object[]> reportData = new ArrayList<>();
+        String query = "SELECT YEAR(hire_date) AS year, " +
+                       "MONTH(hire_date) AS month, " +
+                       "COUNT(*) AS total_employees, " +
+                       "SUM(CASE WHEN hire_date >= CURDATE() - INTERVAL 1 MONTH THEN 1 ELSE 0 END) AS new_employees, " +
+                       "SUM(CASE WHEN status = 'off' THEN 1 ELSE 0 END) AS resigned_employees " +
+                       "FROM employee " +
+                       "WHERE YEAR(hire_date) = ? AND MONTH(hire_date) BETWEEN ? AND ? " +
+                       "GROUP BY YEAR(hire_date), MONTH(hire_date) " +
+                       "ORDER BY year, month";
 
-    public void exportToExcel(List<Object[]> data, String[] columnNames) throws IOException {
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Employee Report");
+        try (Connection connection = mySQL.getConnection(); 
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, year);
+            stmt.setInt(2, monthFrom);
+            stmt.setInt(3, monthTo);
 
-        // Tạo tiêu đề cột
-        Row headerRow = sheet.createRow(0);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int yearResult = rs.getInt("year");
+                    int month = rs.getInt("month");
+                    int totalEmployees = rs.getInt("total_employees");
+                    int newEmployees = rs.getInt("new_employees");
+                    int resignedEmployees = rs.getInt("resigned_employees");
+                    reportData.add(new Object[]{yearResult, month, totalEmployees, newEmployees, resignedEmployees});
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reportData;
+    }
+    
+
+
+    public void exportToExcel(List<Object[]> data, String[] columnNames, String fileName) throws IOException {
+        // Định dạng tên file
+        String path = "D:/" + fileName;
+        
+        // Tiến hành xuất dữ liệu ra file Excel (sử dụng thư viện Apache POI hoặc các công cụ khác để thực hiện xuất dữ liệu)
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Report");
+
+        // Tiến hành ghi dữ liệu vào sheet (ví dụ dùng Apache POI)
+        XSSFRow headerRow = sheet.createRow(0);
         for (int i = 0; i < columnNames.length; i++) {
-            Cell cell = headerRow.createCell(i);
+            XSSFCell cell = headerRow.createCell(i);
             cell.setCellValue(columnNames[i]);
         }
 
-        // Thêm dữ liệu vào sheet
-        for (int i = 0; i < data.size(); i++) {
-            Row row = sheet.createRow(i + 1);
-            Object[] rowData = data.get(i);
-            for (int j = 0; j < rowData.length; j++) {
-                Cell cell = row.createCell(j);
-                cell.setCellValue(rowData[j].toString());
+        // Ghi dữ liệu vào bảng
+        int rowNum = 1;
+        for (Object[] rowData : data) {
+            XSSFRow row = sheet.createRow(rowNum++);
+            for (int i = 0; i < rowData.length; i++) {
+                row.createCell(i).setCellValue(rowData[i].toString());
             }
         }
 
         // Lưu file
-        try (FileOutputStream fileOut = new FileOutputStream("EmployeeReport.xlsx")) {
+        try (FileOutputStream fileOut = new FileOutputStream(path)) {
             workbook.write(fileOut);
-        } finally {
-            workbook.close();
         }
+
+        workbook.close();
     }
+
+
     
  // Phương thức để lưu báo cáo vào CSDL
     public boolean saveReportToDatabase(String month, int totalEmployees, int newEmployees, int resignedEmployees) {

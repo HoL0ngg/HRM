@@ -81,18 +81,6 @@ public class ReportView1 extends JFrame {
 
         navBarPanel.add(userPanel, BorderLayout.EAST); // Thêm userPanel vào bên phải navbar
 
-        // Tạo một JPanel để chứa ghi chú
-        JPanel ghiChuPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        ghiChuPanel.setBackground(Color.WHITE); // Đặt nền ghi chú thành trắng
-        ghiChuPanel.setPreferredSize(new Dimension(800, 40)); // Đặt chiều cao cố định cho ghi chú
-        ghiChuPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); // Ngăn không cho ghi chú thay đổi chiều cao
-
-        JLabel ghiChuLabel = new JLabel("Báo cáo và thống kê nhân sự tổng quan");
-        ghiChuLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        ghiChuPanel.add(ghiChuLabel);
-
-        // Thêm ghi chú vào contentPane trực tiếp, không qua centerPanel
-        contentPane.add(ghiChuPanel, BorderLayout.CENTER); // Thêm ghi chú vào phần CENTER của contentPane
 
         // Tạo một JPanel để chứa 3 panel dưới cùng
         JPanel bottomPanel = new JPanel();

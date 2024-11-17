@@ -12,7 +12,7 @@ public class ReportView1 extends JFrame {
 
     public ReportView1() {
         // Cài đặt JFrame
-        setTitle("Báo cáo nhân sự");
+        setTitle("nhân sự");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 500); // Kích thước JFrame 800x500
         setLocationRelativeTo(null); // Căn giữa JFrame trên màn hình
@@ -84,20 +84,19 @@ public class ReportView1 extends JFrame {
 
         // Tạo một JPanel để chứa 3 panel dưới cùng
         JPanel bottomPanel = new JPanel();
-        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Dùng FlowLayout để căn giữa các panel
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 50)); // Dùng FlowLayout để căn giữa các panel
         bottomPanel.setBackground(Color.WHITE); // Đặt nền bottomPanel thành trắng
-        bottomPanel.add(createPanel("src/main/resources/img/Rp.png", "Tạo báo cáo nhân sự tổng quan "));
-        bottomPanel.add(createPanel("src/main/resources/img/Rp.png", "Tạo báo cáo hiệu suất tuyển dụng"));
-        bottomPanel.add(createPanel("src/main/resources/img/Rp.png", "Báo cáo đã lưu"));
+        bottomPanel.add(createPanel("src/main/resources/img/rpview1.png", "Tạo báo cáo nhân sự tổng quan "));
+        bottomPanel.add(createPanel("src/main/resources/img/rpview2.png", "Tạo báo cáo hiệu suất tuyển dụng"));
+       
 
         // Thêm bottomPanel vào phần dưới của contentPane
-        contentPane.add(bottomPanel, BorderLayout.SOUTH);
+        contentPane.add(bottomPanel, BorderLayout.CENTER);
 
         // Hiển thị JFrame
         setVisible(true);
     }
 
-    // Hàm tạo 3 panel dưới cùng
     private JPanel createPanel(String imagePath, String labelText) {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE); // Đặt nền của panel thành màu trắng
@@ -111,6 +110,7 @@ public class ReportView1 extends JFrame {
         ImageIcon imageIcon = imageFile.exists() ? new ImageIcon(imagePath) : new ImageIcon("src/main/resources/img/default.jpg");
         Image scaledImage = imageIcon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
         JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
+        imageLabel.setCursor(Cursor.getDefaultCursor());  // Đảm bảo con trỏ chuột không xuất hiện trên JLabel
         panel.add(imageLabel, gbc);
 
         // Thêm đường gạch ngang
@@ -118,15 +118,12 @@ public class ReportView1 extends JFrame {
         separator.setPreferredSize(new Dimension(120, 2));
         panel.add(separator, gbc);
 
-        // Thêm label với HTML cho việc xuống dòng
-        JLabel label = new JLabel("<html><body style='width: 120px'>" + labelText + "</body></html>", SwingConstants.CENTER);  // HTML để hỗ trợ xuống dòng
-        label.setPreferredSize(new Dimension(120, 60)); // Đặt chiều cao cố định cho JLabel
-        label.setMaximumSize(new Dimension(120, 60)); // Đảm bảo không vượt quá kích thước này
-        label.setToolTipText(labelText); // Hiển thị toàn bộ text khi di chuột vào label
+        // Sử dụng JLabel để hiển thị văn bản (tự động xuống dòng)
+        JLabel label = new JLabel("<html><body style='width: 150px;'>" + labelText + "</body></html>");
+        label.setFont(new Font("Arial", Font.BOLD, 12)); // Áp dụng font in đậm cho JLabel
+        label.setForeground(Color.BLACK); // Đặt màu chữ là đen
 
-        label.setHorizontalAlignment(SwingConstants.CENTER); // Căn giữa theo chiều ngang
-        label.setVerticalAlignment(SwingConstants.CENTER); // Căn giữa theo chiều dọc
-
+        // Thêm label vào panel
         panel.add(label, gbc);
 
         // Thêm hiệu ứng hover (di chuột qua panel)
@@ -142,10 +139,12 @@ public class ReportView1 extends JFrame {
             }
         });
 
-        panel.setPreferredSize(new Dimension(180, 250)); // Kích thước panel
+        // Cập nhật kích thước của panel, đảm bảo đủ không gian cho label
+        panel.setPreferredSize(new Dimension(200, 300)); // Kích thước panel
         panel.setBorder(new LineBorder(Color.GRAY));
         return panel;
     }
+
 
     // Hàm xử lý quay lại trang chủ
     private void goBackToHome() {
@@ -154,6 +153,6 @@ public class ReportView1 extends JFrame {
     }
 
     public static void main(String[] args) {
-        new ReportEmployeeView(); // Khởi tạo JFrame
+        new ReportView1(); // Khởi tạo giao diện
     }
 }

@@ -81,24 +81,46 @@ public class ReportView3 extends JFrame {
         titleLabel.setForeground(Color.WHITE);
         titlePanel.add(titleLabel);
 
-        // Panel bên phải cho avatar và tên
+     // Panel bên phải cho avatar và tên
         JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         userPanel.setOpaque(false);
         userPanel.setPreferredSize(new Dimension(300, 50));
 
-        Image AvaIcon = new ImageIcon(
-                new File("src/main/resources/img/profile.png").getAbsolutePath())
-                .getImage()
-                .getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        // Avatar 1
+        Image AvaIcon1 = new ImageIcon(new File("src/main/resources/img/profile.png").getAbsolutePath())
+                .getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        JLabel AvaLabel1 = new JLabel(new ImageIcon(AvaIcon1));
 
-        JLabel AvaLabel = new JLabel(new ImageIcon(AvaIcon));
+        // Avatar 2
+        Image AvaIcon2 = new ImageIcon(new File("src/main/resources/img/set-up.png").getAbsolutePath())
+                .getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        JLabel AvaLabel2 = new JLabel(new ImageIcon(AvaIcon2));
+
+        // Avatar 3
+        Image AvaIcon3 = new ImageIcon(new File("src/main/resources/img/bell.png").getAbsolutePath())
+                .getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        JLabel AvaLabel3 = new JLabel(new ImageIcon(AvaIcon3));
+
+        // Avatar 4
+        Image AvaIcon4 = new ImageIcon(new File("src/main/resources/img/bubble-chat.png").getAbsolutePath())
+                .getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        JLabel AvaLabel4 = new JLabel(new ImageIcon(AvaIcon4));
+
+        // Thêm các avatar vào userPanel
+        userPanel.add(AvaLabel1);
+        userPanel.add(AvaLabel2);
+        userPanel.add(AvaLabel3);
+        userPanel.add(AvaLabel4);
+
+        // Thêm tên người dùng
         JLabel TenLabel = new JLabel("Nguyen Van A");
         TenLabel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 15));
         TenLabel.setForeground(Color.WHITE);
-
-        userPanel.add(AvaLabel);
         userPanel.add(TenLabel);
+
+        // Thêm userPanel vào navBarPanel
         navBarPanel.add(userPanel, BorderLayout.EAST);
+
 
         // Thêm titlePanel vào Navbar Panel
         navBarPanel.add(titlePanel, BorderLayout.WEST);

@@ -31,7 +31,7 @@ public class ReportView3 extends JFrame {
     public ReportView3() {
         // Thiết lập cơ bản của JFrame
         setTitle("Đào tạo và phát triển");
-        setSize(1000, 700);
+        setSize(800, 650);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -107,10 +107,11 @@ public class ReportView3 extends JFrame {
         JLabel AvaLabel4 = new JLabel(new ImageIcon(AvaIcon4));
 
         // Thêm các avatar vào userPanel
-        userPanel.add(AvaLabel1);
-        userPanel.add(AvaLabel2);
-        userPanel.add(AvaLabel3);
+        
         userPanel.add(AvaLabel4);
+        userPanel.add(AvaLabel3);
+        userPanel.add(AvaLabel2);
+        userPanel.add(AvaLabel1);
 
         // Thêm tên người dùng
         JLabel TenLabel = new JLabel("Nguyen Van A");
@@ -141,43 +142,39 @@ public class ReportView3 extends JFrame {
         buttonPanel.setLayout(new GridBagLayout()); // Sử dụng GridBagLayout
         buttonPanel.setBackground(new Color(245, 245, 245));
         buttonPanel.setBorder(new LineBorder(Color.LIGHT_GRAY, 1)); // Viền nhẹ cho rõ ràng
-        buttonPanel.setPreferredSize(new Dimension(1000, 40)); // Giảm chiều cao panel
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 10, 0, 10); // Khoảng cách giữa các phần tử
 
      // Sử dụng GridBagLayout và căn lề trái cho các phần tử
 
-     // Năm ComboBox
-     yearComboBox = new JComboBox<>(generateYearOptions());
-     yearComboBox.setPreferredSize(new Dimension(120, 30)); // Giảm chiều rộng
-     gbc.gridx = 1;
-     gbc.gridy = 0;
-     gbc.anchor = GridBagConstraints.WEST; // Căn lề trái cho nhãn và ComboBox
-     gbc.insets = new Insets(0, 0, 0, 10); // Giảm khoảng cách giữa các phần tử
-     buttonPanel.add(new JLabel("Năm:"), gbc);
-     gbc.gridx = 2;
-     buttonPanel.add(yearComboBox, gbc);
-
      // Tháng từ ComboBox
      monthFromComboBox = new JComboBox<>(generateMonthOptions());
      monthFromComboBox.setPreferredSize(new Dimension(120, 30)); // Giảm chiều rộng
-     gbc.gridx = 3;
+  
      gbc.anchor = GridBagConstraints.WEST; // Căn lề trái cho nhãn và ComboBox
-     buttonPanel.add(new JLabel("Từ tháng:"), gbc);
-     gbc.gridx = 4;
+     buttonPanel.add(new JLabel("Từ:"), gbc);
+     
      buttonPanel.add(monthFromComboBox, gbc);
 
      // Tháng đến ComboBox
      monthToComboBox = new JComboBox<>(generateMonthOptions());
      monthToComboBox.setPreferredSize(new Dimension(120, 30)); // Giảm chiều rộng
-     gbc.gridx = 5;
+     
      gbc.anchor = GridBagConstraints.WEST; // Căn lề trái cho nhãn và ComboBox
-     buttonPanel.add(new JLabel("Đến tháng:"), gbc);
-     gbc.gridx = 6;
+     buttonPanel.add(new JLabel("Đến"), gbc);
+     
      buttonPanel.add(monthToComboBox, gbc);
+     
+     // Năm ComboBox
+     yearComboBox = new JComboBox<>(generateYearOptions());
+     yearComboBox.setPreferredSize(new Dimension(120, 30)); // Giảm chiều rộng
+     gbc.anchor = GridBagConstraints.WEST; // Căn lề trái cho nhãn và ComboBox
+     gbc.insets = new Insets(0, 0, 0, 10); // Giảm khoảng cách giữa các phần tử
+     buttonPanel.add(new JLabel("Năm:"), gbc);
+     buttonPanel.add(yearComboBox, gbc);
 
-  // Nút tìm kiếm với biểu tượng
+     // Nút tìm kiếm với biểu tượng
      Image searchIcon = new ImageIcon(new File("src/main/resources/img/search-interface-symbol.png").getAbsolutePath())
              .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
      JButton searchButton = new JButton("Tìm kiếm", new ImageIcon(searchIcon));

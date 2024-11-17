@@ -8,9 +8,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
-public class ReportView1 extends JFrame {
+public class ReportEmployeeView extends JFrame {
 
-    public ReportView1() {
+    public ReportEmployeeView() {
         // Cài đặt JFrame
         setTitle("Báo cáo nhân sự");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

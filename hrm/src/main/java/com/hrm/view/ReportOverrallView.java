@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public class ReportView3 extends JFrame {
+public class ReportOverrallView extends JFrame {
 	private JTable table;
     private DefaultTableModel tableModel;
     private ReportController reportController;
@@ -28,7 +28,7 @@ public class ReportView3 extends JFrame {
     private JComboBox<Integer> monthToComboBox;
     private ReportDAO reportDAO; // Thêm đối tượng DAO
 
-    public ReportView3() {
+    public ReportOverrallView() {
         // Thiết lập cơ bản của JFrame
         setTitle("Đào tạo và phát triển");
         setSize(800, 650);
@@ -215,7 +215,7 @@ public class ReportView3 extends JFrame {
      // Gắn hàm exportToExcel() vào nút xuất file
      exportButton.addActionListener(e -> exportToExcel());
 
-  // Thêm nút Lưu vào
+     // Thêm nút Lưu vào
      Image saveIcon = new ImageIcon(new File("src/main/resources/img/save_icon.png").getAbsolutePath())
              .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
      JButton saveButton = new JButton("Lưu vào", new ImageIcon(saveIcon));
@@ -370,6 +370,6 @@ public class ReportView3 extends JFrame {
 
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ReportView3().setVisible(true));
+        SwingUtilities.invokeLater(() -> new ReportOverrallView().setVisible(true));
     }
 }

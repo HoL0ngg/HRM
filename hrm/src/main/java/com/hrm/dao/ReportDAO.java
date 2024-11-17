@@ -47,6 +47,33 @@ public class ReportDAO {
         }
         return reportData;
     }
+    
+    public List<Object[]> getEmployeeWorkEffect() {
+        List<Object[]> reportData = new ArrayList<>();
+        String query = "SELECT e.id, e.name, d.name AS department_name, " +  // Thay 'd.department_name' bằng 'd.name'
+                       "   (SELECT AVG(t.task_score) FROM tasks t WHERE t.employee_id = e.id) AS completion_rate " +
+                       "FROM employee e " +
+                       "JOIN departments d ON e.department_id = d.id";
+
+        try (Connection connection = mySQL.getConnection();  // Thay 'mySQL.getConnection()' bằng phương thức kết nối của bạn
+             Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String department = rs.getString("department_name");
+                double completionRate = rs.getDouble("completion_rate");
+
+                // Thêm dữ liệu vào danh sách
+                reportData.add(new Object[]{id, name, department, completionRate});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reportData;
+    }
+
 
     // Phương thức lấy dữ liệu báo cáo theo năm và tháng
     public List<Object[]> getEmployeeReportByMonthRange(int year, int monthFrom, int monthTo) {
@@ -138,6 +165,7 @@ public class ReportDAO {
             return false;
         }
     }
+
     
 
     // Đóng kết nối

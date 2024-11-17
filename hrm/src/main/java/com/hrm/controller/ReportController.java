@@ -16,6 +16,10 @@ public class ReportController {
         return reportDAO.getEmployeeReport();
     }
     
+    public List<Object[]> getEmployeeWorkEffect() {
+        return reportDAO.getEmployeeWorkEffect();
+    }
+    
     // Phương thức lấy dữ liệu báo cáo theo phạm vi tháng
     public List<Object[]> getEmployeeReportByMonthRange(int year, int fromMonth, int toMonth) {
         return reportDAO.getEmployeeReportByMonthRange(year, fromMonth, toMonth);

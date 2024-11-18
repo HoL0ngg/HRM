@@ -3,14 +3,23 @@ package com.hrm.view;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import com.hrm.model.Employee;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
 public class ReportEmployeeView extends JFrame {
+	private Employee employee;
 
-    public ReportEmployeeView() {
+    public ReportEmployeeView(Employee employee) {
+            this.employee = employee;
+            this.init();
+    }
+
+    public void init() {
         // Cài đặt JFrame
         setTitle("Báo cáo nhân sự");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,7 +53,7 @@ public class ReportEmployeeView extends JFrame {
         backLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                goBackToHome();
+                goBack();
             }
         });
 
@@ -74,7 +83,7 @@ public class ReportEmployeeView extends JFrame {
             userPanel.add(iconLabel);
         }
 
-        JLabel userNameLabel = new JLabel("Nguyen Van A");
+        JLabel userNameLabel = new JLabel(employee.getName());
         userNameLabel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 15));
         userNameLabel.setForeground(Color.WHITE);
         userPanel.add(userNameLabel);
@@ -98,9 +107,9 @@ public class ReportEmployeeView extends JFrame {
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20)); // Dùng FlowLayout để căn giữa các panel
         bottomPanel.setBackground(Color.WHITE); // Đặt nền bottomPanel thành trắng
-        bottomPanel.add(createPanel("src/main/resources/img/Rp.png", "Tạo báo cáo nhân sự tổng quan "));
-        bottomPanel.add(createPanel("src/main/resources/img/Rp.png", "Tạo báo cáo hiệu suất tuyển dụng"));
-        bottomPanel.add(createPanel("src/main/resources/img/Rp.png", "Báo cáo đã lưu"));
+        bottomPanel.add(createPanel("src/main/resources/img/Rp.png", "Tạo báo cáo nhân sự tổng quan ", () -> new ReportOverrallView(employee).setVisible(true)));
+        bottomPanel.add(createPanel("src/main/resources/img/Rp.png", "Tạo báo cáo hiệu suất tuyển dụng", () -> new ReportEffectWorkView(employee).setVisible(true)));
+        bottomPanel.add(createPanel("src/main/resources/img/Rp.png", "Báo cáo đã lưu", () -> new ReportSaveView(employee).setVisible(true)));
 
         // Thêm bottomPanel vào phần dưới của contentPane
         contentPane.add(bottomPanel, BorderLayout.SOUTH);
@@ -110,62 +119,62 @@ public class ReportEmployeeView extends JFrame {
     }
 
     // Hàm tạo 3 panel dưới cùng
-    private JPanel createPanel(String imagePath, String labelText) {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.WHITE); // Đặt nền của panel thành màu trắng
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(5, 0, 5, 0); // Khoảng cách giữa các thành phần
+    private JPanel createPanel(String imagePath, String labelText, Runnable action) {
+	    JPanel panel = new JPanel(new GridBagLayout());
+	    panel.setBackground(Color.WHITE);
+	    GridBagConstraints gbc = new GridBagConstraints();
+	    gbc.gridx = 0;
+	    gbc.gridy = GridBagConstraints.RELATIVE;
+	    gbc.insets = new Insets(5, 0, 5, 0);
 
-        // Kiểm tra file ảnh
-        File imageFile = new File(imagePath);
-        ImageIcon imageIcon = imageFile.exists() ? new ImageIcon(imagePath) : new ImageIcon("src/main/resources/img/default.jpg");
-        Image scaledImage = imageIcon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
-        JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
-        panel.add(imageLabel, gbc);
+	    File imageFile = new File(imagePath);
+	    ImageIcon imageIcon = imageFile.exists() ? new ImageIcon(imagePath) : new ImageIcon("src/main/resources/img/default.jpg");
+	    Image scaledImage = imageIcon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+	    JLabel imageLabel = new JLabel(new ImageIcon(scaledImage));
+	    imageLabel.setCursor(Cursor.getDefaultCursor());
+	    panel.add(imageLabel, gbc);
 
-        // Thêm đường gạch ngang
-        JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
-        separator.setPreferredSize(new Dimension(120, 2));
-        panel.add(separator, gbc);
+	    JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
+	    separator.setPreferredSize(new Dimension(120, 2));
+	    panel.add(separator, gbc);
 
-        // Thêm label với HTML cho việc xuống dòng
-        JLabel label = new JLabel("<html><body style='width: 120px'>" + labelText + "</body></html>", SwingConstants.CENTER);  // HTML để hỗ trợ xuống dòng
-        label.setPreferredSize(new Dimension(120, 60)); // Đặt chiều cao cố định cho JLabel
-        label.setMaximumSize(new Dimension(120, 60)); // Đảm bảo không vượt quá kích thước này
-        label.setToolTipText(labelText); // Hiển thị toàn bộ text khi di chuột vào label
+	    JLabel label = new JLabel("<html><body style='width: 150px;'>" + labelText + "</body></html>");
+	    label.setFont(new Font("Arial", Font.BOLD, 12));
+	    label.setForeground(Color.BLACK);
+	    panel.add(label, gbc);
 
-        label.setHorizontalAlignment(SwingConstants.CENTER); // Căn giữa theo chiều ngang
-        label.setVerticalAlignment(SwingConstants.CENTER); // Căn giữa theo chiều dọc
+	    panel.addMouseListener(new MouseAdapter() {
+	        @Override
+	        public void mouseClicked(MouseEvent e) {
+	            // Đóng frame hiện tại
+	            SwingUtilities.getWindowAncestor(panel).dispose();
+	            // Thực thi hành động
+	            action.run();
+	        }
 
-        panel.add(label, gbc);
+	        @Override
+	        public void mouseEntered(MouseEvent e) {
+	            panel.setBackground(new Color(240, 240, 240));
+	        }
 
-        // Thêm hiệu ứng hover (di chuột qua panel)
-        panel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                panel.setBackground(new Color(240, 240, 240)); // Màu nền khi di chuột qua
-            }
+	        @Override
+	        public void mouseExited(MouseEvent e) {
+	            panel.setBackground(Color.WHITE);
+	        }
+	    });
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                panel.setBackground(Color.WHITE); // Màu nền khi chuột rời khỏi
-            }
-        });
+	    panel.setPreferredSize(new Dimension(200, 300));
+	    panel.setBorder(new LineBorder(Color.GRAY));
+	    return panel;
+	}
 
-        panel.setPreferredSize(new Dimension(180, 250)); // Kích thước panel
-        panel.setBorder(new LineBorder(Color.GRAY));
-        return panel;
+ // Hàm xử lý quay lại trang chủ
+    private void goBack() {
+    	// Đóng JFrame hiện tại
+        SwingUtilities.getWindowAncestor(this).dispose();
+
+        // Mở MainFrame (hoặc JFrame chính của bạn)
+        new ReportView1(employee).setVisible(true);
     }
 
-    // Hàm xử lý quay lại trang chủ
-    private void goBackToHome() {
-        System.out.println("Quay lại trang chủ");
-        // Thêm logic xử lý quay lại ở đây
-    }
-
-    public static void main(String[] args) {
-        new ReportEmployeeView(); // Khởi tạo JFrame
-    }
 }

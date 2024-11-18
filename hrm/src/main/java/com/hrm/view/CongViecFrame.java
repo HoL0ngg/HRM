@@ -87,6 +87,66 @@ public class CongViecFrame extends JFrame {
         taolichhopPanel.addMouseListener(controller);
         contentPane.add(taolichhopPanel);
 
+        JLabel taolichop1 = new JLabel("Tao moi cong viec");
+        taolichop1.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
+        taolichop1.setForeground(Color.blue);
+        taolichop1.setBounds(38, 180, 220, 30);
+
+        JLabel taolichop2 = new JLabel("Tao moi cong viec");
+        taolichop2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
+        taolichop2.setForeground(Color.green);
+        taolichop2.setBounds(38, 180, 220, 30);
+
+        JLabel daucong = new JLabel("+");
+        daucong.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 80));
+        daucong.setForeground(Color.blue);
+
+        JLabel daucong2 = new JLabel("+");
+        daucong2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 80));
+        daucong2.setForeground(Color.green);
+
+        JLabel hihi = new JLabel("Phòng ban");
+        hihi.setBounds(160, 120, 100, 20);
+        hihi.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
+        hihi.setForeground(Color.blue);
+        contentPane.add(hihi);
+
+        RoundedPanel cong = new RoundedPanel(18);
+        cong.setBounds(61, 80, 80, 80);
+        cong.setForeground(Color.blue);
+        cong.setBackground(Color.white);
+        cong.add(daucong);
+
+        RoundedPanel cong2 = new RoundedPanel(18);
+        cong2.setBounds(61, 80, 80, 80);
+        cong2.setForeground(Color.green);
+        cong2.setBackground(Color.white);
+        cong2.add(daucong2);
+
+        RoundedPanel taocongviec = new RoundedPanel(18);
+        taocongviec.setBounds(100, 160, 202, 300);
+        taocongviec.setBackground(Color.WHITE);
+        taocongviec.setForeground(Color.BLUE);
+        taocongviec.setLayout(null);
+        taocongviec.add(cong);
+        taocongviec.add(taolichop1);
+        contentPane.add(taocongviec);
+
+        JLabel hehe = new JLabel("Nhân viên");
+        hehe.setBounds(500, 120, 100, 20);
+        hehe.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
+        hehe.setForeground(Color.green);
+        contentPane.add(hehe);
+
+        RoundedPanel taocongviec2 = new RoundedPanel(18);
+        taocongviec2.setBounds(440, 160, 202, 300);
+        taocongviec2.setBackground(Color.WHITE);
+        taocongviec2.setForeground(Color.GREEN);
+        taocongviec2.setLayout(null);
+        taocongviec2.add(cong2);
+        taocongviec2.add(taolichop2);
+        contentPane.add(taocongviec2);
+
         setVisible(true);
     }
 

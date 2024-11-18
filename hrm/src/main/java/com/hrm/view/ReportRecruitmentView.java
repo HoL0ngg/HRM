@@ -9,11 +9,13 @@ import com.hrm.controller.ReportController;
 import com.hrm.dao.ReportDAO;
 import com.hrm.model.Employee;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class ReportEmEffectView extends JFrame {
+public class ReportRecruitmentView extends JFrame {
     private JTable table;
     private DefaultTableModel tableModel;
     private ReportController reportController;
@@ -21,8 +23,14 @@ public class ReportEmEffectView extends JFrame {
     private JComboBox<Integer> monthFromComboBox;
     private JComboBox<Integer> monthToComboBox;
     private ReportDAO reportDAO; // Đối tượng DAO để lấy dữ liệu từ cơ sở dữ liệu
+    private Employee employee;
 
-    public ReportEmEffectView() {
+    public ReportRecruitmentView(Employee employee) {
+            this.employee = employee;
+            this.init();
+    }
+
+    public void init() {
         // Thiết lập cơ bản của JFrame
         setTitle("Đào tạo và phát triển");
         setSize(800, 650);
@@ -34,50 +42,69 @@ public class ReportEmEffectView extends JFrame {
         reportController = new ReportController();
         reportDAO = new ReportDAO();
 
-        // Tạo giao diện chính
+     // Tạo contentPane chính với BorderLayout
         JPanel contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-        contentPane.setLayout(new BorderLayout(10, 10));
+        contentPane.setLayout(new BorderLayout(0, 0)); // Dùng BorderLayout để quản lý các panel, bỏ padding
+        contentPane.setBorder(new EmptyBorder(0, 0, 0, 0)); // Không có padding thừa
+        contentPane.setBackground(Color.WHITE); // Đặt màu nền cho contentPane là trắng
         setContentPane(contentPane);
 
-        // Navbar Panel (Thanh điều hướng)
+        // Navbar Panel
         JPanel navBarPanel = new JPanel(new BorderLayout());
         navBarPanel.setBackground(new Color(245, 143, 82));
-        navBarPanel.setPreferredSize(new Dimension(1000, 50));
+        navBarPanel.setPreferredSize(new Dimension(1000, 50)); // Chiều cao cố định cho navbar
+        navBarPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50)); // Ngăn không cho navbar thay đổi chiều cao
+        contentPane.add(navBarPanel, BorderLayout.NORTH); // Thêm navbar vào phần Bắc của JFrame
 
-        // Panel bên trái cho tiêu đề và nút Back
+        // Tiêu đề và nút Back (bên trái navbar)
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         titlePanel.setOpaque(false);
-        titlePanel.setPreferredSize(new Dimension(700, 50));
 
-        // Thêm nút Back vào bên trái titlePanel
-        Image BackBtn = new ImageIcon(
-                new File("src/main/resources/img/left-arrow.png").getAbsolutePath())
-                .getImage()
-                .getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        JLabel BackLabel = new JLabel(new ImageIcon(BackBtn));
-        BackLabel.setBounds(10, 5, 30, 30);
-        BackLabel.setName("quaylai");
+        Image backBtnImage = new ImageIcon(new File("src/main/resources/img/left-arrow.png").getAbsolutePath())
+                .getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        JLabel backLabel = new JLabel(new ImageIcon(backBtnImage));
+        backLabel.setName("quaylai");
 
-        // Thêm sự kiện cho nút quay lại trang chủ
-        BackLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                goBackToHome();
+        // Sự kiện quay lại
+        backLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                goBack();
             }
         });
 
-        // Đặt lại vị trí cho BackLabel bên trái của title
-        titlePanel.add(BackLabel);
-
-        // Tiêu đề "BÁO CÁO"
         JLabel titleLabel = new JLabel("BÁO CÁO", SwingConstants.LEFT);
         titleLabel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 20));
         titleLabel.setForeground(Color.WHITE);
-        titlePanel.add(titleLabel);
 
-        // Thêm titlePanel vào Navbar Panel
-        navBarPanel.add(titlePanel, BorderLayout.WEST);
-        contentPane.add(navBarPanel, BorderLayout.NORTH);
+        titlePanel.add(backLabel);
+        titlePanel.add(titleLabel);
+        navBarPanel.add(titlePanel, BorderLayout.WEST); // Thêm title vào trái của navbar
+
+        // Avatar và tên người dùng (bên phải navbar)
+        JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        userPanel.setOpaque(false);
+
+        String[] iconPaths = {
+                "src/main/resources/img/bubble-chat.png",
+                "src/main/resources/img/bell.png",
+                "src/main/resources/img/set-up.png",
+                "src/main/resources/img/profile.png"
+        };
+
+        for (String path : iconPaths) {
+            Image iconImage = new ImageIcon(new File(path).getAbsolutePath())
+                    .getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+            JLabel iconLabel = new JLabel(new ImageIcon(iconImage));
+            userPanel.add(iconLabel);
+        }
+
+        JLabel userNameLabel = new JLabel(employee.getName());
+        userNameLabel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 15));
+        userNameLabel.setForeground(Color.WHITE);
+        userPanel.add(userNameLabel);
+
+        navBarPanel.add(userPanel, BorderLayout.EAST); // Thêm userPanel vào bên phải navbar
 
         // Panel chứa ghi chú
         JPanel ghiChuPanel = new JPanel();
@@ -264,9 +291,12 @@ public class ReportEmEffectView extends JFrame {
     }
 
 
-    // Phương thức quay lại màn hình chính
-    private void goBackToHome() {
-//        Main.showHome();
+    private void goBack() {
+    	// Đóng JFrame hiện tại
+        SwingUtilities.getWindowAncestor(this).dispose();
+
+        // Mở MainFrame (hoặc JFrame chính của bạn)
+        new ReportEmployeeView(employee).setVisible(true);
     }
 
     // Phương thức tạo danh sách tháng (1 đến 12)
@@ -331,15 +361,4 @@ public class ReportEmEffectView extends JFrame {
         timer.start();
     }
 
-    // Chạy ứng dụng
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                ReportEmEffectView frame = new ReportEmEffectView();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
 }

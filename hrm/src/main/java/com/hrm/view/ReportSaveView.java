@@ -27,8 +27,14 @@ public class ReportSaveView extends JFrame {
     private JComboBox<Integer> monthFromComboBox;
     private JComboBox<Integer> monthToComboBox;
     private ReportDAO reportDAO; // Thêm đối tượng DAO
+    private Employee employee;
 
-    public ReportSaveView() {
+    public ReportSaveView(Employee employee) {
+            this.employee = employee;
+            this.init();
+    }
+
+    public void init() {
         // Thiết lập cơ bản của JFrame
         setTitle("Đào tạo và phát triển");
         setSize(800, 650);
@@ -68,7 +74,7 @@ public class ReportSaveView extends JFrame {
         // Thêm sự kiện cho nút quay lại trang chủ
         BackLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                goBackToHome();
+                goBack();
             }
         });
 
@@ -114,7 +120,7 @@ public class ReportSaveView extends JFrame {
         userPanel.add(AvaLabel1);
 
         // Thêm tên người dùng
-        JLabel TenLabel = new JLabel("Nguyen Van A");
+        JLabel TenLabel = new JLabel(employee.getName());
         TenLabel.setFont(new Font("Segoe UI Emoji", Font.BOLD, 15));
         TenLabel.setForeground(Color.WHITE);
         userPanel.add(TenLabel);
@@ -295,8 +301,13 @@ public class ReportSaveView extends JFrame {
 
 
     
-    private void goBackToHome() {
-        JOptionPane.showMessageDialog(this, "Quay lại trang chủ...");
+ // Hàm xử lý quay lại trang chủ
+    private void goBack() {
+    	// Đóng JFrame hiện tại
+        SwingUtilities.getWindowAncestor(this).dispose();
+
+        // Mở MainFrame (hoặc JFrame chính của bạn)
+        new ReportEmployeeView(employee).setVisible(true);
     }
 
     private Integer[] generateYearOptions() {
@@ -365,11 +376,5 @@ public class ReportSaveView extends JFrame {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi xuất dữ liệu ra Excel: " + e.getMessage());
         }
-    }
-
-
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ReportSaveView().setVisible(true));
     }
 }

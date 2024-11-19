@@ -44,7 +44,11 @@ public class DepartmentDAO implements DAOInterface<Department> {
             try {
                 ResultSet rs = pst.executeQuery();
 
+<<<<<<< HEAD
                 while(rs.next()) {
+=======
+                while (rs.next()) {
+>>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
                     int id = rs.getInt("id");
                     int managerId = rs.getInt("manager_id");
                     String name = rs.getString("name");
@@ -118,6 +122,7 @@ public class DepartmentDAO implements DAOInterface<Department> {
 
         return department;
     }
+<<<<<<< HEAD
     
     public boolean updateManager(int departmentId, int managerId) {
         String sql = "UPDATE departments SET manager_id = ? WHERE id = ?";
@@ -158,4 +163,6 @@ public class DepartmentDAO implements DAOInterface<Department> {
         }
         return null;
     }
+=======
+>>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
 }

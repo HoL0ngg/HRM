@@ -34,7 +34,12 @@ public class AccountDAO implements DAOInterface<Account> {
         return true;
     }
 
+<<<<<<< HEAD
     public Account seclectByID(int id) {
+=======
+    @Override
+    public Account selectByID(int id) {
+>>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
         String sql = "select * from account where emloyee_id = ?";
         Connection con = JDBCUtil.createConnection();
         Account user = null;
@@ -72,7 +77,12 @@ public class AccountDAO implements DAOInterface<Account> {
         return user;
     }
 
+<<<<<<< HEAD
     public ArrayList<Account> seclectAll() {
+=======
+    @Override
+    public ArrayList<Account> selectAll() {
+>>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
         return null;
     }
 
@@ -81,6 +91,7 @@ public class AccountDAO implements DAOInterface<Account> {
         Connection con = JDBCUtil.createConnection();
         Employee employee = null;
 
+<<<<<<< HEAD
         try {
             PreparedStatement pst = con.prepareStatement(sql);
 
@@ -90,6 +101,11 @@ public class AccountDAO implements DAOInterface<Account> {
                 if (rs.next() && password.equals(rs.getString("password"))) {
                     System.out.println("3igZeus: is data valid");
                     employee = EmployeeDAO.getInstance().selectByID(rs.getInt("employee_id"));
+=======
+            if (rs.next()) {
+                if (password.equals(rs.getString("password"))) {
+                    employee = EmployeeDAO.getInstance().getNamebyId(rs.getInt("employee_id"));
+>>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
                 }
             } catch (Throwable var10) {
                 if (pst != null) {
@@ -103,11 +119,15 @@ public class AccountDAO implements DAOInterface<Account> {
                 throw var10;
             }
 
+<<<<<<< HEAD
             if (pst != null) {
                 pst.close();
             }
         } catch (SQLException var11) {
             SQLException e = var11;
+=======
+        } catch (SQLException e) {
+>>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
             e.printStackTrace();
         }
 

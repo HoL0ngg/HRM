@@ -18,7 +18,11 @@ public class SalaryChangeHistory {
     private Employee approvedBy;
     private String comments;
     private String status;
+<<<<<<< HEAD
 
+=======
+   private String employeeName;
+>>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
     public SalaryChangeHistory() {
     }
 
@@ -33,7 +37,16 @@ public class SalaryChangeHistory {
         this.comments = comments;
         this.status = status;
     }
+<<<<<<< HEAD
 
+=======
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+    public String getEmployeeName() {
+        return this.employeeName;
+    }
+>>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
     public int getId() {
         return this.id;
     }
@@ -111,4 +124,11 @@ public class SalaryChangeHistory {
         int var10000 = this.id;
         return "SalaryChangeHistory{id=" + var10000 + ", employee=" + this.employee.getName() + ", oldSalary=" + String.valueOf(this.oldSalary) + ", newSalary=" + String.valueOf(this.newSalary) + ", reasons='" + this.reasons + "', changeDate=" + String.valueOf(this.changeDate) + ", approvedBy=" + this.approvedBy.getName() + ", comments='" + this.comments + "', status='" + this.status + "'}";
     }
+<<<<<<< HEAD
+=======
+
+    public void setApprovedBy(String approvedBy) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+>>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
 }

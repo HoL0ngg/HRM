@@ -9,6 +9,19 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class TimeKeeping {
+<<<<<<< HEAD
+=======
+
+    public enum Status {
+        di_tre_ve_som,
+        di_tre_ve_dung_gio,
+        di_dung_gio_ve_dung_gio,
+        di_dung_gio_ve_som,
+        tang_ca_di_dung_gio,
+        tang_ca_di_tre
+    }
+
+>>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
     private int id;
     private int employee_id;
     private LocalDate date;

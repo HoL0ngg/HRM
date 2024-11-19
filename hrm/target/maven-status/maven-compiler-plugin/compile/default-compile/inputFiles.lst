@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\Users\phamq\OneDrive\Documents\GitHub\HRM\hrm\src\main\java\com\hrm\controller\ApplicantsBUS.java
 C:\Users\phamq\OneDrive\Documents\GitHub\HRM\hrm\src\main\java\com\hrm\controller\ChamCongController.java
 C:\Users\phamq\OneDrive\Documents\GitHub\HRM\hrm\src\main\java\com\hrm\controller\CongViecController.java
@@ -64,3 +65,49 @@ C:\Users\phamq\OneDrive\Documents\GitHub\HRM\hrm\src\main\java\com\hrm\view\Sala
 C:\Users\phamq\OneDrive\Documents\GitHub\HRM\hrm\src\main\java\com\hrm\view\SalaryUpdateDialog.java
 C:\Users\phamq\OneDrive\Documents\GitHub\HRM\hrm\src\main\java\com\hrm\view\TrainingDevelopmentView.java
 C:\Users\phamq\OneDrive\Documents\GitHub\HRM\hrm\src\main\java\com\hrm\view\TuyenDungGUI.java
+=======
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\controller\ApplicantsBUS.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\controller\ChamCongController.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\controller\CongViecController.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\controller\EnterController.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\controller\JobOpeningsBUS.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\controller\LoginController.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\controller\MainController.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\dao\AccountDAO.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\dao\ApplicantsDAO.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\dao\DAOInterface.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\dao\DepartmentDAO.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\dao\EmployeeDAO.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\dao\JobOpeningsDAO.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\dao\MySQLConnect.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\dao\SalaryChangeHistoryDAO.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\dao\SalaryDAO.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\dao\TimeKeepingDAO.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\db\JDBCUtil.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\Main.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\model\Account.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\model\Applicants.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\model\Department.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\model\Employee.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\model\Interviewer.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\model\Interviews.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\model\JobOpenings.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\model\Position.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\model\Salary.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\model\SalaryChangeHistory.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\model\TimeKeeping.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\utils\SalaryStatusRenderer.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\utils\StatusRenderer.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\view\ChamCongFrame.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\view\CongViecFrame.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\view\LoginFrame.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\view\MainFrame.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\view\RoundedButton.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\view\RoundedPanel.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\view\RoundedPasswordField.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\view\RoundedTextField.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\view\SalaryDetailDialog.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\view\SalaryFrame.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\view\SalaryUpdateDialog.java
+D:\DoAn\DoAn_truong\OOAD\HRM partt3\HRM\hrm\src\main\java\com\hrm\view\TuyenDungGUI.java
+>>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f

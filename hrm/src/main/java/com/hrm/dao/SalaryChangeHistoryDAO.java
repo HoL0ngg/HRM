@@ -249,4 +249,123 @@ public class SalaryChangeHistoryDAO implements DAOInterface<SalaryChangeHistory>
 
         return updated;
     }
+<<<<<<< HEAD
+=======
+    public ArrayList<SalaryChangeHistory> selectByMonthdaxem(int month) {
+    String sql = "SELECT sch.id, e.id AS employee_id, e.name AS employee_name, sch.old_salary, " +
+                 "sch.new_salary, sch.change_date, sch.reasons, sch.approved_by, sch.comments " +
+                 "FROM salary_change_history sch " +
+                 "JOIN employee e ON sch.employee_id = e.id " +
+                 "LEFT JOIN employee e2 ON sch.approved_by = e2.id " +  // LEFT JOIN để lấy tên người duyệt
+                 "WHERE MONTH(sch.change_date) = ?";  // Lọc theo tháng
+
+    Connection con = JDBCUtil.createConnection();
+    ArrayList<SalaryChangeHistory> historyList = new ArrayList<>();
+
+    try {
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setInt(1, month); // Truyền tháng vào tham số
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String employeeName = rs.getString("employee_name");
+            BigDecimal oldSalary = rs.getBigDecimal("old_salary");
+            BigDecimal newSalary = rs.getBigDecimal("new_salary");
+            LocalDate changeDate = rs.getDate("change_date").toLocalDate();
+            String reasons = rs.getString("reasons");
+            String approvedBy = rs.getString("e2.name");  // Lấy tên người duyệt
+            String comments = rs.getString("comments");
+
+            // Tạo đối tượng SalaryChangeHistory và gán giá trị
+            SalaryChangeHistory history = new SalaryChangeHistory();
+            history.setId(id);
+            history.setEmployeeName(employeeName);
+            history.setOldSalary(oldSalary);
+            history.setNewSalary(newSalary);
+            history.setChangeDate(changeDate);
+            history.setReasons(reasons);
+            history.setApprovedBy(approvedBy);  // Người duyệt
+            history.setComments(comments);      // Phản hồi
+
+            // Thêm vào danh sách kết quả
+            historyList.add(history);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        JDBCUtil.closeConnection(con);
+    }
+
+    return historyList;
+}
+
+
+
+
+    public ArrayList<SalaryChangeHistory> selectByMonth(int month) {
+    String sql = "SELECT sch.id, e.name AS employee_name, sch.old_salary, sch.new_salary, sch.change_date, " +
+                 "sch.reasons, sch.status " +
+                 "FROM salary_change_history sch " +
+                 "JOIN employee e ON sch.employee_id = e.id " +
+                 "WHERE MONTH(sch.change_date) = ?";  // Chỉ lọc theo tháng
+
+    Connection con = JDBCUtil.createConnection();
+    ArrayList<SalaryChangeHistory> historyList = new ArrayList<>();
+
+    try {
+        PreparedStatement pst = con.prepareStatement(sql);
+
+        try {
+            pst.setInt(1, month); // Chỉ truyền tháng vào tham số
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String employeeName = rs.getString("employee_name");
+                BigDecimal oldSalary = rs.getBigDecimal("old_salary");
+                BigDecimal newSalary = rs.getBigDecimal("new_salary");
+                LocalDate changeDate = rs.getDate("change_date").toLocalDate();
+                String reasons = rs.getString("reasons");
+                String status = rs.getString("status");
+
+                // Tạo đối tượng SalaryChangeHistory với thông tin cần thiết
+                SalaryChangeHistory history = new SalaryChangeHistory();
+                history.setId(id);
+                history.setEmployeeName(employeeName);
+                history.setOldSalary(oldSalary);
+                history.setNewSalary(newSalary);
+                history.setChangeDate(changeDate);
+                history.setReasons(reasons);
+                history.setStatus(status);
+
+                // Thêm vào danh sách kết quả
+                historyList.add(history);
+            }
+        } catch (Throwable var32) {
+            if (pst != null) {
+                try {
+                    pst.close();
+                } catch (Throwable var31) {
+                    var32.addSuppressed(var31);
+                }
+            }
+
+            throw var32;
+        }
+
+        if (pst != null) {
+            pst.close();
+        }
+    } catch (SQLException var33) {
+        var33.printStackTrace();
+    } finally {
+        JDBCUtil.closeConnection(con);
+    }
+
+    return historyList;
+}
+
+
+>>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
 }

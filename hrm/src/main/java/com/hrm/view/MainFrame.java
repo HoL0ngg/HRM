@@ -40,7 +40,7 @@ public class MainFrame extends JFrame {
                 contentPane.setLayout(null);
 
                 // Phan Thong tin
-                Image AvatarIcon = new ImageIcon(new File("hrm/src/main/resources/img/profile.png").getAbsolutePath())
+                Image AvatarIcon = new ImageIcon(new File("../hrm/src/main/resources/img/profile.png").getAbsolutePath())
                                 .getImage()
                                 .getScaledInstance(50, 50, Image.SCALE_SMOOTH);
                 JLabel IconLabel = new JLabel();
@@ -55,7 +55,7 @@ public class MainFrame extends JFrame {
 
                 // Thanh tim kiem
                 Image TimKiemIcon = new ImageIcon(
-                                new File("hrm/src/main/resources/img/search.png").getAbsolutePath())
+                                new File("../hrm/src/main/resources/img/search.png").getAbsolutePath())
                                 .getImage()
                                 .getScaledInstance(25, 25, Image.SCALE_SMOOTH);
                 JLabel timkiemLabel = new JLabel(new ImageIcon(TimKiemIcon));
@@ -95,7 +95,7 @@ public class MainFrame extends JFrame {
 
                 // Phan Menu
                 RoundedPanel NhanVienPanel = new RoundedPanel(20,
-                                new File("hrm/src/main/resources/img/team.png").getAbsolutePath());
+                                new File("../hrm/src/main/resources/img/team.png").getAbsolutePath());
                 NhanVienPanel.setBounds(220, 235, 65, 65);
                 NhanVienPanel.setName("NhanVienPanel");
                 JLabel NhanVienLabel = new JLabel("Nhan vien");
@@ -106,7 +106,7 @@ public class MainFrame extends JFrame {
                 NhanVienPanel.addMouseListener(controller);
 
                 RoundedPanel TuyenDungPanel = new RoundedPanel(20,
-                                new File("hrm/src/main/resources/img/hiring.png").getAbsolutePath());
+                                new File("../hrm/src/main/resources/img/hiring.png").getAbsolutePath());
                 TuyenDungPanel.setBounds(440, 235, 65, 65);
                 TuyenDungPanel.setName("TuyenDungPanel");
                 JLabel TuyenDungLabel = new JLabel("Tuyen dung");
@@ -116,7 +116,7 @@ public class MainFrame extends JFrame {
                 contentPane.add(TuyenDungLabel);
 
                 RoundedPanel LuongPanel = new RoundedPanel(20,
-                                new File("hrm/src/main/resources/img/financial-profit.png").getAbsolutePath());
+                                new File("../hrm/src/main/resources/img/financial-profit.png").getAbsolutePath());
                 LuongPanel.setBounds(660, 235, 65, 65);
                 LuongPanel.setName("LuongPanel");
                 JLabel LuongLabel = new JLabel("Luong");
@@ -126,7 +126,7 @@ public class MainFrame extends JFrame {
                 contentPane.add(LuongLabel);
 
                 RoundedPanel ChamCongPanel = new RoundedPanel(20,
-                                new File("hrm/src/main/resources/img/business.png").getAbsolutePath());
+                                new File("../hrm/src/main/resources/img/business.png").getAbsolutePath());
                 ChamCongPanel.setBounds(880, 235, 65, 65);
                 ChamCongPanel.setName("ChamCongPanel");
                 JLabel ChamCongLabel = new JLabel("Cham cong");
@@ -137,7 +137,7 @@ public class MainFrame extends JFrame {
                 ChamCongPanel.addMouseListener(controller);
 
                 RoundedPanel ThongKePanel = new RoundedPanel(20,
-                                new File("hrm/src/main/resources/img/graph2.png").getAbsolutePath());
+                                new File("../hrm/src/main/resources/img/graph2.png").getAbsolutePath());
                 ThongKePanel.setBounds(220, 375, 65, 65);
                 ThongKePanel.setName("ThongKePanel");
                 JLabel ThongKeLabel = new JLabel("Thong ke");
@@ -147,7 +147,7 @@ public class MainFrame extends JFrame {
                 contentPane.add(ThongKeLabel);
 
                 RoundedPanel PhatTrienPanel = new RoundedPanel(20,
-                                new File("hrm/src/main/resources/img/promotion.png").getAbsolutePath());
+                                new File("../hrm/src/main/resources/img/promotion.png").getAbsolutePath());
                 PhatTrienPanel.setBounds(440, 375, 65, 65);
                 PhatTrienPanel.setName("PhatTrienPanel");
                 JLabel PhatTrienLabel = new JLabel(
@@ -158,7 +158,7 @@ public class MainFrame extends JFrame {
                 contentPane.add(PhatTrienPanel);
 
                 RoundedPanel CongViecPanel = new RoundedPanel(20,
-                                new File("hrm/src/main/resources/img/task.png").getAbsolutePath());
+                                new File("../hrm/src/main/resources/img/task.png").getAbsolutePath());
                 CongViecPanel.setBounds(660, 375, 65, 65);
                 CongViecPanel.setName("CongViecPanel");
                 JLabel CongViecLabel = new JLabel("Cong viec");
@@ -168,7 +168,7 @@ public class MainFrame extends JFrame {
                 contentPane.add(CongViecPanel);
 
                 RoundedPanel CaiDatPanel = new RoundedPanel(20,
-                                new File("hrm/src/main/resources/img/set-up.png").getAbsolutePath());
+                                new File("../hrm/src/main/resources/img/set-up.png").getAbsolutePath());
                 CaiDatPanel.setBounds(880, 375, 65, 65);
                 CaiDatPanel.setName("CaiDatPanel");
                 JLabel CaiDatLabel = new JLabel("Cai dat");
@@ -178,7 +178,7 @@ public class MainFrame extends JFrame {
                 contentPane.add(CaiDatPanel);
 
                 RoundedPanel MucTieuPanel = new RoundedPanel(20,
-                                new File("hrm/src/main/resources/img/targeted.png").getAbsolutePath());
+                                new File("../hrm/src/main/resources/img/targeted.png").getAbsolutePath());
                 MucTieuPanel.setBounds(220, 515, 65, 65);
                 MucTieuPanel.setName("MucTieuPanel");
                 JLabel MuctieuLabel = new JLabel(

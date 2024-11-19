@@ -289,7 +289,7 @@ public class ChamCongFrame extends JFrame {
                         LocalDate endLocalDate = NgayKetThuc.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                         Object[] rowdata = {
                                         time.getEmployee_id(),
-                                        EmployeeDAO.getInstance().seclectByID(time.getEmployee_id()).getName(),
+                                        EmployeeDAO.getInstance().selectByID(time.getEmployee_id()).getName(),
                                         time.getDate(),
                                         time.getCheck_in_time(),
                                         time.getCheck_out_time(),

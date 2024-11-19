@@ -1,19 +1,14 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package com.hrm.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class TimeKeeping {
-
-    public enum Status {
-        Late_arrival_early_departure,
-        Late_arrival_on_time_departure,
-        On_time_arrival_early_departure,
-        On_time_arrival_on_time_departure,
-        Overtime_late_arrival,
-        Overtime_on_time_arrival
-    }
-
     private int id;
     private int employee_id;
     private LocalDate date;
@@ -21,8 +16,7 @@ public class TimeKeeping {
     private LocalTime check_out_time;
     private Status status;
 
-    public TimeKeeping(int id, int employee_id, LocalDate date, LocalTime check_in_time, LocalTime check_out_time,
-            Status status) {
+    public TimeKeeping(int id, int employee_id, LocalDate date, LocalTime check_in_time, LocalTime check_out_time, Status status) {
         this.id = id;
         this.employee_id = employee_id;
         this.date = date;
@@ -35,7 +29,7 @@ public class TimeKeeping {
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -43,7 +37,7 @@ public class TimeKeeping {
     }
 
     public int getEmployee_id() {
-        return employee_id;
+        return this.employee_id;
     }
 
     public void setEmployee_id(int employee_id) {
@@ -51,7 +45,7 @@ public class TimeKeeping {
     }
 
     public LocalDate getDate() {
-        return date;
+        return this.date;
     }
 
     public void setDate(LocalDate date) {
@@ -59,7 +53,7 @@ public class TimeKeeping {
     }
 
     public LocalTime getCheck_in_time() {
-        return check_in_time;
+        return this.check_in_time;
     }
 
     public void setCheck_in_time(LocalTime check_in_time) {
@@ -67,7 +61,7 @@ public class TimeKeeping {
     }
 
     public LocalTime getCheck_out_time() {
-        return check_out_time;
+        return this.check_out_time;
     }
 
     public void setCheck_out_time(LocalTime check_out_time) {
@@ -75,11 +69,22 @@ public class TimeKeeping {
     }
 
     public Status getStatus() {
-        return status;
+        return this.status;
     }
 
     public void setStatus(Status status) {
         this.status = status;
     }
 
+    public static enum Status {
+        Late_arrival_early_departure,
+        Late_arrival_on_time_departure,
+        On_time_arrival_early_departure,
+        On_time_arrival_on_time_departure,
+        Overtime_late_arrival,
+        Overtime_on_time_arrival;
+
+        private Status() {
+        }
+    }
 }

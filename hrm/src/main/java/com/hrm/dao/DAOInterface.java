@@ -9,8 +9,8 @@ public interface DAOInterface<T> {
 
     public boolean capnhat(T object);
 
-    public ArrayList<T> seclectAll();
+    public ArrayList<T> selectAll();
 
-    public T seclectByID(int id);
+    public T selectByID(int id);
 
 }

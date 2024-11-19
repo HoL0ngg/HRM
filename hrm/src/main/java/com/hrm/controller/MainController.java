@@ -1,5 +1,6 @@
 package com.hrm.controller;
 
+import com.hrm.model.Employee;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -7,7 +8,10 @@ import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 
 import com.hrm.view.ChamCongFrame;
+import com.hrm.view.EmployeeDetailFrame;
+import com.hrm.view.EmployeeManagerFrame;
 import com.hrm.view.MainFrame;
+import javax.swing.JOptionPane;
 
 public class MainController implements MouseListener {
     private MainFrame mainFrame;
@@ -21,6 +25,18 @@ public class MainController implements MouseListener {
         JPanel src = (JPanel) e.getSource();
         if (src.getName().equals("ChamCongPanel")) {
             new ChamCongFrame(mainFrame.getEmployee());
+            mainFrame.setVisible(false);
+        } else if (src.getName().equals("NhanVienPanel")) {
+            System.out.println("Employee: " + mainFrame.getEmployee());
+            
+            Employee e1 = mainFrame.getEmployee();
+            if (e1.getId() == e1.getDepartment().getManagerId()) {
+                // admin
+                new EmployeeManagerFrame();
+            } else {
+                // normal
+                new EmployeeDetailFrame(e1);
+            }
             mainFrame.setVisible(false);
         }
     }

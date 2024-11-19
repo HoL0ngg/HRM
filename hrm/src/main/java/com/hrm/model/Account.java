@@ -1,3 +1,8 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by FernFlower decompiler)
+//
+
 package com.hrm.model;
 
 public class Account {
@@ -15,7 +20,7 @@ public class Account {
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
     public void setUsername(String username) {
@@ -23,7 +28,7 @@ public class Account {
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public void setPassword(String password) {
@@ -31,11 +36,10 @@ public class Account {
     }
 
     public int getEmloyee_id() {
-        return emloyee_id;
+        return this.emloyee_id;
     }
 
     public void setEmloyee_id(int emloyee_id) {
         this.emloyee_id = emloyee_id;
     }
-
 }

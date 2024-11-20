@@ -185,4 +185,10 @@ public class InterviewsBUS {
         intvList = intvDao.list();
         return intvList;
     }
+    
+    public int getNextId() {
+        int maxId = intvList.stream().mapToInt(Interviews::getId).max().orElse(0);
+        return maxId + 1;
+    }
+
 }

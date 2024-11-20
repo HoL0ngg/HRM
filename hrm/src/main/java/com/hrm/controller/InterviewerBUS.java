@@ -23,6 +23,21 @@ public class InterviewerBUS {
         intverList = intverDao.list();
     }
 
+    public void add(Interviewer intver){
+        if(!check(intver.getEmployee_id())){
+            intverList.add(intver);
+            intverDao.add(intver);
+        }
+    }
+    
+        public boolean check(int id) {
+        for (Interviewer intver : intverList) {
+            if (intver.getEmployee_id() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
 //    public String[] getFullNameById(int id) {
 //        List<String> list = new ArrayList<>();
 //        if (intverList == null) {

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class DepartmentBUS {
     private ArrayList<Department> dptmList;
     private DepartmentDAO departmentDao;
+    private Department dptm;
     
     public DepartmentBUS(){
         dptmList = new ArrayList<>();
@@ -27,6 +28,15 @@ public class DepartmentBUS {
         }
         return null;
     }   
+    
+    public boolean check(int id){
+        for(Department dptm : dptmList){
+            if(dptm.getManagerId() == id){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public ArrayList<Department> getList(){
         return dptmList;

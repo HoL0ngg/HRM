@@ -2,46 +2,43 @@ package com.hrm.controller;
 
 import com.hrm.dao.ApplicantsDAO;
 import com.hrm.model.Applicants;
+import com.hrm.model.Employee;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicantsBUS {
-    private ArrayList<Applicants> applicants ;
 
-    public ApplicantsBUS() { 
+    private ArrayList<Applicants> applicants;
+    private ArrayList<Employee> employeeList;
+
+    public ApplicantsBUS() {
         list();
     }
 
-    public Applicants get (int id)
-    {
-        for(Applicants a : applicants)
-        {
-            if(a.getId()==(id))
-            {
+    public Applicants get(int id) {
+        for (Applicants a : applicants) {
+            if (a.getId() == (id)) {
                 return a;
             }
         }
         return null;
     }
-    
-    public void list() 
-    {
+
+    public void list() {
         ApplicantsDAO applicantsDao = new ApplicantsDAO();
         applicants = new ArrayList<>();
         applicants = applicantsDao.list();
     }
-    
-    public void add(Applicants applicant)
-    {
+
+    public void add(Applicants applicant) {
         applicants.add(applicant);
         ApplicantsDAO applicantsDAO = new ApplicantsDAO();
         applicantsDAO.add(applicant);
     }
-    
-    public void delete(int id)
-    {
-        for(Applicants applicant : applicants)
-        {
-            if(applicant.getId()==(id));
+
+    public void delete(int id) {
+        for (Applicants applicant : applicants) {
+            if (applicant.getId() == (id));
             {
                 applicants.remove(id);
                 ApplicantsDAO applicantsDAO = new ApplicantsDAO();
@@ -50,33 +47,28 @@ public class ApplicantsBUS {
             }
         }
     }
-    
-    public void set(Applicants applicant)
-    {
-        for(int i = 0 ; i < applicants.size() ; i++)
-        {
-            if(applicants.get(i).getId()==(applicant.getId()))
-            {
+
+    public void set(Applicants applicant) {
+        for (int i = 0; i < applicants.size(); i++) {
+            if (applicants.get(i).getId() == (applicant.getId())) {
                 applicants.set(i, applicant);
                 ApplicantsDAO applicantsDAO = new ApplicantsDAO();
                 applicantsDAO.set(applicant);
                 return;
             }
-            
+
         }
     }
-    
-    public boolean check(int id)
-    {
-        for(Applicants applicant : applicants)
-        {
-            if(applicant.getId()==(id))
-            {
+
+    public boolean check(int id) {
+        for (Applicants applicant : applicants) {
+            if (applicant.getId() == (id)) {
                 return true;
             }
-        } return false;
+        }
+        return false;
     }
-    
+
 //    public ArrayList<Applicants> search(int id, String fullName)
 //    {
 //        ArrayList<Applicants> search = new ArrayList<>();
@@ -91,9 +83,12 @@ public class ApplicantsBUS {
 //        }
 //        return search;
 //    }
-    
-    public ArrayList<Applicants> getList(){
+    public ArrayList<Applicants> getList() {
         return applicants;
     }
-}
 
+    public int getNextId() {
+        int maxId = applicants.stream().mapToInt(Applicants::getId).max().orElse(0);
+        return maxId + 1;
+    }
+}

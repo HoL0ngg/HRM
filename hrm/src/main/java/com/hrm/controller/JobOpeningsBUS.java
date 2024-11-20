@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class JobOpeningsBUS {
+
     private ArrayList<JobOpenings> jobList;
     private JobOpeningsDAO jobDao;
 
@@ -16,7 +17,9 @@ public class JobOpeningsBUS {
     }
 
     public JobOpenings get(int id) {
-        if (jobList == null) return null;
+        if (jobList == null) {
+            return null;
+        }
         for (JobOpenings j : jobList) {
             if (j.getId() == id) {
                 return j;
@@ -35,10 +38,10 @@ public class JobOpeningsBUS {
             jobDao.add(job);
         }
     }
-    
-    public void delete(int id){
-        for(JobOpenings job : jobList){
-            if(job.getId()==id){
+
+    public void delete(int id) {
+        for (JobOpenings job : jobList) {
+            if (job.getId() == id) {
                 jobList.remove(id);
                 jobDao = new JobOpeningsDAO();
                 jobDao.delete(id);
@@ -56,42 +59,48 @@ public class JobOpeningsBUS {
             }
         }
     }
-    
-    public boolean check(int id)
-    {
-        for(JobOpenings job : jobList){
-            if(job.getId()==id){
+
+    public boolean check(int id) {
+        for (JobOpenings job : jobList) {
+            if (job.getId() == id) {
                 return true;
             }
         }
         return false;
     }
-    
-    public ArrayList<JobOpenings> search(Integer id, String position) 
-    {
+
+    public ArrayList<JobOpenings> search(Integer id, String position) {
         ArrayList<JobOpenings> searchResults = new ArrayList<>();
-    
+
         String idString = (id != null) ? String.valueOf(id) : null;
 
         for (JobOpenings job : jobList) {
-        boolean matchId = (idString == null || String.valueOf(job.getId()).contains(idString));
-        boolean matchPosition = (position == null || position.isEmpty() || job.getPosition().contains(position));
-        
-        if (matchId && matchPosition) {
-            searchResults.add(job);
+            boolean matchId = (idString == null || String.valueOf(job.getId()).contains(idString));
+            boolean matchPosition = (position == null || position.isEmpty() || job.getPosition().contains(position));
+
+            if (matchId && matchPosition) {
+                searchResults.add(job);
             }
         }
         return searchResults;
     }
-    
-    public ArrayList<JobOpenings> getList(){
+
+    public ArrayList<JobOpenings> getList() {
         jobList = jobDao.list();
         return jobList;
     }
-    
+
     public int getNextId() {
         int maxId = jobList.stream().mapToInt(JobOpenings::getId).max().orElse(0);
         return maxId + 1;
+    }
+    
+    public int getIdByPosition(String position){
+        for(JobOpenings job : jobList){
+            if(job.getPosition().equals(position)){
+                return job.getId();
+            }
+        }
+        return 0;
+    }
 }
-}
-

@@ -1,10 +1,12 @@
 package com.hrm.view;
 
 import com.hrm.controller.ApplicantsBUS;
+import com.hrm.controller.EmployeeBus;
 import com.hrm.controller.InterviewerBUS;
 import com.hrm.controller.InterviewsBUS;
 import com.hrm.controller.JobOpeningsBUS;
 import com.hrm.model.Applicants;
+import com.hrm.model.Interviewer;
 import com.hrm.model.Interviews;
 import com.hrm.model.JobOpenings;
 
@@ -17,9 +19,13 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.stream.Collectors;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -70,11 +76,13 @@ public class TuyenDungGUI extends JPanel {
     private ArrayList<Interviews> intvList;
     private InterviewerBUS intverBus;
     private ApplicantsBUS applicantBus;
+    private EmployeeBus emplBus;
     private ArrayList<Applicants> applicantList;
 
     public TuyenDungGUI() {
         jobList = new ArrayList<>();
         jobBus = new JobOpeningsBUS();
+        applicantBus = new ApplicantsBUS();
         init();
     }
 
@@ -222,9 +230,6 @@ public class TuyenDungGUI extends JPanel {
         scrollPane1 = new JScrollPane(homePanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane1.getVerticalScrollBar().setUnitIncrement(14);
         scrollPane1.setPreferredSize(new Dimension(WIDTH - 146, HEIGHT - 190));
-
-        applicantForm = new ApplicantPanel();
-        applicantForm.setPreferredSize(new Dimension(800, 500));
 
         jobFormPanel = new JobDetailPanel();
         jobFormPanel.addButtonListener(e -> completeBtn());
@@ -425,7 +430,7 @@ public class TuyenDungGUI extends JPanel {
                 jobInfoPanel.applyButton(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        applyButton();
+                        applyButton(jobId);
                     }
 
                 });
@@ -633,37 +638,59 @@ public class TuyenDungGUI extends JPanel {
         String[] headers = {"STT", "Họ Tên", "Vị Trí Ứng Tuyển", "Phòng ban", "Ngày Nộp", "Trạng Thái", "Link CV"};
         applicantTable.setHeaders(headers);
 
-        // Duyệt qua danh sách ứng viên và thêm vào bảng
         int index = 0;
         intvBus = new InterviewsBUS();
+
+        // Lưu danh sách ứng viên
+        ArrayList<Applicants> currentApplicantList = applicantList;
+
         for (Applicants applicant : applicantList) {
             index++;
-            // Lấy thông tin vị trí và phòng ban từ intvBus
             String position = intvBus.getPositionByApplicantId(applicant.getId());
             String department = intvBus.getDepartmentName(applicant.getId());
-
-            // Định dạng ngày tháng
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String date = applicant.getApplicant_date().format(formatter);
 
-            // Thêm hàng dữ liệu vào bảng
             applicantTable.addRow(new String[]{
                 Integer.toString(index), // STT
                 applicant.getFull_name(), // Họ Tên
                 position, // Vị Trí
                 department, // Phòng ban
-                date, // Ngày Nộp Đơn
+                date, // Ngày Nộp
                 null, // Trạng Thái (có thể cập nhật sau)
                 applicant.getResume() // Link CV
             });
         }
 
-        // Tự động điều chỉnh chiều rộng cột theo nội dung
+        // Tự động điều chỉnh chiều rộng cột
         applicantTable.resizeColumnWidth();
 
-        // Thiết lập chiều cao của từng hàng trong bảng
-        //applicantTable.setRowHeight(50);
-        // Thêm bảng vào mainPanel
+        // Lắng nghe sự kiện nhấn vào hàng
+        applicantTable.getTable().addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JTable table = (JTable) evt.getSource();
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1) {
+                    // Lấy đối tượng ứng viên dựa vào chỉ số dòng
+                    Applicants selectedApplicant = currentApplicantList.get(table.convertRowIndexToModel(selectedRow));
+
+                    // Lấy ID bằng getId()
+                    int id = selectedApplicant.getId();
+                    applicantForm = new ApplicantPanel(id);
+                    applicantForm.setPreferredSize(new Dimension(800, 500));
+                    applicantForm.addApplicantButton(e -> addApplicant());
+                    applicantForm.exitButton(e -> exitButton(2));
+                    addJobPanel.removeAll();
+                    addJobPanel = new JPanel();
+                    addJobPanel.setBackground(Color.WHITE);
+                    addJobPanel.add(applicantForm);
+                    mainPanel.add(addJobPanel, "Update_Applicant");
+                    togglePanel("Update_Applicant");
+                }
+            }
+        });
+
         return applicantTable;
     }
 
@@ -686,7 +713,7 @@ public class TuyenDungGUI extends JPanel {
 
             // Định dạng ngày tháng
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String date = intv.getInterviews_date().format(formatter);
+            String date = intv.getInterview_date().format(formatter);
 
             // Thêm hàng dữ liệu vào bảng
             intvTable.addRow(new Object[]{
@@ -694,7 +721,7 @@ public class TuyenDungGUI extends JPanel {
                 applicantName, // Họ tên
                 position, // Vị trí
                 date, // Thời gian
-                intv.getInterviews_stage(), // Trạng thái (dùng String thay vì JComboBox)
+                intv.getInterview_stage(), // Trạng thái (dùng String thay vì JComboBox)
                 intverName // Người phỏng vấn
             });
         }
@@ -742,7 +769,10 @@ public class TuyenDungGUI extends JPanel {
             editPanel = viewAll("Danh sách công việc", new Color(102, 153, 255), 1);
             mainPanel.add(editPanel, "Edit");
             togglePanel("Edit");
+        } else if (flag == 2) {
+            togglePanel("Home");
         }
+
     }
 
     //   Nút hoàn tất khi thêm bài đăng
@@ -820,13 +850,123 @@ public class TuyenDungGUI extends JPanel {
         togglePanel("Home");
     }
 
-    private void applyButton() {
+    private void applyButton(int id) {
+        applicantForm = new ApplicantPanel(id, 0);
+        applicantForm.setPreferredSize(new Dimension(800, 500));
+        applicantForm.addApplicantButton(e -> addApplicant());
+        applicantForm.exitButton(e -> exitButton(2));
         addJobPanel.removeAll();
         addJobPanel = new JPanel();
         addJobPanel.setBackground(Color.WHITE);
         addJobPanel.add(applicantForm);
-        mainPanel.add(addJobPanel, "Add_Applicant");
-        togglePanel("Add_Applicant");
+        mainPanel.add(addJobPanel, "Suggest_Applicant");
+        togglePanel("Suggest_Applicant");
+    }
+
+    private void addApplicant() {
+        // Lấy thông tin ứng viên
+        int applicantId = applicantBus.getNextId();
+        String name = applicantForm.nameField.getText().trim();
+        String email = applicantForm.emailField.getText().trim();
+        String phone = applicantForm.phoneField.getText().trim();
+        String resume = applicantForm.cvLinkField.getText().trim();
+        LocalDate applicantDate = LocalDate.now();
+
+        // Kiểm tra thông tin ứng viên
+        if (name.isEmpty() || email.isEmpty() || phone.isEmpty() || resume.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Phải điền đầy đủ các thông tin ứng viên!");
+            return;
+        }
+
+        Applicants applicant = new Applicants(applicantId, name, email, phone, resume, applicantDate);
+        applicantBus.add(applicant);
+
+        JOptionPane.showMessageDialog(this, "Thông tin đã được lưu!");
+        loadJobList();
+        togglePanel("Home");
+    }
+
+    private void updateApplicant() {
+        // Lấy thông tin ứng viên
+        int applicantId = applicantBus.getNextId();
+        String name = applicantForm.nameField.getText().trim();
+        String email = applicantForm.emailField.getText().trim();
+        String phone = applicantForm.phoneField.getText().trim();
+        String resume = applicantForm.cvLinkField.getText().trim();
+        LocalDate applicantDate = LocalDate.now();
+
+        // Kiểm tra thông tin ứng viên
+        if (name.isEmpty() || email.isEmpty() || phone.isEmpty() || resume.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Phải điền đầy đủ các thông tin ứng viên!");
+            return;
+        }
+
+        Applicants applicant = new Applicants(applicantId, name, email, phone, resume, applicantDate);
+        applicantBus.add(applicant);
+
+        //them lich phong van
+        int intvId = intvBus.getNextId();
+        String position = applicantForm.positionField.getText().trim();
+        int jobId = jobBus.getIdByPosition(position);
+        LocalDate intvDate = null;
+        if (applicantForm.dateChooser.getDate() != null) {
+            intvDate = new java.sql.Date(applicantForm.dateChooser.getDate().getTime()).toLocalDate();
+        }
+
+        LocalTime intvTime = null;
+        if (applicantForm.interviewTimeSpinner.getValue() != null) {
+            Date spinnerValue = (Date) applicantForm.interviewTimeSpinner.getValue();
+            intvTime = spinnerValue.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalTime();
+        }
+
+        if (intvDate != null && intvDate.isBefore(applicantDate)) {
+            JOptionPane.showMessageDialog(null, "Ngày phỏng vấn không được trước ngày ứng tuyển!");
+            return;
+        }
+
+        if (intvDate != null && intvTime != null) {
+            LocalDateTime interviewDateTime = LocalDateTime.of(intvDate, intvTime);
+            if (interviewDateTime.isBefore(LocalDateTime.now())) {
+                JOptionPane.showMessageDialog(null, "Thời gian phỏng vấn không được trước thời điểm hiện tại!");
+                return;
+            }
+        }
+
+        String stage = "Pending";
+        String note = applicantForm.noteArea.getText().trim();
+        String result = (String) applicantForm.resultComboBox.getSelectedItem();
+        Interviews intv = new Interviews(intvId, jobId, applicantId, intvDate, intvTime, stage, note, result);
+        intvBus.add(intv);
+
+        //them nguoi phong van
+        String name1 = (String) applicantForm.interviewer1ComboBox.getSelectedItem();
+        String name2 = (String) applicantForm.interviewer2ComboBox.getSelectedItem();
+        String name3 = (String) applicantForm.interviewer3ComboBox.getSelectedItem();
+        name1 = (name1 != null && !name1.trim().isEmpty()) ? name1 : null;
+        name2 = (name2 != null && !name2.trim().isEmpty()) ? name2 : null;
+        name3 = (name3 != null && !name3.trim().isEmpty()) ? name3 : null;
+
+        if (name1 != null) {
+            int id1 = emplBus.getIdByName(name1);
+            Interviewer intver = new Interviewer(id1, intvId);
+            intverBus.add(intver);
+        }
+        if (name2 != null) {
+            int id2 = emplBus.getIdByName(name2);
+            Interviewer intver = new Interviewer(id2, intvId);
+            intverBus.add(intver);
+        }
+        if (name3 != null) {
+            int id3 = emplBus.getIdByName(name3);
+            Interviewer intver = new Interviewer(id3, intvId);
+            intverBus.add(intver);
+        }
+
+        JOptionPane.showMessageDialog(this, "Thông tin đã được lưu!");
+        loadJobList();
+        togglePanel("Home");
     }
 
     public static void main(String[] args) {

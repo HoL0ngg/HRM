@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class MySQLConnect {
     private String user = "root";
     private String password="";
-    private String url="jdbc:mysql://localhost/quanlynhansu?useUnicode=true&characterEncoding=UTF-8";
+    private String url="jdbc:mySQL://localhost:3306/quanlynhansu";
     private Connection conn = null;
     private Statement st = null;
     

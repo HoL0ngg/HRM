@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.hrm.dao;
 
 import com.hrm.model.Applicants;
@@ -13,11 +9,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-/**
- *
- * @author MSI
- */
 public class ApplicantsDAO {
     private MySQLConnect mySQL = new MySQLConnect();
 
@@ -32,7 +23,7 @@ public class ApplicantsDAO {
             ResultSet rs = mySQL.executeQuery(sql);
             while(rs.next())
             {
-                String id = rs.getString("id");
+                int id = rs.getInt("id");
                 String full_name = rs.getString("full_name");
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
@@ -80,11 +71,21 @@ public class ApplicantsDAO {
         System.out.println(sql);
     }
     
-    public void delete(String id)
+    public void delete(int id)
     {
         MySQLConnect mySQL = new MySQLConnect();
         String sql = "DELETE FROM applicants WHERE id='"+id+"'";
         mySQL.executeUpdate(sql);
         System.out.println(sql);
+    }
+    
+    public static void main(String[] args){
+        ApplicantsDAO applicantDao = new ApplicantsDAO();
+        ArrayList<Applicants> applicantlist = applicantDao.list();
+        for(Applicants a : applicantlist){
+            System.out.println("id: " + a.getId());
+            System.out.println("full name: " + a.getFull_name());
+            System.out.println("------------");
+        }
     }
 }

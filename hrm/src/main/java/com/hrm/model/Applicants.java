@@ -11,10 +11,11 @@ import java.time.LocalDate;
  * @author MSI
  */
 public class Applicants {
-    private String id,full_name, email, phone, resume;
+    private int id;
+    private String full_name, email, phone, resume;
     private LocalDate applicant_date;
 
-    public Applicants(String id, String full_name, String email, String phone, String resume, LocalDate applicant_date) {
+    public Applicants(int id, String full_name, String email, String phone, String resume, LocalDate applicant_date) {
         this.id = id;
         this.full_name = full_name;
         this.email = email;
@@ -23,11 +24,11 @@ public class Applicants {
         this.applicant_date = applicant_date;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -14,19 +14,17 @@ public class Interviews {
     private int id;
     private int job_open_id;
     private int applicants_id;
-    private LocalDate interviews_date;
+    private LocalDate interview_date;
+    private String interview_stage, note, result ;
 
-    private enum interviews_stage {
-    };
-
-    private String note;
-
-    public Interviews(int id, int job_open_id, int applicants_id, LocalDate interviews_date, String note) {
+    public Interviews(int id, int job_open_id, int applicants_id, LocalDate interview_date, String interview_stage, String note, String result) {
         this.id = id;
         this.job_open_id = job_open_id;
         this.applicants_id = applicants_id;
-        this.interviews_date = interviews_date;
+        this.interview_date = interview_date;
+        this.interview_stage = interview_stage;
         this.note = note;
+        this.result = result;
     }
 
     public int getId() {
@@ -54,11 +52,19 @@ public class Interviews {
     }
 
     public LocalDate getInterviews_date() {
-        return interviews_date;
+        return interview_date;
     }
 
     public void setInterviews_date(LocalDate interviews_date) {
-        this.interviews_date = interviews_date;
+        this.interview_date = interviews_date;
+    }
+
+    public String getInterviews_stage() {
+        return interview_stage;
+    }
+
+    public void setInterviews_stage(String interviews_stage) {
+        this.interview_stage = interviews_stage;
     }
 
     public String getNote() {
@@ -67,6 +73,14 @@ public class Interviews {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 
 }

@@ -35,28 +35,17 @@ public class JobOpeningsBUS {
             jobDao.add(job);
         }
     }
-
-    public void delete(int id) {
-        Iterator<JobOpenings> iterator = jobList.iterator();
-        while (iterator.hasNext()) {
-            JobOpenings job = iterator.next();
-            if (job.getId() == id) {
-                iterator.remove();
+    
+    public void delete(int id){
+        for(JobOpenings job : jobList){
+            if(job.getId()==id){
+                jobList.remove(id);
+                jobDao = new JobOpeningsDAO();
                 jobDao.delete(id);
                 return;
             }
         }
     }
-//    public void delete(int id){
-//        for(JobOpenings job : jobList){
-//            if(job.getId()==id){
-//                jobList.remove(id);
-//                JobOpeningsDAO jobDao = new JobOpeningsDAO();
-//                jobDao.delete(id);
-//                return;
-//            }
-//        }
-//    }
 
     public void set(JobOpenings job) {
         for (int i = 0; i < jobList.size(); i++) {
@@ -96,7 +85,13 @@ public class JobOpeningsBUS {
     }
     
     public ArrayList<JobOpenings> getList(){
+        jobList = jobDao.list();
         return jobList;
     }
+    
+    public int getNextId() {
+        int maxId = jobList.stream().mapToInt(JobOpenings::getId).max().orElse(0);
+        return maxId + 1;
+}
 }
 

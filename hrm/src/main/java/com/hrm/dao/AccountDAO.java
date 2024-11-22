@@ -34,12 +34,8 @@ public class AccountDAO implements DAOInterface<Account> {
         return true;
     }
 
-<<<<<<< HEAD
-    public Account seclectByID(int id) {
-=======
     @Override
     public Account selectByID(int id) {
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
         String sql = "select * from account where emloyee_id = ?";
         Connection con = JDBCUtil.createConnection();
         Account user = null;
@@ -77,57 +73,38 @@ public class AccountDAO implements DAOInterface<Account> {
         return user;
     }
 
-<<<<<<< HEAD
-    public ArrayList<Account> seclectAll() {
-=======
-    @Override
-    public ArrayList<Account> selectAll() {
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
-        return null;
-    }
-
     public Employee DangNhap(String user, String password) {
         String sql = "select * from account where username = ?";
         Connection con = JDBCUtil.createConnection();
         Employee employee = null;
-
-<<<<<<< HEAD
         try {
             PreparedStatement pst = con.prepareStatement(sql);
 
             try {
                 pst.setString(1, user);
                 ResultSet rs = pst.executeQuery();
-                if (rs.next() && password.equals(rs.getString("password"))) {
-                    System.out.println("3igZeus: is data valid");
-                    employee = EmployeeDAO.getInstance().selectByID(rs.getInt("employee_id"));
-=======
-            if (rs.next()) {
-                if (password.equals(rs.getString("password"))) {
-                    employee = EmployeeDAO.getInstance().getNamebyId(rs.getInt("employee_id"));
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
+                if (rs.next()) {
+                    if (password.equals(rs.getString("password"))) {
+                        employee = EmployeeDAO.getInstance().getNamebyId(rs.getInt("employee_id"));
+                    }
                 }
-            } catch (Throwable var10) {
+            } catch (Throwable var9) {
                 if (pst != null) {
                     try {
                         pst.close();
-                    } catch (Throwable var9) {
-                        var10.addSuppressed(var9);
+                    } catch (Throwable var8) {
+                        var9.addSuppressed(var8);
                     }
                 }
 
-                throw var10;
+                throw var9;
             }
 
-<<<<<<< HEAD
             if (pst != null) {
                 pst.close();
             }
-        } catch (SQLException var11) {
-            SQLException e = var11;
-=======
-        } catch (SQLException e) {
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
+        } catch (SQLException var10) {
+            SQLException e = var10;
             e.printStackTrace();
         }
 
@@ -137,11 +114,7 @@ public class AccountDAO implements DAOInterface<Account> {
 
     @Override
     public ArrayList<Account> selectAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Account selectByID(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'selectAll'");
     }
 }

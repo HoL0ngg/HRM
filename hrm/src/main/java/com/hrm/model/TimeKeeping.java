@@ -9,8 +9,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class TimeKeeping {
-<<<<<<< HEAD
-=======
 
     public enum Status {
         di_tre_ve_som,
@@ -21,7 +19,6 @@ public class TimeKeeping {
         tang_ca_di_tre
     }
 
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
     private int id;
     private int employee_id;
     private LocalDate date;
@@ -29,7 +26,8 @@ public class TimeKeeping {
     private LocalTime check_out_time;
     private Status status;
 
-    public TimeKeeping(int id, int employee_id, LocalDate date, LocalTime check_in_time, LocalTime check_out_time, Status status) {
+    public TimeKeeping(int id, int employee_id, LocalDate date, LocalTime check_in_time, LocalTime check_out_time,
+            Status status) {
         this.id = id;
         this.employee_id = employee_id;
         this.date = date;
@@ -87,17 +85,5 @@ public class TimeKeeping {
 
     public void setStatus(Status status) {
         this.status = status;
-    }
-
-    public static enum Status {
-        Late_arrival_early_departure,
-        Late_arrival_on_time_departure,
-        On_time_arrival_early_departure,
-        On_time_arrival_on_time_departure,
-        Overtime_late_arrival,
-        Overtime_on_time_arrival;
-
-        private Status() {
-        }
     }
 }

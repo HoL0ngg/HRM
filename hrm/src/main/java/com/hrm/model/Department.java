@@ -45,10 +45,6 @@ public class Department {
 
     @Override
     public String toString() {
-<<<<<<< HEAD
-        return name; // Hiển thị tên phòng ban trong combobox
-=======
         return "Department [id=" + this.id + ", managerId=" + this.managerId + ", name=" + this.name + "]";
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
     }
 }

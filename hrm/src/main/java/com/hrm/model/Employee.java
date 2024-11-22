@@ -25,15 +25,9 @@ public class Employee {
     private int id;
     private String name;
     private LocalDate dob;
-<<<<<<< HEAD
-    private int position_id;       // ID của vị trí
-    private int department_id;     // ID của phòng ban
-    private Position position;     // Đối tượng Position
-=======
     private int position_id; // ID của vị trí
     private int department_id; // ID của phòng ban
     private Position position; // Đối tượng Position
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
     private Department department; // Đối tượng Department
     private String previous_position;
     private Gender gender;
@@ -51,34 +45,7 @@ public class Employee {
     private String image;
     private int isDeleted;
 
-<<<<<<< HEAD
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public int getIsDeleted() {
-        return isDeleted;
-    }
-
-    public void setIsDeleted(int isDeleted) {
-        this.isDeleted = isDeleted;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-=======
     // Constructor không đối số
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
     // Constructor không đối số
     public Employee() {
     }
@@ -90,8 +57,8 @@ public class Employee {
 
     // Constructor với position_id và department_id
     public Employee(int id, String name, LocalDate dob, int position_id, int department_id, String previous_position,
-                    Gender gender, String phone_mumber, String address, String email, LocalDate hire_date, Status status,
-                    int account_bank, int indentify_card, int tax_code, int social_insurance_code, Work_type work_type) {
+            Gender gender, String phone_mumber, String address, String email, LocalDate hire_date, Status status,
+            int account_bank, int indentify_card, int tax_code, int social_insurance_code, Work_type work_type) {
         this.id = id;
         this.name = name;
         this.dob = dob;
@@ -112,28 +79,17 @@ public class Employee {
     }
 
     // Constructor mới với đối tượng Position và Department
-<<<<<<< HEAD
-    public Employee(int id, String name, LocalDate dob, Position position, Department department, String previous_position,
-                    Gender gender, String phone_mumber, String address, String email, LocalDate hire_date, Status status,
-                    int account_bank, int indentify_card, int tax_code, int social_insurance_code, Work_type work_type) {
-=======
     public Employee(int id, String name, LocalDate dob, Position position, Department department,
             String previous_position,
             Gender gender, String phone_mumber, String address, String email, LocalDate hire_date, Status status,
             int account_bank, int indentify_card, int tax_code, int social_insurance_code, Work_type work_type) {
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
         this.id = id;
         this.name = name;
         this.dob = dob;
         this.position = position;
         this.department = department;
-<<<<<<< HEAD
-        this.position_id = position.getId();  // Lấy id từ Position object
-        this.department_id = department.getId();  // Lấy id từ Department object
-=======
         this.position_id = position.getId(); // Lấy id từ Position object
         this.department_id = department.getId(); // Lấy id từ Department object
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
         this.previous_position = previous_position;
         this.gender = gender;
         this.phone_mumber = phone_mumber;
@@ -309,16 +265,9 @@ public class Employee {
         return "Employee [id=" + id + ", name=" + name + ", dob=" + dob + ", position_id=" + position_id
                 + ", department_id=" + department_id + ", previous_position=" + previous_position + ", gender=" + gender
                 + ", phone_mumber=" + phone_mumber + ", address=" + address + ", email=" + email + ", hire_date="
-<<<<<<< HEAD
-                + hire_date + ", status=" + status + ", account_bank=" + account_bank + ", indentify_card=" + indentify_card
-                + ", tax_code=" + tax_code + ", social_insurance_code=" + social_insurance_code + ", work_type=" + work_type + "]";
-    }
-}
-=======
                 + hire_date + ", status=" + status + ", account_bank=" + account_bank + ", indentify_card="
                 + indentify_card
                 + ", tax_code=" + tax_code + ", social_insurance_code=" + social_insurance_code + ", work_type="
                 + work_type + "]";
     }
 }
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f

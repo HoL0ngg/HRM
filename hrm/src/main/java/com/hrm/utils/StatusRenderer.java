@@ -10,26 +10,13 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-<<<<<<< HEAD
-=======
 import com.hrm.model.TimeKeeping.Status;
 
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
 public class StatusRenderer extends DefaultTableCellRenderer {
     public StatusRenderer() {
     }
 
     @Override
-<<<<<<< HEAD
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        Color dotColor;
-        if (value.equals("pass")) {
-            dotColor = Color.GREEN;
-        } else if (value.equals("fail")) {
-            dotColor = Color.RED;
-        } else {
-            dotColor = Color.GRAY;
-=======
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
             int row, int column) {
         Color dotColor = Color.white;
@@ -64,7 +51,6 @@ public class StatusRenderer extends DefaultTableCellRenderer {
             } else {
                 dotColor = Color.GRAY;
             }
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
         }
 
         SalaryStatusRenderer panel = new SalaryStatusRenderer(dotColor);

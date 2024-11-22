@@ -14,18 +14,14 @@ public class JDBCUtil {
 
         try {
             DriverManager.registerDriver(new Driver());
-<<<<<<< HEAD
-            String url = "jdbc:mySQL://localhost:3306/quanlynhansu?useUnicode=true&characterEncoding=UTF-8";
-=======
             String url = "jdbc:mySQL://localhost:3306/quanlynhansu";
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
             String user = "root";
             String pass = "";
             con = DriverManager.getConnection(url, user, pass);
         } catch (SQLException var4) {
             SQLException e = var4;
             e.printStackTrace();
-            
+
             System.out.println("3igZeus: connect faild " + var4);
         }
 

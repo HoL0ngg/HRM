@@ -41,7 +41,8 @@ public class MainFrame extends JFrame {
                 contentPane.setLayout(null);
 
                 // Phan Thong tin
-                Image AvatarIcon = new ImageIcon(new File("../hrm/src/main/resources/img/profile.png").getAbsolutePath())
+                Image AvatarIcon = new ImageIcon(
+                                new File("../hrm/src/main/resources/img/profile.png").getAbsolutePath())
                                 .getImage()
                                 .getScaledInstance(50, 50, Image.SCALE_SMOOTH);
                 JLabel IconLabel = new JLabel();
@@ -142,17 +143,6 @@ public class MainFrame extends JFrame {
                 contentPane.add(ChamCongLabel);
                 ChamCongPanel.addMouseListener(controller);
 
-<<<<<<< HEAD
-                RoundedPanel ThongKePanel = new RoundedPanel(20,
-                                new File("../hrm/src/main/resources/img/graph2.png").getAbsolutePath());
-                ThongKePanel.setBounds(220, 375, 65, 65);
-                ThongKePanel.setName("ThongKePanel");
-                JLabel ThongKeLabel = new JLabel("Thong ke");
-                ThongKeLabel.setBounds(215, 415, 90, 80);
-                ThongKeLabel.setFont(MenuFont);
-                contentPane.add(ThongKePanel);
-                contentPane.add(ThongKeLabel);
-=======
                 RoundedPanel BaoCaoPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/graph2.png").getAbsolutePath());
                 BaoCaoPanel.setBounds(220, 375, 65, 65);
@@ -163,7 +153,6 @@ public class MainFrame extends JFrame {
                 contentPane.add(BaoCaoPanel);
                 contentPane.add(BaoCaoLabel);
                 BaoCaoPanel.addMouseListener(controller);
->>>>>>> 484d70c9ef6a49ac09b9838e97d19b1e1452577f
 
                 RoundedPanel PhatTrienPanel = new RoundedPanel(20,
                                 new File("../hrm/src/main/resources/img/promotion.png").getAbsolutePath());

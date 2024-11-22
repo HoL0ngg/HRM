@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.hrm.view;
 
 import com.hrm.dao.SalaryChangeHistoryDAO;
@@ -63,7 +58,7 @@ public class SalaryUpdateDialog extends JDialog {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(lblName, gbc);
@@ -131,7 +126,7 @@ public class SalaryUpdateDialog extends JDialog {
         });
         this.getContentPane().add(panel);
         this.pack();
-        this.setLocationRelativeTo((Component)null);
+        this.setLocationRelativeTo((Component) null);
     }
 
     private void setFields() {
@@ -155,22 +150,28 @@ public class SalaryUpdateDialog extends JDialog {
             this.btnApprove.setEnabled(true);
             this.btnReject.setEnabled(true);
         }
-
     }
 
     private void updateSalaryChangeHistory() {
+        // Lấy giá trị từ các trường nhập liệu
         this.salaryChangeHistory.setNewSalary(new BigDecimal(this.txtNewSalary.getText()));
         this.salaryChangeHistory.setReasons(this.txtReason.getText());
         this.salaryChangeHistory.setComments(this.txtComment.getText());
         int approvedById = Integer.parseInt(this.txtApprovedById.getText());
         this.salaryChangeHistory.getApprovedBy().setId(approvedById);
+
+        // Đặt ngày thay đổi là thời gian thực
+        this.salaryChangeHistory.setChangeDate(java.time.LocalDate.now());
+
+        // Gọi DAO để thực hiện cập nhật
         SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
         boolean success = salaryChangeHistoryDAO.update(this.salaryChangeHistory);
+
+        // Hiển thị thông báo
         if (success) {
             JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
         } else {
             JOptionPane.showMessageDialog(this, "Cập nhật thất bại.");
         }
-
     }
 }

@@ -214,45 +214,48 @@ public class SalaryChangeHistoryDAO implements DAOInterface<SalaryChangeHistory>
     }
 
     public boolean update(SalaryChangeHistory history) {
-        String sql = "UPDATE salary_change_history SET new_salary = ?, reasons = ?, comments = ?, approved_by = ?, status = ? WHERE id = ?";
-        Connection con = JDBCUtil.createConnection();
-        boolean updated = false;
+    String sql = "UPDATE salary_change_history SET new_salary = ?, reasons = ?, comments = ?, approved_by = ?, status = ?, change_date = ? WHERE id = ?";
+    Connection con = JDBCUtil.createConnection();
+    boolean updated = false;
+
+    try {
+        PreparedStatement pst = con.prepareStatement(sql);
 
         try {
-            PreparedStatement pst = con.prepareStatement(sql);
+            // Gán các tham số vào câu lệnh SQL
+            pst.setBigDecimal(1, history.getNewSalary()); // new_salary
+            pst.setString(2, history.getReasons());       // reasons
+            pst.setString(3, history.getComments());      // comments
+            pst.setInt(4, history.getApprovedBy().getId());// approved_by
+            pst.setString(5, history.getStatus());        // status
+            pst.setDate(6, java.sql.Date.valueOf(java.time.LocalDate.now())); // change_date
+            pst.setInt(7, history.getId());               // id
 
-            try {
-                pst.setBigDecimal(1, history.getNewSalary());
-                pst.setString(2, history.getReasons());
-                pst.setString(3, history.getComments());
-                pst.setInt(4, history.getApprovedBy().getId());
-                pst.setString(5, history.getStatus());
-                pst.setInt(6, history.getId());
-                updated = pst.executeUpdate() > 0;
-            } catch (Throwable var14) {
-                if (pst != null) {
-                    try {
-                        pst.close();
-                    } catch (Throwable var13) {
-                        var14.addSuppressed(var13);
-                    }
-                }
-
-                throw var14;
-            }
-
+            // Thực hiện cập nhật
+            updated = pst.executeUpdate() > 0;
+        } catch (Throwable var14) {
             if (pst != null) {
-                pst.close();
+                try {
+                    pst.close();
+                } catch (Throwable var13) {
+                    var14.addSuppressed(var13);
+                }
             }
-        } catch (SQLException var15) {
-            SQLException e = var15;
-            e.printStackTrace();
-        } finally {
-            JDBCUtil.closeConnection(con);
+            throw var14;
         }
 
-        return updated;
+        if (pst != null) {
+            pst.close();
+        }
+    } catch (SQLException var15) {
+        var15.printStackTrace();
+    } finally {
+        JDBCUtil.closeConnection(con);
     }
+
+    return updated;
+}
+
     public ArrayList<SalaryChangeHistory> selectByMonthDaXem(int month) {
     String sql = "SELECT sch.*, e.id as employee_id, e.name as employee_name, e.gender, e.phone_number, approved.id as approved_by_id, approved.name as approved_by_name "
                 + "FROM salary_change_history sch "

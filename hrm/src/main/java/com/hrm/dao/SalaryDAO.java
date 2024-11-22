@@ -76,10 +76,12 @@ public class SalaryDAO implements DAOInterface<Salary> {
                     int positionId = rs.getInt("position_id");
                     String positionName = rs.getString("position_name");
                     Position position = new Position(positionId, 0, positionName);
-                    BigDecimal tax= rs.getBigDecimal("tax");
-                    BigDecimal social_insurance= rs.getBigDecimal("social_insurance");
+                    BigDecimal hourly_salary = rs.getBigDecimal("hourly_salary");
+                    BigDecimal overtime_hourly_salary = rs.getBigDecimal("overtime_hourly_salary");
+                    BigDecimal total_overtime_shifts = rs.getBigDecimal("total_overtime_shifts");
+                    float total_hourly_work = rs.getFloat("total_hourly_work");
                     Salary salary = new Salary(id, employee, positionSalary, bonus, deductions, net_salary,
-                            overtimeSalary, payday, note, attendance, position,tax,social_insurance);
+                            overtimeSalary, payday, note, attendance, position,hourly_salary,overtime_hourly_salary,total_overtime_shifts,total_hourly_work);
                     salaryList.add(salary);
                 }
             } catch (Throwable var31) {
@@ -128,10 +130,12 @@ public class SalaryDAO implements DAOInterface<Salary> {
                     LocalDate payday = (LocalDate) rs.getObject("payday", LocalDate.class);
                     String note = rs.getString("note");
                     int attendance = rs.getInt("attendance");
-                    BigDecimal tax= rs.getBigDecimal("tax");
-                    BigDecimal social_insurance= rs.getBigDecimal("social_insurance");
+                    BigDecimal hourly_salary = rs.getBigDecimal("hourly_salary");
+                    BigDecimal overtime_hourly_salary = rs.getBigDecimal("overtime_hourly_salary");
+                    BigDecimal total_overtime_shifts = rs.getBigDecimal("total_overtime_shifts");
+                    float total_hourly_work = rs.getFloat("total_hourly_work");
                     salary = new Salary(id, employeeId, positionSalary, bonus, deductions, net_salary, overtimeSalary,
-                            payday, note, attendance,tax,social_insurance);
+                            payday, note, attendance,hourly_salary,overtime_hourly_salary,total_overtime_shifts,total_hourly_work);
                 }
             } catch (Throwable var22) {
                 if (pst != null) {
@@ -197,11 +201,13 @@ public class SalaryDAO implements DAOInterface<Salary> {
                     employee.setPhone_mumber(phoneNumber);
                     int positionId = rs.getInt("position_id");
                     String positionName = rs.getString("position_name");
-                    BigDecimal tax= rs.getBigDecimal("tax");
-                    BigDecimal social_insurance= rs.getBigDecimal("social_insurance");
+                    BigDecimal hourly_salary = rs.getBigDecimal("hourly_salary");
+                    BigDecimal overtime_hourly_salary = rs.getBigDecimal("overtime_hourly_salary");
+                    BigDecimal total_overtime_shifts = rs.getBigDecimal("total_overtime_shifts");
+                    float total_hourly_work = rs.getFloat("total_hourly_work");
                     Position position = new Position(positionId, 0, positionName);
                     Salary salary = new Salary(id, employee, positionSalary, bonus, deductions, net_salary,
-                            overtimeSalary, payday, note, attendance, position,tax,social_insurance);
+                            overtimeSalary, payday, note, attendance, position,hourly_salary,overtime_hourly_salary,total_overtime_shifts,total_hourly_work);
                     salaryList.add(salary);
                 }
             } catch (Throwable var32) {
@@ -228,9 +234,10 @@ public class SalaryDAO implements DAOInterface<Salary> {
 
         return salaryList;
     }
-public boolean updateSalary(int employeeID, BigDecimal bonus, BigDecimal attendance, BigDecimal deductions, String note, LocalDate payday, BigDecimal net_salary) {
+public boolean updateSalary(int employeeID, BigDecimal bonus, BigDecimal attendance, BigDecimal deductions, String note, LocalDate payday, BigDecimal net_salary,BigDecimal hourly_salary , BigDecimal overtime_hourly_salary) {
     // Câu lệnh SQL để cập nhật thông tin lương
-    String sql = "UPDATE salaries SET bonus = ?, attendance = ?, deductions = ?, note = ?, payday = ?, net_salary = ? WHERE employee_id = ?";
+    String sql = "UPDATE salaries SET bonus = ?, attendance = ?, deductions = ?, note = ?, payday = ?, net_salary = ? , hourly_salary = ? , overtime_hourly_salary = ?  "
+            + "WHERE employee_id = ?";
     Connection con = JDBCUtil.createConnection(); // Kết nối đến cơ sở dữ liệu
     boolean updated = false;
 
@@ -245,8 +252,9 @@ public boolean updateSalary(int employeeID, BigDecimal bonus, BigDecimal attenda
             pst.setString(4, note); // Ghi chú
             pst.setDate(5, java.sql.Date.valueOf(payday)); // Ngày hiệu lực (payday)
             pst.setBigDecimal(6, net_salary); // Tổng lương sau khi tính toán
-            pst.setInt(7, employeeID); // ID của nhân viên
-            
+            pst.setBigDecimal(7,hourly_salary);
+            pst.setBigDecimal(8,overtime_hourly_salary);
+           pst.setInt(9, employeeID); // ID của nhân viên
             // Thực thi câu truy vấn và kiểm tra xem có bản ghi nào bị ảnh hưởng không
             updated = pst.executeUpdate() > 0;
         } catch (Throwable ex) {
@@ -321,8 +329,10 @@ public ArrayList<Salary> selectByEmployeeIdforDanhSachLuong(int employeeId) {
             Employee.Gender gender = Employee.Gender.valueOf(genderStr); // Chuyển đổi giới tính
             String phoneNumber = rs.getString("phone_number");
             
-            BigDecimal tax= rs.getBigDecimal("tax");
-            BigDecimal social_insurance= rs.getBigDecimal("social_insurance");
+            BigDecimal hourly_salary = rs.getBigDecimal("hourly_salary");
+            BigDecimal overtime_hourly_salary = rs.getBigDecimal("overtime_hourly_salary");
+            BigDecimal total_overtime_shifts = rs.getBigDecimal("total_overtime_shifts");
+            float total_hourly_work = rs.getFloat("total_hourly_work");
             // Tạo đối tượng Employee
             Employee employee = new Employee();
             employee.setId(employeeIdResult);
@@ -336,7 +346,7 @@ public ArrayList<Salary> selectByEmployeeIdforDanhSachLuong(int employeeId) {
             Position position = new Position(positionId, 0, positionName);
 
             // Tạo đối tượng Salary và thêm vào danh sách
-            Salary salary = new Salary(id, employee, positionSalary, bonus, deductions, net_salary, overtimeSalary, payday, note, attendance, position,tax,social_insurance);
+            Salary salary = new Salary(id, employee, positionSalary, bonus, deductions, net_salary, overtimeSalary, payday, note, attendance, position, hourly_salary,overtime_hourly_salary,total_overtime_shifts,total_hourly_work);
             salaryList.add(salary);
         }
     } catch (SQLException ex) {

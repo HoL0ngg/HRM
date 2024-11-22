@@ -219,7 +219,7 @@ public class SalaryFrame extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
                 .addComponent(lblHinhThucLamViec)
-                .addContainerGap(296, Short.MAX_VALUE))
+                .addContainerGap(302, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -338,12 +338,8 @@ public class SalaryFrame extends javax.swing.JFrame {
                                         .addComponent(txtKhauTru, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addGap(0, 63, Short.MAX_VALUE)
-                                        .addComponent(dataChooseNgayHieuLuc, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))))))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(dataChooseNgayHieuLuc, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -410,7 +406,7 @@ public class SalaryFrame extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel8))
-                        .addGap(0, 775, Short.MAX_VALUE))
+                        .addGap(0, 781, Short.MAX_VALUE))
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -545,7 +541,7 @@ public class SalaryFrame extends javax.swing.JFrame {
                     .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnListSalaries, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(267, Short.MAX_VALUE))
+                .addContainerGap(273, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -622,7 +618,7 @@ public class SalaryFrame extends javax.swing.JFrame {
                 .addGap(111, 111, 111)
                 .addComponent(btnRefreshDataYeuCauThayDoi)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 927, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 933, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -838,18 +834,50 @@ public class SalaryFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_cbbThangActionPerformed
 
     private void tblDanhSachLuongMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachLuongMouseClicked
-        int selectedRow = this.tblDanhSachLuong.getSelectedRow();
-                if (selectedRow >= 0) {
-                        String employeeName = this.tblDanhSachLuong.getValueAt(selectedRow, 1).toString();
-                        String position = this.tblDanhSachLuong.getValueAt(selectedRow, 2).toString();
-                        String totalSalary = this.tblDanhSachLuong.getValueAt(selectedRow, 8).toString();
-                        String overtimeSalary = this.tblDanhSachLuong.getValueAt(selectedRow, 4).toString();
-                        String bonus = this.tblDanhSachLuong.getValueAt(selectedRow, 6).toString();
-                        String deductions = this.tblDanhSachLuong.getValueAt(selectedRow, 7).toString();
-                        String note = "";
-                        SalaryDetailDialog.showSalaryDetailDialog((JFrame) null, employeeName, position, totalSalary,
-                                        overtimeSalary, bonus, deductions, note);
-                }
+        int row = tblDanhSachLuong.rowAtPoint(evt.getPoint());
+        if (row >= 0) {
+            // Lấy employeeId từ hàng đã chọn
+            int employeeId = (int) tblDanhSachLuong.getValueAt(row, 0);  // Giả sử cột 0 là employee_id
+            
+            // Gọi phương thức để lấy thông tin lương chi tiết từ database
+            SalaryDAO salaryDAO = SalaryDAO.getInstance();
+            ArrayList<Salary> salaryDetails = salaryDAO.selectByEmployeeIdforDanhSachLuong(employeeId);
+
+            // Kiểm tra nếu danh sách có lương cho nhân viên
+            if (!salaryDetails.isEmpty()) {
+                // Lấy thông tin chi tiết từ đối tượng Salary
+                Salary salaryDetail = salaryDetails.get(0);  // Lấy thông tin lương chi tiết (nếu có)
+                
+                String employeeName = salaryDetail.getEmployee().getName();
+                String position = salaryDetail.getPosition().getName();
+                BigDecimal totalSalary = salaryDetail.getHourly_salary();  // Lương theo giờ
+                BigDecimal overtimeSalary = salaryDetail.getOvertimeSalary();  // Lương tăng ca
+                BigDecimal bonus = salaryDetail.getBonus();
+                int attendance = salaryDetail.getAttendance();
+                BigDecimal deductions = salaryDetail.getDeductions();
+                BigDecimal netSalary = salaryDetail.getnet_salary();  // Tổng lương
+                LocalDate payday = salaryDetail.getPayday();
+                String note = salaryDetail.getNote();
+                
+                // Gọi phương thức để hiển thị thông tin chi tiết trong SalaryDetailDialog
+                SalaryDetailDialog.showSalaryDetailDialog(
+                    (JFrame) null,  // parent frame có thể là null
+                    employeeName,   // Tên nhân viên
+                    position,       // Vị trí công việc
+                    totalSalary,    // Tổng lương theo giờ
+                    overtimeSalary, // Tổng lương tăng ca
+                    bonus,          // Thưởng
+                    attendance,     // Chuyên cần
+                    deductions,     // Khấu trừ
+                    netSalary,      // Tổng lương (net salary)
+                    payday,         // Ngày hiệu lực
+                    note            // Ghi chú
+                );
+            } else {
+                // Xử lý trường hợp không có dữ liệu (nếu cần)
+                JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin lương.");
+            }
+        }
     }//GEN-LAST:event_tblDanhSachLuongMouseClicked
 
     private void TangDanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TangDanMouseClicked
@@ -970,7 +998,7 @@ public class SalaryFrame extends javax.swing.JFrame {
 
     // Lấy danh sách yêu cầu tăng lương theo tháng
     SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
-    ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectByMonthdaxem(selectedMonth);
+    ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectByMonthDaXem(selectedMonth);
 
     // Tạo bảng dữ liệu cho JTable
     Object[][] tableData = new Object[salaryChangeList.size()][8];
@@ -979,13 +1007,13 @@ public class SalaryFrame extends javax.swing.JFrame {
         SalaryChangeHistory history = salaryChangeList.get(i);
 
         // Gán dữ liệu vào các cột của bảng
-        tableData[i][0] = history.getId();
-        tableData[i][1] = history.getEmployeeName();  // Họ và tên
+        tableData[i][0] = history.getEmployee().getId();
+        tableData[i][1] = history.getEmployee().getName();  // Họ và tên
         tableData[i][2] = history.getOldSalary();     // Lương hiện tại
         tableData[i][3] = history.getNewSalary();     // Lương đề xuất
         tableData[i][4] = history.getReasons();       // Lý do yêu cầu
         tableData[i][5] = history.getChangeDate();    // Ngày thay đổi
-        tableData[i][6] = history.getApprovedBy();    // Người duyệt
+        tableData[i][6] = history.getApprovedBy().getName();    // Người duyệt
         tableData[i][7] = history.getComments();      // Phản hồi
     }
 
@@ -1198,11 +1226,10 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIR
         // Lấy thông tin lương theo giờ, tăng ca, thuế và bảo hiểm xã hội
         BigDecimal hourlySalary = new BigDecimal(lblTongLuongTheoGio.getText()); // Lương theo giờ
         BigDecimal overtimeSalary = new BigDecimal(lblTongLuongTangCa.getText()); // Lương tăng ca
-        BigDecimal tax = new BigDecimal(lblTax.getText()); // Thuế
-        BigDecimal socialInsurance = new BigDecimal(lblSocial_insurance.getText()); // Bảo hiểm xã hội
+        
 
         // Tính tổng lương
-        BigDecimal net_salary = hourlySalary.add(overtimeSalary).add(bonus).subtract(deductions).subtract(tax).subtract(socialInsurance);
+        BigDecimal net_salary = hourlySalary.add(overtimeSalary).add(bonus).subtract(deductions);
         
         // Lấy ngày hiệu lực từ JDateChooser
         java.util.Date date = dataChooseNgayHieuLuc.getDate();
@@ -1210,7 +1237,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIR
         lblTongLuong.setText(net_salary.toString());
         // Tạo đối tượng SalaryDAO và gọi phương thức updateSalary
         SalaryDAO salaryDAO = new SalaryDAO();
-        boolean updated = salaryDAO.updateSalary(employeeID, bonus, attendance, deductions, note, payday, net_salary);
+        boolean updated = salaryDAO.updateSalary(employeeID, bonus, attendance, deductions, note, payday, net_salary ,hourlySalary,overtimeSalary);
 
         if (updated) {
             JOptionPane.showMessageDialog(this, "Dữ liệu đã được cập nhật thành công!");
@@ -1269,7 +1296,26 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIR
                                 this.lblViTri.setText(employee.getPosition().getName());
                                 this.lblHinhThucLamViec.setText("" + String.valueOf(employee.getWork_type()));
                                 this.lblHoVaTen.setText(employee.getName());
-                                this.lblTongLuongTheoGio.setText(salary.getPositionSalary() + "");
+                                // Lấy các giá trị cần thiết
+                                BigDecimal positionSalary = salary.getPositionSalary(); // position_salary từ cơ sở dữ liệu
+                                float totalHourlyWorkFloat = salary.getTotal_hourly_work(); // total_hourly_work (float)
+
+                                // Chuyển đổi float sang BigDecimal
+                                BigDecimal totalHourlyWork = BigDecimal.valueOf(totalHourlyWorkFloat);
+
+                                // Chia position_salary cho 26 và 8
+                                BigDecimal hourlyRate = positionSalary.divide(BigDecimal.valueOf(26), 2, RoundingMode.HALF_UP)
+                                                                       .divide(BigDecimal.valueOf(8), 2, RoundingMode.HALF_UP);
+
+                                // Tính tổng lương theo giờ
+                                BigDecimal totalHourlySalary = hourlyRate.multiply(totalHourlyWork);
+
+                                // Làm tròn 2 chữ số thập phân
+                                BigDecimal roundedSalary = totalHourlySalary.setScale(2, RoundingMode.HALF_UP);
+
+                                // Hiển thị kết quả
+                                this.lblTongLuongTheoGio.setText(roundedSalary.toPlainString());
+//                                this.lblTongLuongTheoGio.setText(salary.getPositionSalary() + "");
 //                                this.txtGhiChu.setText(salary.getNote());
 //                                this.txtKhauTru.setText(salary.getDeductions() + "");
 //                                this.txtThuong.setText(salary.getBonus() + "");
@@ -1277,10 +1323,22 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIR
                                 //this.lblTongLuong.setText(salary.getNetSalary() + "");
 //                                this.lblTax.setText(salary.gettax()+ "");
 //                                this.lblSocial_insurance.setText(salary.getsocial_insurance()+ "");
-                                this.lblTongLuongTangCa.setText(salary.getOvertimeSalary() + "");
-                                this.lblTax.setText(salary.getTax()+"");
-                                this.lblSocial_insurance.setText(salary.getSocialInsurance()+"");
+//                                this.lblTongLuongTangCa.setText(salary.getOvertimeSalary() + "");
+//                                this.lblTax.setText(salary.getTax()+"");
+//                                this.lblSocial_insurance.setText(salary.getSocialInsurance()+"");
 //                                this.lblTongLuong.setText (salary.getnet_salary()+"");
+                                BigDecimal overtimeSalary = salary.getOvertimeSalary(); // overtime_salary từ cơ sở dữ liệu
+                                BigDecimal totalOvertimeShifts = salary.getTotal_overtime_shifts(); // total_overtime_shifts (float)
+
+                                // Tính tổng lương tăng ca
+                                BigDecimal totalOvertimeSalary = overtimeSalary.multiply(totalOvertimeShifts);
+
+                                // Làm tròn 2 chữ số thập phân
+                                BigDecimal roundedOvertimeSalary = totalOvertimeSalary.setScale(2, RoundingMode.HALF_UP);
+
+                                // Hiển thị kết quả
+                                this.lblTongLuongTangCa.setText(roundedOvertimeSalary.toPlainString());
+                                  
                                 LocalDate payday = salary.getPayday();
                                 Date date = java.util.Date
                                                 .from(payday.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -1529,8 +1587,9 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIR
                 for (int i = 0; i < salaryChangeList.size(); ++i) {
                         SalaryChangeHistory history = (SalaryChangeHistory) salaryChangeList.get(i);
                         Object[] var10000 = tableData[i];
-                        Object[] var10003 = new Object[] { history.getEmployee().getId() };
-                        var10000[0] = "NV" + String.format("%03d", var10003);
+//                        Object[] var10003 = new Object[] { history.getEmployee().getId() };
+//                        var10000[0] = "NV" + String.format("%03d", var10003);
+                        tableData[i][0] = history.getEmployee().getId();
                         tableData[i][1] = history.getEmployee().getName();
                         tableData[i][2] = history.getOldSalary();
                         tableData[i][3] = history.getNewSalary();

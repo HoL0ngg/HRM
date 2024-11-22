@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.hrm.model;
 
 import java.math.BigDecimal;
@@ -15,10 +10,11 @@ public class SalaryChangeHistory {
     private BigDecimal newSalary;
     private String reasons;
     private LocalDate changeDate;
-    private Employee approvedBy;
+    private Employee approvedBy;  // Thay đổi từ int sang Employee để lưu thông tin người duyệt
     private String comments;
     private String status;
-   private String employeeName;
+    private String employeeName;
+
     public SalaryChangeHistory() {
     }
 
@@ -33,12 +29,15 @@ public class SalaryChangeHistory {
         this.comments = comments;
         this.status = status;
     }
+
     public void setEmployeeName(String employeeName) {
         this.employeeName = employeeName;
     }
+
     public String getEmployeeName() {
         return this.employeeName;
     }
+
     public int getId() {
         return this.id;
     }
@@ -113,11 +112,16 @@ public class SalaryChangeHistory {
 
     @Override
     public String toString() {
-        int var10000 = this.id;
-        return "SalaryChangeHistory{id=" + var10000 + ", employee=" + this.employee.getName() + ", oldSalary=" + String.valueOf(this.oldSalary) + ", newSalary=" + String.valueOf(this.newSalary) + ", reasons='" + this.reasons + "', changeDate=" + String.valueOf(this.changeDate) + ", approvedBy=" + this.approvedBy.getName() + ", comments='" + this.comments + "', status='" + this.status + "'}";
-    }
-
-    public void setApprovedBy(String approvedBy) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "SalaryChangeHistory{" +
+                "id=" + id +
+                ", oldSalary=" + oldSalary +
+                ", newSalary=" + newSalary +
+                ", reasons='" + reasons + '\'' +
+                ", changeDate=" + changeDate +
+                ", employee=" + employee.getName() +
+                ", approvedBy=" + (approvedBy != null ? approvedBy.getName() : "N/A") + // Lấy tên người duyệt
+                ", comments='" + comments + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

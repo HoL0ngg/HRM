@@ -17,7 +17,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class SalaryDetailDialog extends JDialog {
-
+    public SalaryDetailDialog(){
+        
+    }
     // Constructor cập nhật giá trị chi tiết lương
     public SalaryDetailDialog(JFrame parent, String employeeName, String position, BigDecimal totalSalary, 
                               BigDecimal overtimeSalary, BigDecimal bonus, int attendance, BigDecimal deductions, 
@@ -107,6 +109,7 @@ public class SalaryDetailDialog extends JDialog {
         gbc.gridy = 8;
         JTextArea txtGhiChu = new JTextArea(5, 20);
         txtGhiChu.setText(note);
+        txtGhiChu.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(txtGhiChu);
         panel.add(scrollPane, gbc);
         

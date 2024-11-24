@@ -5,11 +5,14 @@ import java.time.LocalDate;
 
 public class SalaryChangeHistory {
     private int id;
+    
     private Employee employee;
+    
     private BigDecimal oldSalary;
     private BigDecimal newSalary;
     private String reasons;
-    private LocalDate changeDate;
+    private LocalDate changeDateSend;
+    private LocalDate changeDateBrowse;
     private Employee approvedBy;  // Thay đổi từ int sang Employee để lưu thông tin người duyệt
     private String comments;
     private String status;
@@ -18,18 +21,34 @@ public class SalaryChangeHistory {
     public SalaryChangeHistory() {
     }
 
-    public SalaryChangeHistory(int id, Employee employee, BigDecimal oldSalary, BigDecimal newSalary, String reasons, LocalDate changeDate, Employee approvedBy, String comments, String status) {
+    public SalaryChangeHistory(int id, Employee employee ,BigDecimal oldSalary, BigDecimal newSalary, String reasons, LocalDate changeDateSend,LocalDate changeDateBrowse, Employee approvedBy, String comments, String status) {
         this.id = id;
+        
         this.employee = employee;
+        
         this.oldSalary = oldSalary;
         this.newSalary = newSalary;
         this.reasons = reasons;
-        this.changeDate = changeDate;
+        this.changeDateSend = changeDateSend;
+        this.changeDateBrowse = changeDateBrowse;
         this.approvedBy = approvedBy;
         this.comments = comments;
         this.status = status;
     }
-
+   
+    public LocalDate getchangeDateBrowse(){
+        return this.changeDateBrowse;
+    }
+    public void setchangeDateBrowse(LocalDate changeDateBrowse ){
+        this.changeDateBrowse = changeDateBrowse;
+    }
+    
+    public LocalDate getchangeDateSend(){
+        return this.changeDateSend;
+    }
+    public void setchangeDateSend(LocalDate changeDateSend ){
+        this.changeDateSend = changeDateSend;
+    }
     public void setEmployeeName(String employeeName) {
         this.employeeName = employeeName;
     }
@@ -78,13 +97,7 @@ public class SalaryChangeHistory {
         this.reasons = reasons;
     }
 
-    public LocalDate getChangeDate() {
-        return this.changeDate;
-    }
-
-    public void setChangeDate(LocalDate changeDate) {
-        this.changeDate = changeDate;
-    }
+  
 
     public Employee getApprovedBy() {
         return this.approvedBy;
@@ -117,7 +130,8 @@ public class SalaryChangeHistory {
                 ", oldSalary=" + oldSalary +
                 ", newSalary=" + newSalary +
                 ", reasons='" + reasons + '\'' +
-                ", changeDate=" + changeDate +
+                ", changeDateSend=" + changeDateSend +
+                ", changeDateBrowse=" + changeDateBrowse +
                 ", employee=" + employee.getName() +
                 ", approvedBy=" + (approvedBy != null ? approvedBy.getName() : "N/A") + // Lấy tên người duyệt
                 ", comments='" + comments + '\'' +

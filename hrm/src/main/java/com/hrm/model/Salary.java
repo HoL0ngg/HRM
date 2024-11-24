@@ -21,6 +21,7 @@ public class Salary {
     private String note;
     private int attendance;
     private Position position;
+    private SalaryChangeHistory salaryChangeHistory;
     private BigDecimal hourly_salary ;
     private BigDecimal overtime_hourly_salary;
     private BigDecimal total_overtime_shifts;
@@ -46,7 +47,7 @@ public class Salary {
         
     }
 
-    public Salary(int id, Employee employee, BigDecimal positionSalary, BigDecimal bonus, BigDecimal deductions, BigDecimal net_salary, BigDecimal overtimeSalary, LocalDate payday, String note, int attendance, Position position,BigDecimal hourly_salary, BigDecimal overtime_hourly_salary, BigDecimal total_overtime_shifts, float total_hourly_work) {
+    public Salary(int id, Employee employee,SalaryChangeHistory salaryChangeHistory, BigDecimal positionSalary, BigDecimal bonus, BigDecimal deductions, BigDecimal net_salary, BigDecimal overtimeSalary, LocalDate payday, String note, int attendance, Position position,BigDecimal hourly_salary, BigDecimal overtime_hourly_salary, BigDecimal total_overtime_shifts, float total_hourly_work) {
         this.id = id;
         this.employee = employee;
         this.employeeId = employee.getId();
@@ -63,6 +64,7 @@ public class Salary {
         this.overtime_hourly_salary = overtime_hourly_salary;
         this.total_overtime_shifts = total_overtime_shifts;
         this.total_hourly_work = total_hourly_work;
+        this.salaryChangeHistory = salaryChangeHistory;
     }
     public BigDecimal getHourly_salary() {
         return hourly_salary;
@@ -109,7 +111,12 @@ public class Salary {
     public int getEmployeeId() {
         return this.employeeId;
     }
-
+    public void setSalaryChangeHistory(SalaryChangeHistory salaryChangeHistory){
+        this.salaryChangeHistory = salaryChangeHistory;
+    }
+    public SalaryChangeHistory getsalaryChangeHistory(){
+        return salaryChangeHistory;
+    }
     public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
     }
@@ -199,5 +206,9 @@ public class Salary {
     public String toString() {
         int var10000 = this.id;
         return "Salary [id=" + var10000 + ", employeeId=" + this.employeeId + ", positionSalary=" + String.valueOf(this.positionSalary) + ", bonus=" + String.valueOf(this.bonus) + ", deductions=" + String.valueOf(this.deductions) + ", net_salary=" + String.valueOf(this.net_salary) + ", overtimeSalary=" + String.valueOf(this.overtimeSalary) + ", payday=" + String.valueOf(this.payday) + ", note=" + this.note + ", attendance=" + this.attendance + "]";
+    }
+
+    public Salary get(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

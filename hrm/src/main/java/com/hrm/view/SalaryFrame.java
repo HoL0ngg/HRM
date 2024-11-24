@@ -16,6 +16,8 @@ import com.hrm.utils.StatusRenderer;
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -25,6 +27,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -34,6 +37,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
@@ -43,7 +47,20 @@ import javax.swing.table.DefaultTableModel;
  */
 public class SalaryFrame extends javax.swing.JFrame {
       private JPopupMenu filterMenu;
+      public JTextField getTxtSearch() {
+        return txtSearch;
+    }
+
+    public JTable getTblDanhSachLuong() {
+        return tblDanhSachLuong;
+    }
+
+    public JPanel getPanel() {
+        return jPanel1;
+    }
+   
     
+
     // Biến lưu giá trị lọc
     private String selectedDepartment = null; // Phòng ban
     //private String selectedStatus = null;     // Trạng thái (On/Off)
@@ -52,7 +69,7 @@ public class SalaryFrame extends javax.swing.JFrame {
     private BigDecimal  selecedSalaryMax = null;
     
     
-
+           
         /*
          * Creates new form Salarytest
          */
@@ -61,6 +78,20 @@ public class SalaryFrame extends javax.swing.JFrame {
                 loadListSalariesToTable();
                 loadDataToYeuCauTangLuongTable();
                 loadDataToYeuCauTangLuongDaXemTable();
+                
+                Image FilterIcon = new ImageIcon(
+                new File("../hrm/src/main/resources/img/filter.png").getAbsolutePath())
+                .getImage()
+                .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+                this.jLabel20.setIcon(new ImageIcon(FilterIcon));
+                
+                
+                Image reset = new ImageIcon(
+                new File("../hrm/src/main/resources/img/refresh_icon.png").getAbsolutePath())
+                .getImage()
+                .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+                this.jblDanhSachLuong.setIcon(new ImageIcon(reset));
+                
         }
 
         /**
@@ -120,7 +151,6 @@ public class SalaryFrame extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tblDanhSachLuong = new javax.swing.JTable();
         cbbThang = new javax.swing.JComboBox<>();
-        btnListSalaries = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         lableFilter = new javax.swing.JLabel();
@@ -128,6 +158,7 @@ public class SalaryFrame extends javax.swing.JFrame {
         TangDan = new javax.swing.JLabel();
         GiamDan = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
+        jblDanhSachLuong = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tblYeuCauTangLuong = new javax.swing.JTable();
@@ -428,6 +459,8 @@ public class SalaryFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Tạo phiếu lương", jPanel1);
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
         tblDanhSachLuong.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -451,13 +484,6 @@ public class SalaryFrame extends javax.swing.JFrame {
         cbbThang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbbThangActionPerformed(evt);
-            }
-        });
-
-        btnListSalaries.setText("Xem danh sách");
-        btnListSalaries.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnListSalariesActionPerformed(evt);
             }
         });
 
@@ -513,10 +539,15 @@ public class SalaryFrame extends javax.swing.JFrame {
                 .addComponent(GiamDan))
         );
 
-        jLabel20.setText("Sắp xếp");
         jLabel20.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel20MouseClicked(evt);
+            }
+        });
+
+        jblDanhSachLuong.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jblDanhSachLuongMouseClicked(evt);
             }
         });
 
@@ -524,43 +555,57 @@ public class SalaryFrame extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 933, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(44, 44, 44)
-                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbbThang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
-                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(lableFilter)
+                        .addGap(44, 44, 44)
+                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnListSalaries, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(273, Short.MAX_VALUE))
+                        .addComponent(cbbThang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(45, 45, 45)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lableFilter)
+                        .addGap(207, 207, 207)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel20)
+                        .addGap(18, 18, 18)
+                        .addComponent(jblDanhSachLuong)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbbThang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel19)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lableFilter)
-                    .addComponent(btnListSalaries)
-                    .addComponent(jLabel20))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbbThang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel19)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel20)
+                            .addComponent(jblDanhSachLuong))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(lableFilter)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Danh sách nhân viên", jPanel2);
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
         tblYeuCauTangLuong.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -635,6 +680,8 @@ public class SalaryFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Yêu cầu thay đổi", jPanel3);
 
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+
         btnRefreshDataYeuCauDaXem.setText("Refresh Data");
         btnRefreshDataYeuCauDaXem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -691,11 +738,7 @@ public class SalaryFrame extends javax.swing.JFrame {
                 .addGap(103, 103, 103)
                 .addComponent(btnRefreshDataYeuCauDaXem)
                 .addContainerGap(196, Short.MAX_VALUE))
-            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel8Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 915, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addComponent(jScrollPane5)
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -710,12 +753,9 @@ public class SalaryFrame extends javax.swing.JFrame {
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addComponent(btnRefreshDataYeuCauDaXem)))
-                .addContainerGap(564, Short.MAX_VALUE))
-            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel8Layout.createSequentialGroup()
-                    .addGap(104, 104, 104)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 462, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(63, Short.MAX_VALUE)))
+                .addGap(39, 39, 39)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -723,9 +763,9 @@ public class SalaryFrame extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 3, Short.MAX_VALUE)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 3, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -802,10 +842,6 @@ public class SalaryFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin lương cho nhân viên này!");
         }
     }//GEN-LAST:event_txtSearchActionPerformed
-
-    private void btnListSalariesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListSalariesActionPerformed
-        loadListSalariesToTable();
-    }//GEN-LAST:event_btnListSalariesActionPerformed
 
     private void cbbThangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbThangActionPerformed
         int selectedMonth = this.cbbThang.getSelectedIndex() + 1;
@@ -953,7 +989,35 @@ public class SalaryFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel20MouseClicked
 
     private void txtSearch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearch1ActionPerformed
-        // TODO add your handling code here:
+        SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
+        int selectedid = Integer.parseInt(txtSearch1.getText().trim());
+        ArrayList<SalaryChangeHistory> salaryList = salaryChangeHistoryDAO.selectByEmployeeId1(selectedid);
+
+        // Nếu danh sách không rỗng, cập nhật bảng dữ liệu
+        if (salaryList != null && !salaryList.isEmpty()) {
+            Object[][] tableData = new Object[salaryList.size()][8]; // Tạo mảng phù hợp với số dòng dữ liệu
+
+            for (int i = 0; i < salaryList.size(); ++i) {
+                SalaryChangeHistory history = salaryList.get(i);
+                tableData[i][0] = history.getId();
+                tableData[i][1] = selectedid;
+                tableData[i][2] = history.getEmployeeName();
+                tableData[i][3] = history.getOldSalary();
+                tableData[i][4] = history.getNewSalary();
+                tableData[i][5] = history.getchangeDateSend();
+                tableData[i][6] = history.getReasons();
+                tableData[i][7] = history.getStatus();
+            }
+
+            // Tạo model cho bảng và cập nhật
+            DefaultTableModel model = new DefaultTableModel(tableData,
+                new String[] { "Mã","Mã nhân viên", "Họ và tên", "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", "Lý do", "Trạng thái" });
+            this.tblYeuCauTangLuong.setModel(model);
+            this.tblYeuCauTangLuong.getColumnModel().getColumn(7).setCellRenderer(new StatusRenderer());
+        } else {
+            // Nếu không tìm thấy thông tin, hiển thị thông báo
+            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin thay đổi lương cho nhân viên này!");
+        }
     }//GEN-LAST:event_txtSearch1ActionPerformed
 
     private void cbbThang1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbThang1ActionPerformed
@@ -963,24 +1027,25 @@ public class SalaryFrame extends javax.swing.JFrame {
 
                 SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
                 // Sử dụng đúng kiểu dữ liệu cho danh sách SalaryChangeHistory
-                ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectByMonth(selectedMonth); 
-                Object[][] tableData = new Object[salaryChangeList.size()][7];
+                ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectByMonthDaXem(selectedMonth); 
+                Object[][] tableData = new Object[salaryChangeList.size()][8];
 
                 for (int i = 0; i < salaryChangeList.size(); ++i) {
-                    SalaryChangeHistory history = salaryChangeList.get(i); // Không cần ép kiểu nữa vì đã khai báo đúng kiểu
+                    SalaryChangeHistory history = salaryChangeList.get(i);// Không cần ép kiểu nữa vì đã khai báo đúng kiểu
                     tableData[i][0] = history.getId();
-                    tableData[i][1] = history.getEmployeeName();  // Sử dụng employeeName thay vì getEmployee().getName()
-                    tableData[i][2] = history.getOldSalary();
-                    tableData[i][3] = history.getNewSalary();
-                    tableData[i][4] = history.getChangeDate();
-                    tableData[i][5] = history.getReasons();
-                    tableData[i][6] = history.getStatus();
+                    tableData[i][1] = history.getEmployee().getId();
+                    tableData[i][2] = history.getEmployee().getName();  // Sử dụng employeeName thay vì getEmployee().getName()
+                    tableData[i][3] = history.getOldSalary();
+                    tableData[i][4] = history.getNewSalary();
+                    tableData[i][5] = history.getchangeDateSend();
+                    tableData[i][6] = history.getReasons();
+                    tableData[i][7] = history.getStatus();
                 }
 
                 DefaultTableModel model = new DefaultTableModel(tableData,
-                    new String[] { "ID", "Nhân viên", "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", "Lý do", "Trạng thái" });
+                    new String[] { "Mã","Mã nhân viên", "Nhân viên", "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", "Lý do", "Trạng thái" });
                 this.tblYeuCauTangLuong.setModel(model);
-                this.tblYeuCauTangLuong.getColumnModel().getColumn(6).setCellRenderer(new StatusRenderer());
+                this.tblYeuCauTangLuong.getColumnModel().getColumn(7).setCellRenderer(new StatusRenderer());
 
     }//GEN-LAST:event_cbbThang1ActionPerformed
 
@@ -989,7 +1054,36 @@ public class SalaryFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRefreshDataYeuCauDaXemActionPerformed
 
     private void txtSearch2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearch2ActionPerformed
-        // TODO add your handling code here:
+        SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
+        int selectedid = Integer.parseInt(txtSearch2.getText().trim());
+        ArrayList<SalaryChangeHistory> salaryList = salaryChangeHistoryDAO.selectByEmployeeId2(selectedid);
+
+        // Nếu danh sách không rỗng, cập nhật bảng dữ liệu
+        if (salaryList != null && !salaryList.isEmpty()) {
+            Object[][] tableData = new Object[salaryList.size()][8]; // Tạo mảng phù hợp với số dòng dữ liệu
+
+            for (int i = 0; i < salaryList.size(); ++i) {
+                SalaryChangeHistory history = salaryList.get(i);
+                
+                tableData[i][0] = selectedid;
+                tableData[i][1] = history.getEmployee().getName();
+                tableData[i][2] = history.getOldSalary();
+                tableData[i][3] = history.getNewSalary();
+                tableData[i][4] = history.getReasons();
+                tableData[i][5] = history.getchangeDateBrowse();
+                tableData[i][6] = history.getApprovedBy().getName();
+                tableData[i][7] = history.getComments();
+            }
+
+            // Tạo model cho bảng và cập nhật
+            DefaultTableModel model = new DefaultTableModel(tableData,
+                new String[] { "Mã nhân viên", "Họ và tên", "Lương hiện tại", "Lương đề xuất", "Ngày thay đổi", "Người duyệt", "Phản hồi" });
+            this.tblYeuCauTangLuong1.setModel(model);
+            
+        } else {
+            // Nếu không tìm thấy thông tin, hiển thị thông báo
+            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin thay đổi lương cho nhân viên này!");
+        }
     }//GEN-LAST:event_txtSearch2ActionPerformed
 
     private void cbbThang2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbThang2ActionPerformed
@@ -998,7 +1092,7 @@ public class SalaryFrame extends javax.swing.JFrame {
 
     // Lấy danh sách yêu cầu tăng lương theo tháng
     SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
-    ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectByMonthDaXem(selectedMonth);
+    ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectByMonthDaXem1(selectedMonth);
 
     // Tạo bảng dữ liệu cho JTable
     Object[][] tableData = new Object[salaryChangeList.size()][8];
@@ -1012,7 +1106,7 @@ public class SalaryFrame extends javax.swing.JFrame {
         tableData[i][2] = history.getOldSalary();     // Lương hiện tại
         tableData[i][3] = history.getNewSalary();     // Lương đề xuất
         tableData[i][4] = history.getReasons();       // Lý do yêu cầu
-        tableData[i][5] = history.getChangeDate();    // Ngày thay đổi
+        tableData[i][5] = history.getchangeDateBrowse();    // Ngày thay đổi
         tableData[i][6] = history.getApprovedBy().getName();    // Người duyệt
         tableData[i][7] = history.getComments();      // Phản hồi
     }
@@ -1031,6 +1125,10 @@ public class SalaryFrame extends javax.swing.JFrame {
     private void tblYeuCauTangLuong1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblYeuCauTangLuong1MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_tblYeuCauTangLuong1MouseClicked
+
+    private void jblDanhSachLuongMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jblDanhSachLuongMouseClicked
+        loadListSalariesToTable();
+    }//GEN-LAST:event_jblDanhSachLuongMouseClicked
     
     
                                           
@@ -1362,7 +1460,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIR
         }// GEN-LAST:event_btnRefreshDataYeuCauThayDoiActionPerformed
 
         private void tblYeuCauTangLuongMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tblYeuCauTangLuongMouseClicked
-                int selectedRow = this.tblYeuCauTangLuong.getSelectedRow();
+              int selectedRow = this.tblYeuCauTangLuong.getSelectedRow();
                 if (selectedRow != -1) {
                         int salaryChangeId = (Integer) this.tblYeuCauTangLuong.getValueAt(selectedRow, 0);
                         SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
@@ -1430,7 +1528,6 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIR
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel GiamDan;
     private javax.swing.JLabel TangDan;
-    private javax.swing.JButton btnListSalaries;
     private javax.swing.JButton btnRefreshDataYeuCauDaXem;
     private javax.swing.JButton btnRefreshDataYeuCauThayDoi;
     private javax.swing.JComboBox<String> cbbThang;
@@ -1476,6 +1573,7 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIR
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel jblDanhSachLuong;
     private javax.swing.JLabel lableFilter;
     private javax.swing.JLabel lblChuyenCan;
     private javax.swing.JLabel lblHinhThucLamViec;
@@ -1559,24 +1657,25 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIR
                 this.tblYeuCauTangLuong.setRowHeight(30);
                 SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
                 ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectAllWithEmployee();
-                Object[][] tableData = new Object[salaryChangeList.size()][7];
+                Object[][] tableData = new Object[salaryChangeList.size()][8];
 
                 for (int i = 0; i < salaryChangeList.size(); ++i) {
                         SalaryChangeHistory history = (SalaryChangeHistory) salaryChangeList.get(i);
                         tableData[i][0] = history.getId();
-                        tableData[i][1] = history.getEmployee().getName();
-                        tableData[i][2] = history.getOldSalary();
-                        tableData[i][3] = history.getNewSalary();
-                        tableData[i][4] = history.getChangeDate();
-                        tableData[i][5] = history.getReasons();
-                        tableData[i][6] = history.getStatus();
+                        tableData[i][1] = history.getEmployee().getId();
+                        tableData[i][2] = history.getEmployee().getName();
+                        tableData[i][3] = history.getOldSalary();
+                        tableData[i][4] = history.getNewSalary();
+                        tableData[i][5] = history.getchangeDateSend();
+                        tableData[i][6] = history.getReasons();
+                        tableData[i][7] = history.getStatus();
                 }
 
                 DefaultTableModel model = new DefaultTableModel(tableData,
-                                new String[] { "ID", "Nhân viên", "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", "Lý do",
+                                new String[] { "Mã","Mã nhân viên", "Nhân viên", "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", "Lý do",
                                                 "Trạng thái" });
                 this.tblYeuCauTangLuong.setModel(model);
-                this.tblYeuCauTangLuong.getColumnModel().getColumn(6).setCellRenderer(new StatusRenderer());
+                this.tblYeuCauTangLuong.getColumnModel().getColumn(7).setCellRenderer(new StatusRenderer());
         }
 
         private void loadDataToYeuCauTangLuongDaXemTable() {
@@ -1589,17 +1688,18 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIR
                         Object[] var10000 = tableData[i];
 //                        Object[] var10003 = new Object[] { history.getEmployee().getId() };
 //                        var10000[0] = "NV" + String.format("%03d", var10003);
+//                        tableData[i][0] = history.getId();
                         tableData[i][0] = history.getEmployee().getId();
                         tableData[i][1] = history.getEmployee().getName();
                         tableData[i][2] = history.getOldSalary();
                         tableData[i][3] = history.getNewSalary();
                         tableData[i][4] = history.getReasons();
-                        tableData[i][5] = history.getChangeDate();
+                        tableData[i][5] = history.getchangeDateBrowse();
                         tableData[i][6] = history.getApprovedBy().getName();
                         tableData[i][7] = history.getComments();
                 }
 
-                DefaultTableModel model = new DefaultTableModel(tableData, new String[] { "Mã nhân viên", "Họ và tên",
+                DefaultTableModel model = new DefaultTableModel(tableData, new String[] {"Mã nhân viên", "Họ và tên",
                                 "Lương hiện tại", "Lương đề xuất", "Lý do yêu cầu", "Ngày thay đổi", "Người duyệt",
                                 "Phản hồi" });
                 this.tblYeuCauTangLuong1.setModel(model);

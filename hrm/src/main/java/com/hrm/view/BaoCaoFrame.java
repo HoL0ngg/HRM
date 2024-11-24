@@ -182,21 +182,21 @@ public class BaoCaoFrame extends JFrame {
         new MainFrame(employee).setVisible(true);
     }
 
-    public static void main(String[] args) {
-        // Cài đặt FlatLaf trước khi hiển thị JFrame
-        try {
-            UIManager.setLookAndFeel(new FlatLightLaf());
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-
-        // Tạo đối tượng Employee mẫu (thay thế bằng dữ liệu thực nếu có)
-        Employee employee = new Employee();
-        employee.setName("Nguyễn Văn A"); // Đặt tên mẫu cho Employee
-
-        // Khởi chạy JFrame ReportOverrallView
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            new BaoCaoFrame(employee).setVisible(true);
-        });
-    }
+//    public static void main(String[] args) {
+//        // Cài đặt FlatLaf trước khi hiển thị JFrame
+//        try {
+//            UIManager.setLookAndFeel(new FlatLightLaf());
+//        } catch (UnsupportedLookAndFeelException e) {
+//            e.printStackTrace();
+//        }
+//
+//        // Tạo đối tượng Employee mẫu (thay thế bằng dữ liệu thực nếu có)
+//        Employee employee = new Employee();
+//        employee.setName("Nguyễn Văn A"); // Đặt tên mẫu cho Employee
+//
+//        // Khởi chạy JFrame ReportOverrallView
+//        javax.swing.SwingUtilities.invokeLater(() -> {
+//            new BaoCaoFrame(employee).setVisible(true);
+//        });
+//    }
 }

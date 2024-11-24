@@ -4,7 +4,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-import com.hrm.Main;
 import com.hrm.controller.ReportController;
 import com.hrm.dao.ReportDAO;
 import com.hrm.model.Employee;
@@ -14,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import com.formdev.flatlaf.FlatLightLaf;
 
 public class ReportRecruitmentView extends JFrame {
     private JTable table;
@@ -26,8 +26,15 @@ public class ReportRecruitmentView extends JFrame {
     private Employee employee;
 
     public ReportRecruitmentView(Employee employee) {
-            this.employee = employee;
-            this.init();
+    	// Cài đặt FlatLaf trước khi khởi tạo JFrame
+        try {
+            UIManager.setLookAndFeel(new FlatLightLaf()); // Chọn kiểu giao diện
+        } catch (UnsupportedLookAndFeelException ex) {
+            ex.printStackTrace();
+        }
+
+        this.employee = employee;
+        this.init();
     }
 
     public void init() {
@@ -190,9 +197,28 @@ public class ReportRecruitmentView extends JFrame {
 
         // Sự kiện cho nút Lưu vào (chưa thực hiện gì)
         saveButton.addActionListener(e -> {
-            // Không làm gì khi nhấn nút này
-       	 showSuccessNotification();
-        });
+    	    // Lấy dữ liệu từ giao diện
+    	    String ghiChu = ghiChuLabel.getText(); // Ghi chú từ JLabel
+    	    String monthFrom = monthFromComboBox.getSelectedItem().toString(); // Tháng bắt đầu
+    	    String monthTo = monthToComboBox.getSelectedItem().toString();     // Tháng kết thúc
+    	    String year = yearComboBox.getSelectedItem().toString();           // Năm
+
+    	    // Kiểm tra nếu monthFrom và monthTo giống nhau
+    	    String reportTitle;
+    	    if (monthFrom.equals(monthTo)) {
+    	        reportTitle = ghiChu + " Tháng " + monthFrom + " năm " + year;
+    	    } else {
+    	        reportTitle = ghiChu + " Từ Tháng " + monthFrom + " đến Tháng " + monthTo + " năm " + year;
+    	    }
+
+    	    // Dữ liệu khác
+    	    int createdBy = employee.getId(); // ID người tạo
+    	    String results = "Đã lưu"; // Trạng thái mặc định
+
+    	    // Gọi phương thức lưu trong Controller
+    	    new ReportController().saveReport(createdBy, reportTitle, results);
+    	    showSuccessNotification();
+    	});
 
         // Panel chứa table
         tableModel = new DefaultTableModel(
@@ -210,18 +236,15 @@ public class ReportRecruitmentView extends JFrame {
         contentPane.add(scrollPane, BorderLayout.SOUTH);
 
         // Load dữ liệu ban đầu từ cơ sở dữ liệu
-        loadTableData(reportController.getEmployeeReport());
+        loadTableData(reportController.getRecruitmentPerformanceReport());
     }
 
     // Phương thức tải dữ liệu từ cơ sở dữ liệu vào bảng
     private void loadTableData(List<Object[]> data) {
         // Cập nhật tên cột để phù hợp với dữ liệu từ cơ sở dữ liệu
         String[] columnNames = {
-            "Tháng", 
-            "Tổng số ứng viên", 
-            "Tỷ lệ chuyển đổi P/T", 
-            "Tỷ lệ ứng viên từ chối", 
-            "Thời gian trung bình tuyển dụng"
+            "Năm", "Tháng", "Tổng số ứng viên", "Tỷ lệ chuyển đổi P/T", 
+            "Tỷ lệ ứng viên từ chối", "Thời gian trung bình tuyển dụng"
         };
 
         // Thiết lập các tên cột trong bảng
@@ -229,15 +252,28 @@ public class ReportRecruitmentView extends JFrame {
 
         // Thêm dữ liệu vào bảng
         tableModel.setRowCount(0); // Xóa dữ liệu cũ
+
+        // Duyệt qua từng dòng dữ liệu và cập nhật tỷ lệ
         for (Object[] row : data) {
             // Kiểm tra và chuyển đổi tỷ lệ thành phần trăm với 2 chữ số thập phân
-            if (row[2] != null) {
-                Double conversionRate = (row[2] instanceof Integer) ? ((Integer) row[2]).doubleValue() : (Double) row[2];
-                row[2] = String.format("%.2f", conversionRate * 100) + "%";  // Tỷ lệ chuyển đổi P/T
-            }
             if (row[3] != null) {
-                Double rejectionRate = (row[3] instanceof Integer) ? ((Integer) row[3]).doubleValue() : (Double) row[3];
-                row[3] = String.format("%.2f", rejectionRate * 100) + "%";  // Tỷ lệ ứng viên từ chối
+                try {
+                    // Kiểm tra nếu dữ liệu là kiểu String và chuyển đổi thành Double
+                    Double conversionRate = row[3] instanceof String ? Double.parseDouble((String) row[3]) : (Double) row[3];
+                    row[3] = String.format("%.2f", conversionRate) + "%";  // Tỷ lệ chuyển đổi P/T
+                } catch (NumberFormatException e) {
+                    row[3] = "0%";  // Nếu không thể chuyển đổi, gán giá trị mặc định
+                }
+            }
+            
+            if (row[4] != null) {
+                try {
+                    // Kiểm tra nếu dữ liệu là kiểu String và chuyển đổi thành Double
+                    Double rejectionRate = row[4] instanceof String ? Double.parseDouble((String) row[4]) : (Double) row[4];
+                    row[4] = String.format("%.2f", rejectionRate) + "%";  // Tỷ lệ ứng viên từ chối
+                } catch (NumberFormatException e) {
+                    row[4] = "0%";  // Nếu không thể chuyển đổi, gán giá trị mặc định
+                }
             }
 
             // Thêm từng dòng dữ liệu vào bảng
@@ -246,39 +282,58 @@ public class ReportRecruitmentView extends JFrame {
     }
 
 
+
+
     // Phương thức tìm kiếm theo năm và tháng
     private void performSearch() {
-        // Lấy năm và tháng từ các ComboBox
         int year = (int) yearComboBox.getSelectedItem();
         int monthFrom = (int) monthFromComboBox.getSelectedItem();
         int monthTo = (int) monthToComboBox.getSelectedItem();
 
-        // Lấy dữ liệu từ cơ sở dữ liệu và cập nhật bảng
-        List<Object[]> data = reportController.getEmployeeReportByMonthRange(year, monthFrom, monthTo);
-        loadTableData(data);
+        if (monthFrom > monthTo) {
+            JOptionPane.showMessageDialog(this, "Tháng bắt đầu không được lớn hơn tháng kết thúc.");
+            return;
+        }
+
+        List<Object[]> searchData = reportController.searchReports2(year, monthFrom, monthTo);
+        loadTableData(searchData);
     }
 
     // Phương thức xuất dữ liệu ra file Excel
     private void exportToExcel() {
-        // Thực hiện xuất dữ liệu ra file Excel (cần thêm thư viện Apache POI hoặc các thư viện khác để xuất dữ liệu)
         try {
-            // Xử lý file và dữ liệu
-            // Tạo tên file theo tháng và năm chọn
-            int year = (int) yearComboBox.getSelectedItem();
-            int monthFrom = (int) monthFromComboBox.getSelectedItem();
-            int monthTo = (int) monthToComboBox.getSelectedItem();
+        	String ghiChu = "Báo cáo và thống kê nhân sự tổng quan"; // Ghi chú từ JLabel
+    	    String monthFrom = monthFromComboBox.getSelectedItem().toString(); // Tháng bắt đầu
+    	    String monthTo = monthToComboBox.getSelectedItem().toString();     // Tháng kết thúc
+    	    String year = yearComboBox.getSelectedItem().toString();           // Năm
 
-            // Tạo tên file động
-            String fileName = "Báo cáo nhân sự tổng quan từ tháng " + monthFrom + " - tháng " + monthTo + " năm " + year + ".xlsx";
+    	    // Kiểm tra nếu monthFrom và monthTo giống nhau
+    	    String fileName;
+    	    if (monthFrom.equals(monthTo)) {
+    	    	fileName = ghiChu + " Tháng " + monthFrom + " năm " + year + ".xlsx";
+    	    } else {
+    	    	fileName = ghiChu + " Từ Tháng " + monthFrom + " đến Tháng " + monthTo + " năm " + year + ".xlsx";
+    	    }
+    	    
+    	    int monthFromE = (int) monthFromComboBox.getSelectedItem();
+    	    int monthToE = (int) monthToComboBox.getSelectedItem();
+    	    int yearE = (int) yearComboBox.getSelectedItem();
             
-            // Dữ liệu cần xuất
-            List<Object[]> data = reportController.getEmployeeReportByMonthRange(year, monthFrom, monthTo);
+    	    if (monthFromE > monthToE) {
+                JOptionPane.showMessageDialog(this, "Tháng bắt đầu không được lớn hơn tháng kết thúc.");
+                return;
+            }
+    	    
+            // Chuyển dữ liệu từ table vào danh sách dữ liệu để xuất
+            List<Object[]> data = reportController.searchReports2(yearE, monthFromE, monthToE);
+            String[] columnNames = {"Năm", "Tháng", "Tổng số nhân viên", "Nhân viên mới", "Nhân viên đã nghỉ"};
+
+            // Xuất dữ liệu ra file Excel
+            reportDAO.exportToExcel(data, columnNames, fileName);
             
-            // Bạn có thể thêm mã để xuất dữ liệu ra Excel tại đây
-            JOptionPane.showMessageDialog(this, "Xuất file thành công: " + fileName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi xuất file!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Dữ liệu đã được xuất ra Excel thành công!");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi xuất dữ liệu ra Excel: " + e.getMessage());
         }
     }
 
@@ -287,16 +342,14 @@ public class ReportRecruitmentView extends JFrame {
         yearComboBox.setSelectedIndex(0);
         monthFromComboBox.setSelectedIndex(0);
         monthToComboBox.setSelectedIndex(0);
-        loadTableData(reportController.getEmployeeReport());
+        loadTableData(reportController.getRecruitmentPerformanceReport());
     }
 
 
     private void goBack() {
-    	// Đóng JFrame hiện tại
-        SwingUtilities.getWindowAncestor(this).dispose();
-
-        // Mở MainFrame (hoặc JFrame chính của bạn)
-        new ReportEmployeeView(employee).setVisible(true);
+    	this.dispose();
+        // Mở JFrame khác (ReportEffectWorkView)
+        new BaoCaoFrame(employee).setVisible(true);
     }
 
     // Phương thức tạo danh sách tháng (1 đến 12)

@@ -5,7 +5,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import com.hrm.Main;
 import com.hrm.controller.ReportController;
 
 
@@ -17,7 +16,7 @@ import com.hrm.model.Employee;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import com.formdev.flatlaf.FlatLightLaf;
 
 public class ReportSaveView extends JFrame {
 	private JTable table;
@@ -30,8 +29,15 @@ public class ReportSaveView extends JFrame {
     private Employee employee;
 
     public ReportSaveView(Employee employee) {
-            this.employee = employee;
-            this.init();
+    	// Cài đặt FlatLaf trước khi khởi tạo JFrame
+        try {
+            UIManager.setLookAndFeel(new FlatLightLaf()); // Chọn kiểu giao diện
+        } catch (UnsupportedLookAndFeelException ex) {
+            ex.printStackTrace();
+        }
+
+        this.employee = employee;
+        this.init();
     }
 
     public void init() {
@@ -138,7 +144,7 @@ public class ReportSaveView extends JFrame {
         ghiChuPanel.setBackground(new Color(230, 230, 230));
         ghiChuPanel.setPreferredSize(new Dimension(1000, 40));
         ghiChuPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        JLabel ghiChuLabel = new JLabel("Báo cáo và thống kê nhân sự tổng quan");
+        JLabel ghiChuLabel = new JLabel("Báo cáo đã lưu/in");
         ghiChuLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         ghiChuPanel.add(ghiChuLabel);
 
@@ -208,38 +214,38 @@ public class ReportSaveView extends JFrame {
      // Gắn hàm resetTableData() vào nút reset
      resetButton.addActionListener(e -> resetTableData());
 
-  // Nút xuất Excel với biểu tượng
-     Image exportIcon = new ImageIcon(new File("src/main/resources/img/edit_icon.png").getAbsolutePath())
-             .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-     JButton exportButton = new JButton("Xuất file", new ImageIcon(exportIcon));
-     exportButton.setBackground(new Color(255, 193, 7));
-     exportButton.setBorder(new LineBorder(Color.BLACK, 1));
-     exportButton.setPreferredSize(new Dimension(100, 40)); // Đảm bảo nút không quá to
-     gbc.gridx = 9;
-     buttonPanel.add(exportButton, gbc);
-
-     // Gắn hàm exportToExcel() vào nút xuất file
-     exportButton.addActionListener(e -> exportToExcel());
-
-     // Thêm nút Lưu vào
-     Image saveIcon = new ImageIcon(new File("src/main/resources/img/save_icon.png").getAbsolutePath())
-             .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-     JButton saveButton = new JButton("Lưu vào", new ImageIcon(saveIcon));
-     saveButton.setBackground(new Color(0, 204, 0)); // Màu xanh
-     saveButton.setBorder(new LineBorder(Color.BLACK, 1));
-     saveButton.setPreferredSize(new Dimension(100, 40)); // Đảm bảo nút không quá to
-     gbc.gridx = 10; // Đặt vị trí cho nút "Lưu vào"
-     buttonPanel.add(saveButton, gbc);
-
-     // Sự kiện cho nút Lưu vào (chưa thực hiện gì)
-     saveButton.addActionListener(e -> {
-         // Không làm gì khi nhấn nút này
-    	 showSuccessNotification();
-     });
+//  // Nút xuất Excel với biểu tượng
+//     Image exportIcon = new ImageIcon(new File("src/main/resources/img/edit_icon.png").getAbsolutePath())
+//             .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+//     JButton exportButton = new JButton("Xuất file", new ImageIcon(exportIcon));
+//     exportButton.setBackground(new Color(255, 193, 7));
+//     exportButton.setBorder(new LineBorder(Color.BLACK, 1));
+//     exportButton.setPreferredSize(new Dimension(100, 40)); // Đảm bảo nút không quá to
+//     gbc.gridx = 9;
+//     buttonPanel.add(exportButton, gbc);
+//
+//     // Gắn hàm exportToExcel() vào nút xuất file
+//     exportButton.addActionListener(e -> exportToExcel());
+//
+//     // Thêm nút Lưu vào
+//     Image saveIcon = new ImageIcon(new File("src/main/resources/img/save_icon.png").getAbsolutePath())
+//             .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+//     JButton saveButton = new JButton("Lưu vào", new ImageIcon(saveIcon));
+//     saveButton.setBackground(new Color(0, 204, 0)); // Màu xanh
+//     saveButton.setBorder(new LineBorder(Color.BLACK, 1));
+//     saveButton.setPreferredSize(new Dimension(100, 40)); // Đảm bảo nút không quá to
+//     gbc.gridx = 10; // Đặt vị trí cho nút "Lưu vào"
+//     buttonPanel.add(saveButton, gbc);
+//
+//     // Sự kiện cho nút Lưu vào (chưa thực hiện gì)
+//     saveButton.addActionListener(e -> {
+//         // Không làm gì khi nhấn nút này
+//    	 showSuccessNotification();
+//     });
 
         // Panel chứa table
         tableModel = new DefaultTableModel(
-                new String[]{"Năm", "Tháng", "Tên báo cáo", "Đã lưu/in"},
+                new String[]{"Thời gian", "Tạo bởi", "Tên báo cáo", "Đã lưu/in"},
                 0
         );
         table = new JTable(tableModel);
@@ -253,7 +259,7 @@ public class ReportSaveView extends JFrame {
         contentPane.add(scrollPane, BorderLayout.SOUTH);
 
         // Load dữ liệu ban đầu
-        loadTableData(reportController.getEmployeeReport());
+        loadTableData(reportController.getAllReports());
     }
     
     private void showSuccessNotification() {
@@ -303,13 +309,11 @@ public class ReportSaveView extends JFrame {
     
  // Hàm xử lý quay lại trang chủ
     private void goBack() {
-    	// Đóng JFrame hiện tại
-        SwingUtilities.getWindowAncestor(this).dispose();
-
-        // Mở MainFrame (hoặc JFrame chính của bạn)
-        new ReportEmployeeView(employee).setVisible(true);
+    	this.dispose();
+        // Mở JFrame khác (ReportEffectWorkView)
+        new BaoCaoFrame(employee).setVisible(true);
     }
-
+    
     private Integer[] generateYearOptions() {
         int currentYear = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
         Integer[] years = new Integer[10];
@@ -344,7 +348,7 @@ public class ReportSaveView extends JFrame {
             return;
         }
 
-        List<Object[]> searchData = reportController.searchReports(year, monthFrom, monthTo);
+        List<Object[]> searchData = reportController.searchReports3(year, monthFrom, monthTo);
         loadTableData(searchData);
     }
 
@@ -352,7 +356,7 @@ public class ReportSaveView extends JFrame {
         yearComboBox.setSelectedIndex(0);
         monthFromComboBox.setSelectedIndex(0);
         monthToComboBox.setSelectedIndex(0);
-        loadTableData(reportController.getEmployeeReport());
+        loadTableData(reportController.getAllReports());
     }
 
     private void exportToExcel() {

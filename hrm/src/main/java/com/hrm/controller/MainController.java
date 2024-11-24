@@ -11,6 +11,7 @@ import com.hrm.view.ChamCongFrame;
 import com.hrm.view.CongViecFrame;
 import com.hrm.view.LoginFrame;
 import com.hrm.view.MainFrame;
+import com.hrm.view.BaoCaoFrame;
 import com.hrm.view.SalaryFrame;
 
 public class MainController implements MouseListener {
@@ -41,6 +42,10 @@ public class MainController implements MouseListener {
                 break;
             case "CongViecPanel":
                 new CongViecFrame(EmployeeDAO.getInstance().selectByID(mainFrame.getEmployee().getId()));
+                mainFrame.dispose();
+                break;
+            case "BaoCaoPanel":
+                new BaoCaoFrame(mainFrame.getEmployee());
                 mainFrame.dispose();
                 break;
         }

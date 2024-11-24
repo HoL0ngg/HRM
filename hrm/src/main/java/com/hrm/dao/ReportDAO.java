@@ -144,29 +144,199 @@ public class ReportDAO {
         workbook.close();
     }
 
+    public boolean saveReport(int createdBy, String title, String results) {
+        String sql = "INSERT INTO reports (created_by, title, created_date, results) VALUES (?, ?, ?, ?)";
 
-    
- // Phương thức để lưu báo cáo vào CSDL
-    public boolean saveReportToDatabase(String month, int totalEmployees, int newEmployees, int resignedEmployees) {
-        String sql = "INSERT INTO employee_report (month, total_employees, new_employees, resigned_employees) VALUES (?, ?, ?, ?)";
-        
         try (Connection conn = mySQL.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            
-            stmt.setString(1, month);
-            stmt.setInt(2, totalEmployees);
-            stmt.setInt(3, newEmployees);
-            stmt.setInt(4, resignedEmployees);
-            
+
+            stmt.setInt(1, createdBy); // ID người tạo
+            stmt.setString(2, title); // Tiêu đề báo cáo
+            stmt.setDate(3, new java.sql.Date(System.currentTimeMillis())); // Ngày tạo
+            stmt.setString(4, results); // Kết quả (ví dụ: "Đã lưu")
+
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            return rowsAffected > 0; // Trả về true nếu lưu thành công
         } catch (SQLException ex) {
             ex.printStackTrace();
-            return false;
+            return false; // Trả về false nếu có lỗi
         }
     }
 
+
     
+    public List<Object[]> getRecruitmentPerformanceReport() {
+        List<Object[]> reportData = new ArrayList<>();
+        String query = """
+            SELECT 
+                YEAR(i.interview_date) AS year,
+                MONTH(i.interview_date) AS month,
+                COUNT(i.id) AS total_applicants,
+                SUM(CASE WHEN i.result = 'passed' THEN 1 ELSE 0 END) AS total_passed,
+                SUM(CASE WHEN i.result = 'failed' THEN 1 ELSE 0 END) AS total_failed,
+                AVG(DATEDIFF(jo.closing_date, jo.opening_date)) AS average_hiring_time
+            FROM interviews i
+            JOIN job_openings jo ON i.job_open_id = jo.id
+            GROUP BY YEAR(i.interview_date), MONTH(i.interview_date)
+            ORDER BY year, month
+        """;
+
+        try (Connection connection = mySQL.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+        	while (rs.next()) {
+        	    int yearResult = rs.getInt("year");
+        	    int month = rs.getInt("month");
+        	    int totalApplicants = rs.getInt("total_applicants");
+        	    int totalPassed = rs.getInt("total_passed");
+        	    int totalFailed = rs.getInt("total_failed");
+        	    double averageHiringTime = rs.getDouble("average_hiring_time");
+
+        	    // Tính tỷ lệ chuyển đổi và tỷ lệ từ chối với điều kiện chặt chẽ
+        	    double passRate = (totalApplicants > 0 && totalPassed <= totalApplicants) 
+        	    	    ? (double) totalPassed / totalApplicants * 100 
+        	    	    : 0;
+
+        	    	double rejectRate = (totalApplicants > 0 && totalFailed <= totalApplicants) 
+        	    	    ? (double) totalFailed / totalApplicants * 100 
+        	    	    : 0;
+
+        	    	// Đảm bảo tỷ lệ không bao giờ vượt quá 100%
+        	    	passRate = Math.min(passRate, 100);
+        	    	rejectRate = Math.min(rejectRate, 100);
+
+
+        	    reportData.add(new Object[]{
+        	        yearResult, month, totalApplicants, passRate, rejectRate, averageHiringTime
+        	    });
+        	}
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reportData;
+    }
+    
+    public List<Object[]> getRecruitmentPerformanceReport(int year, int fromMonth, int toMonth) {
+        List<Object[]> reportData = new ArrayList<>();
+        String query = """
+            SELECT 
+                YEAR(i.interview_date) AS year,
+                MONTH(i.interview_date) AS month,
+                COUNT(i.id) AS total_applicants,
+                SUM(CASE WHEN i.result = 'passed' THEN 1 ELSE 0 END) AS total_passed,
+                SUM(CASE WHEN i.result = 'failed' THEN 1 ELSE 0 END) AS total_failed,
+                AVG(DATEDIFF(jo.closing_date, jo.opening_date)) AS average_hiring_time
+            FROM interviews i
+            JOIN job_openings jo ON i.job_open_id = jo.id
+            WHERE YEAR(i.interview_date) = ? AND MONTH(i.interview_date) BETWEEN ? AND ?
+            GROUP BY YEAR(i.interview_date), MONTH(i.interview_date)
+            ORDER BY year, month
+        """;
+
+        try (Connection connection = mySQL.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+            
+            // Thiết lập các tham số
+            stmt.setInt(1, year);        // Năm
+            stmt.setInt(2, fromMonth);    // Tháng bắt đầu
+            stmt.setInt(3, toMonth);      // Tháng kết thúc
+
+            try (ResultSet rs = stmt.executeQuery()) {
+            	while (rs.next()) {
+            	    int yearResult = rs.getInt("year");
+            	    int month = rs.getInt("month");
+            	    int totalApplicants = rs.getInt("total_applicants");
+            	    int totalPassed = rs.getInt("total_passed");
+            	    int totalFailed = rs.getInt("total_failed");
+            	    double averageHiringTime = rs.getDouble("average_hiring_time");
+
+            	    // Tính tỷ lệ chuyển đổi và tỷ lệ từ chối với điều kiện chặt chẽ
+            	    double passRate = (totalApplicants > 0 && totalPassed <= totalApplicants) 
+            	    	    ? (double) totalPassed / totalApplicants * 100 
+            	    	    : 0;
+
+            	    	double rejectRate = (totalApplicants > 0 && totalFailed <= totalApplicants) 
+            	    	    ? (double) totalFailed / totalApplicants * 100 
+            	    	    : 0;
+
+            	    	// Đảm bảo tỷ lệ không bao giờ vượt quá 100%
+            	    	passRate = Math.min(passRate, 100);
+            	    	rejectRate = Math.min(rejectRate, 100);
+
+
+            	    reportData.add(new Object[]{
+            	        yearResult, month, totalApplicants, passRate, rejectRate, averageHiringTime
+            	    });
+            	}
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reportData;
+    }
+
+ // Phương thức lấy tất cả báo cáo từ cơ sở dữ liệu
+    public List<Object[]> getAllReports() {
+        List<Object[]> reportData = new ArrayList<>();
+        String query = "SELECT id, created_by, title, created_date, results FROM reports";
+
+        try (Connection connection = mySQL.getConnection();
+             Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                int createdBy = rs.getInt("created_by");
+                String title = rs.getString("title");
+                Date createdDate = rs.getDate("created_date");
+                String results = rs.getString("results");
+
+                // Thêm dữ liệu vào danh sách
+                reportData.add(new Object[]{createdDate, createdBy, title, results});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reportData;
+    }
+    
+    public List<Object[]> getAllReports(int year, int monthFrom, int monthTo) {
+        List<Object[]> reportData = new ArrayList<>();
+        String query = """
+            SELECT id, created_by, title, created_date, results 
+            FROM reports 
+            WHERE YEAR(created_date) = ? 
+            AND MONTH(created_date) BETWEEN ? AND ?
+            ORDER BY created_date
+        """;
+
+        try (Connection connection = mySQL.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+            
+            // Thiết lập các tham số
+            stmt.setInt(1, year);         // Năm
+            stmt.setInt(2, monthFrom);    // Tháng bắt đầu
+            stmt.setInt(3, monthTo);      // Tháng kết thúc
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int createdBy = rs.getInt("created_by");
+                    String title = rs.getString("title");
+                    Date createdDate = rs.getDate("created_date");
+                    String results = rs.getString("results");
+
+                    // Thêm dữ liệu vào danh sách
+                    reportData.add(new Object[]{createdDate, createdBy, title, results});
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reportData;
+    }
+
 
     // Đóng kết nối
     public void closeConnection() throws SQLException {

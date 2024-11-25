@@ -7,6 +7,7 @@ import com.hrm.model.Interviews;
 import com.hrm.model.JobOpenings;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InterviewsBUS {
 
@@ -15,6 +16,7 @@ public class InterviewsBUS {
     private JobOpeningsBUS jobBus;
     private DepartmentBUS dptmBus;
     private ApplicantsBUS applicantBus;
+    private InterviewerBUS intverBus;
 
     public InterviewsBUS() {
         intvList = new ArrayList<>();
@@ -22,6 +24,7 @@ public class InterviewsBUS {
         jobBus = new JobOpeningsBUS();
         dptmBus = new DepartmentBUS();
         applicantBus = new ApplicantsBUS();
+        intverBus = new InterviewerBUS();
         list();
     }
 
@@ -36,8 +39,20 @@ public class InterviewsBUS {
         }
         return null;
     }
+    
+    public Interviews getByJobId(int id){
+        if (intvList == null) {
+            return null;
+        }
+        for (Interviews j : intvList) {
+            if (j.getJob_open_id() == id) {
+                return j;
+            }
+        }
+        return null;
+    }
 
-    public Interviews getByApplicantId(int id){
+    public Interviews getByApplicantId(int id) {
         if (intvList == null) {
             return null;
         }
@@ -48,6 +63,7 @@ public class InterviewsBUS {
         }
         return null;
     }
+
     public String getPositionNameById(int id) {
         if (intvList == null) {
             return null;
@@ -93,7 +109,7 @@ public class InterviewsBUS {
         return null;
     }
 
-        public String getPositionById(int id) {
+    public String getPositionById(int id) {
         if (intvList == null) {
             return null;
         }
@@ -107,7 +123,7 @@ public class InterviewsBUS {
         }
         return null;
     }
-    
+
     public String getDepartmentName(int id) {
         if (intvList == null) {
             return null;
@@ -125,8 +141,8 @@ public class InterviewsBUS {
         }
         return null;
     }
-    
-    public String getStageById(int id){
+
+    public String getStageById(int id) {
         if (intvList == null) {
             return null;
         }
@@ -188,27 +204,27 @@ public class InterviewsBUS {
         return false;
     }
 
-//    public ArrayList<Interviews> search(Integer id, String position) 
-//    {
-//        ArrayList<Interviews> searchResults = new ArrayList<>();
-//    
-//        String idString = (id != null) ? String.valueOf(id) : null;
-//
-//        for (Interviews intv : intvList) {
-//        boolean matchId = (idString == null || String.valueOf(intv.getId()).contains(idString));
-//        boolean matchPosition = (position == null || position.isEmpty() || intv.getPosition().contains(position));
-//        
-//        if (matchId && matchPosition) {
-//            searchResults.add(intv);
-//            }
-//        }
-//        return searchResults;
-//    }
+    public ArrayList<Interviews> search(String searchText) {
+        ArrayList<Interviews> searchResults = new ArrayList<>();
+
+        // Chuẩn hóa searchText
+        String searchString = (searchText != null) ? searchText.trim() : "";
+
+        // Lọc danh sách intvList
+        searchResults = intvList.stream()
+                .filter(intv
+                        -> (searchString.isEmpty() || String.valueOf(intv.getId()).contains(searchString)) // Kiểm tra ID
+                || (searchString.isEmpty() || getPositionById(intv.getId()).toLowerCase().contains(searchString.toLowerCase())) // Kiểm tra Position
+                || (searchString.isEmpty() || intverBus.getFullNamesById(intv.getId()).toLowerCase().contains(searchString.toLowerCase()))
+                ) .collect(Collectors.toCollection(ArrayList::new));
+
+        return searchResults;
+    }
+
     public ArrayList<Interviews> getList() {
-        intvList = intvDao.list();
         return intvList;
     }
-    
+
     public int getNextId() {
         int maxId = intvList.stream().mapToInt(Interviews::getId).max().orElse(0);
         return maxId + 1;

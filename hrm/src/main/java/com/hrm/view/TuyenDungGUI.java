@@ -18,6 +18,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
@@ -51,12 +53,12 @@ public class TuyenDungGUI extends JPanel {
     private JPanel mainPanel;
     private JPanel homePanel;
     private JScrollPane scrollPane1;
-    private JScrollPane scrollPane2;
     private JPanel viewAllJobPanel;
     private JPanel addJobPanel;
     private JPanel applicantPanel;
     private JPanel interviewPanel;
     private JPanel editPanel;
+    private JPanel searchPanel;
     private JPanel searchField;
 
     private CardLayout cardLayout;
@@ -65,7 +67,7 @@ public class TuyenDungGUI extends JPanel {
     private JButton interviewListBtn;
     private JButton reloadBtn;
     private JButton exportExcelBtn;
-    private JButton searchBtn;
+    private JButton clear;
     private JTextField search;
 
     private JobDetailPanel jobFormPanel;
@@ -137,7 +139,7 @@ public class TuyenDungGUI extends JPanel {
         jobOpeningListBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                searchField.add(exportExcelBtn);
+                searchPanel.add(exportExcelBtn);
                 togglePanel("Applicants");
             }
         });
@@ -168,16 +170,58 @@ public class TuyenDungGUI extends JPanel {
         toolBar.add(reloadBtn);
         applyButtonHoverEffect(reloadBtn);
 
-        searchField = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 15));
-        searchField.setBackground(Color.white);
-        search = new JTextField("Tìm kiếm", 30);
+        searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 15));
+        searchPanel.setBackground(Color.white);
+
+        search = new JTextField("Tìm kiếm...", 30);
         search.setFont(new Font("Arial", Font.PLAIN, 15));
-        search.setPreferredSize(new Dimension(200, 35));
+        search.setPreferredSize(new Dimension(150, 35));
         search.setForeground(Color.GRAY);
+
+        clear = new JButton("X");
+        clear.setForeground(Color.red);
+        //clear.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        searchField = new JPanel(new BorderLayout());
+        searchField.setPreferredSize(new Dimension(200, 40));
+        searchField.add(search, BorderLayout.CENTER);
+        searchField.add(clear, BorderLayout.EAST);
+
+        clear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                search.setText("Tìm kiếm...");
+                search.setForeground(Color.GRAY);
+                switch (currentPanel) {
+                    case "JobSearch":
+                        loadJobList();
+                        togglePanel("Home");
+                        break;
+
+                    case "EditSearch":
+                        editPanel.removeAll();
+                        editPanel = viewAll("Danh sách công việc", new Color(102, 153, 255), 1);
+                        mainPanel.add(editPanel, "Edit");
+                        togglePanel("Edit");
+                        break;
+
+                    case "ApplicantSearch":
+                        loadApplicantList();
+                        togglePanel("Applicants");
+                        break;
+                        
+                    case "InterviewSearch":
+                        loadInterviewSchedule();
+                        togglePanel("Interviews");
+                        break;
+                }
+            }
+        });
+
         search.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (search.getText().equals("Tìm kiếm ...")) {
+                if (search.getText().equals("Tìm kiếm...")) {
                     search.setText("");
                     search.setForeground(Color.BLACK);
                 }
@@ -185,21 +229,29 @@ public class TuyenDungGUI extends JPanel {
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (search.getText().isEmpty()) {
-                    search.setText("Search...");
+                if (search.getText().isEmpty() || search.getText().equals("")) {
+                    search.setText("Tìm kiếm...");
                     search.setForeground(Color.GRAY);
                 }
             }
         });
 
-        searchBtn = createIconButton("src\\main\\java\\img\\search-interface-symbol.png");
+        search.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    String searchText = search.getText();
+                    searchAndUpdateTable(searchText);
+                }
+            }
+        });
+
+        searchPanel.add(searchField);
+
         exportExcelBtn = createRoundedButton("Xuất Excel", "", 100, 35);
-        searchField.add(search);
-        //searchField.add(searchBtn);
-        searchField.add(createIconButton("src\\main\\java\\img\\filter_1.png"));
 
         headBar.add(toolBar, BorderLayout.NORTH);
-        headBar.add(searchField, BorderLayout.CENTER);
+        headBar.add(searchPanel, BorderLayout.CENTER);
         return headBar;
     }
 
@@ -279,11 +331,7 @@ public class TuyenDungGUI extends JPanel {
 
         editPanel = viewAll("Danh sách công việc", new Color(102, 153, 255), 1);
 
-//        scrollPane2 = new JScrollPane(editPanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//        scrollPane2.getVerticalScrollBar().setUnitIncrement(14);
-//        scrollPane2.setPreferredSize(new Dimension(WIDTH - 146, HEIGHT - 190));
         mainPanel.add(scrollPane1, "Home");
-        //mainPanel.add(addJobPanel, "AddJob");
         mainPanel.add(applicantPanel, "Applicants");
         mainPanel.add(interviewPanel, "Interviews");
         mainPanel.add(editPanel, "Edit");
@@ -555,9 +603,10 @@ public class TuyenDungGUI extends JPanel {
     }
 
     private void loadApplicantList() {
-        applicantBus = new ApplicantsBUS();
+        //applicantBus = new ApplicantsBUS();
         applicantList = applicantBus.getList();
         applicantTable = createApplicantTable(applicantList);
+        applicantPanel.removeAll();
         applicantPanel = new JPanel(new BorderLayout());
         applicantPanel.setBackground(Color.WHITE);
         applicantPanel.add(applicantTable, BorderLayout.CENTER);
@@ -779,6 +828,118 @@ public class TuyenDungGUI extends JPanel {
         // intvTable.setRowHeight(50); // Nếu muốn thay đổi chiều cao
         // Thêm bảng vào mainPanel
         return intvTable;
+    }
+
+    public void searchAndUpdateTable(String searchText) {
+        // Kiểm tra card nào đang được hiển thị và gọi phương thức tìm kiếm phù hợp
+        switch (currentPanel) {
+            case "ViewAll":
+                ArrayList<JobOpenings> searchResults = jobBus.search(searchText);
+                updateJobPanel(searchResults, 0); // Cập nhật bảng công việc
+                break;
+
+            case "Edit":
+                searchResults = jobBus.search(searchText);
+                updateJobPanel(searchResults, 1); // Cập nhật bảng công việc cho chỉnh sửa
+                break;
+
+            case "Applicants":
+                ArrayList<Applicants> applicantResults = applicantBus.search(searchText);
+
+                applicantTable = createApplicantTable(applicantResults);
+                applicantPanel.removeAll();
+                applicantPanel = new JPanel(new BorderLayout());
+                applicantPanel.setBackground(Color.WHITE);
+                applicantPanel.add(applicantTable, BorderLayout.CENTER);
+                mainPanel.add(applicantPanel, "ApplicantSearch");
+                togglePanel("ApplicantSearch");
+                break;
+                
+            case "Interviews":
+                ArrayList<Interviews> intvResults = intvBus.search(searchText);
+
+                interviewTable = createInterviewTable(intvResults);
+                interviewPanel.removeAll();
+                interviewPanel = new JPanel(new BorderLayout());
+                interviewPanel.setBackground(Color.WHITE);
+                interviewPanel.add(interviewTable, BorderLayout.CENTER);
+                mainPanel.add(interviewPanel, "InterviewSearch");
+                togglePanel("InterviewSearch");
+                break;
+        }
+    }
+
+    public void updateJobPanel(ArrayList<JobOpenings> searchResults, int flag) {
+        //viewAll("Danh sách công việc", new Color(102, 153, 255), 1)
+        JPanel jobPanel = new JPanel(new BorderLayout());
+        //viewAllJobPanel = new JPanel(new BorderLayout());
+        jobPanel.setBorder(BorderFactory.createLineBorder(new Color(255, 204, 0), 2));
+        jobPanel.setPreferredSize(new Dimension(WIDTH - 146, HEIGHT - 190));
+
+        JPanel header = new JPanel(new BorderLayout());
+        header.setBorder(new EmptyBorder(0, 10, 0, 10));
+        header.setPreferredSize(new Dimension(WIDTH - 146, 50));
+        header.setBackground(new Color(255, 204, 0));
+
+        JLabel titleLabel = new JLabel("Danh sách tìm kiếm", JLabel.LEFT);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        titleLabel.setForeground(Color.BLACK);
+
+        JLabel viewAllLabel = new JLabel("Xem tất cả", JLabel.RIGHT);
+        viewAllLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        viewAllLabel.setForeground(Color.BLUE);
+        viewAllLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        viewAllLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                togglePanel("Home");
+            }
+        });
+        header.add(titleLabel, BorderLayout.WEST);
+        //header.add(viewAllLabel, BorderLayout.EAST);
+        jobPanel.add(header, BorderLayout.NORTH);
+
+        ArrayList<JobOpenings> sortedJobList = searchResults.stream()
+                .sorted(Comparator.comparing(JobOpenings::getOpening_date).reversed())
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        int row;
+        if (searchResults.size() % 3 != 0) {
+            row = searchResults.size() / 3 + 1;
+        } else {
+            row = searchResults.size() / 3;
+        }
+        JPanel jobsGrid = new JPanel(new GridLayout(row, 3, 35, 20));
+        jobsGrid.setBorder(new EmptyBorder(15, 15, 15, 15));
+        //jobsGrid.setPreferredSize(new Dimension(WIDTH - 80, HEIGHT - 170 - 50));
+        jobsGrid.setBackground(Color.white);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        if (flag == 0) {
+            header.add(viewAllLabel, BorderLayout.EAST);
+
+            for (JobOpenings job : sortedJobList) {
+                String openingDateString = job.getOpening_date().format(formatter);
+                jobsGrid.add(createInfoJobCard(job.getPosition(), job.getSalary(), openingDateString, job.getId()));
+            }
+        } else if (flag == 1) {
+            for (JobOpenings job : sortedJobList) {
+                String openingDateString = job.getOpening_date().format(formatter);
+                jobsGrid.add(createEditJobCard(job.getPosition(), job.getSalary(), openingDateString, job.getId()));
+            }
+        }
+
+        JScrollPane jobScrollPane = new JScrollPane(jobsGrid, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        jobScrollPane.setPreferredSize(new Dimension(WIDTH - 148, HEIGHT - 190 - 50));
+        jobScrollPane.getVerticalScrollBar().setUnitIncrement(14);
+        jobScrollPane.setBackground(Color.white);
+        jobPanel.add(jobScrollPane, BorderLayout.CENTER);
+
+        viewAllJobPanel.removeAll();
+        viewAllJobPanel.add(jobPanel);
+        mainPanel.add(viewAllJobPanel, "JobSearch");
+        cardLayout.show(mainPanel, "JobSearch");
     }
 
 //   PHẦN XỬ KIẾN SỰ KIỆN NÚT TRONG CÁC CHỨC NĂNG  

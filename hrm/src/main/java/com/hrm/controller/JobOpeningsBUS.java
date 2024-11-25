@@ -1,31 +1,30 @@
 package com.hrm.controller;
 
+import com.hrm.dao.InterviewsDAO;
 import com.hrm.dao.JobOpeningsDAO;
+import com.hrm.model.Interviews;
 import com.hrm.model.JobOpenings;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 public class JobOpeningsBUS {
 
     private ArrayList<JobOpenings> jobList;
     private JobOpeningsDAO jobDao;
+    private ArrayList<Interviews> intvList;
+    private InterviewsDAO intvDao;
 
     public JobOpeningsBUS() {
         jobList = new ArrayList<>();
         jobDao = new JobOpeningsDAO();
+        intvDao = new InterviewsDAO();
+        intvList = new ArrayList<>();
         list();
     }
 
     public JobOpenings get(int id) {
-        if (jobList == null) {
-            return null;
-        }
-        for (JobOpenings j : jobList) {
-            if (j.getId() == id) {
-                return j;
-            }
-        }
-        return null;
+        return jobList.stream().filter(job -> job.getId() == id).findFirst().orElse(null);
     }
 
     public void list() {
@@ -36,18 +35,35 @@ public class JobOpeningsBUS {
         if (!check(job.getId())) {
             jobList.add(job);
             jobDao.add(job);
+        } else {
+            System.out.println("Job ID already exists!");
         }
     }
 
     public void delete(int id) {
-        for (JobOpenings job : jobList) {
-            if (job.getId() == id) {
-                jobList.remove(id);
-                jobDao = new JobOpeningsDAO();
-                jobDao.delete(id);
-                return;
+
+        boolean hasInterviewScheduled = false;
+        intvList = intvDao.list();
+        for (Interviews intv : intvList) {
+            if (intv.getJob_open_id() == id) { 
+                hasInterviewScheduled = true; 
+                break;
             }
         }
+
+        if (hasInterviewScheduled == false) {
+            Iterator<JobOpenings> iterator = jobList.iterator();
+            while (iterator.hasNext()) {
+                JobOpenings job = iterator.next();
+                if (job.getId() == id) {
+                    iterator.remove();
+                    jobDao.delete(id);
+                    System.out.println("Công việc đã được xóa");
+                    return;
+                }
+            }
+        }
+        System.out.println("Không thể xóa công việc vì có lịch phỏng vấn");
     }
 
     public void set(JobOpenings job) {
@@ -61,32 +77,22 @@ public class JobOpeningsBUS {
     }
 
     public boolean check(int id) {
-        for (JobOpenings job : jobList) {
-            if (job.getId() == id) {
-                return true;
-            }
-        }
-        return false;
+        return jobList.stream().anyMatch(job -> job.getId() == id);
     }
 
-    public ArrayList<JobOpenings> search(String id, String position) {
-        ArrayList<JobOpenings> searchResults = new ArrayList<>();
+    public ArrayList<JobOpenings> search(String searchText) {
+        // Nếu searchText không phải là null và không phải là chuỗi rỗng, ta sẽ sử dụng nó để tìm kiếm
+        String searchString = (searchText != null) ? searchText.trim() : "";
 
-        String idString = (id != null) ? String.valueOf(id) : null;
-
-        for (JobOpenings job : jobList) {
-            boolean matchId = (idString == null || String.valueOf(job.getId()).contains(idString));
-            boolean matchPosition = (position == null || position.isEmpty() || job.getPosition().contains(position));
-
-            if (matchId && matchPosition) {
-                searchResults.add(job);
-            }
-        }
-        return searchResults;
+        return jobList.stream()
+                .filter(job -> (searchString.isEmpty()
+                || String.valueOf(job.getId()).contains(searchString)
+                || // Tìm kiếm trong id
+                job.getPosition().toLowerCase().contains(searchString.toLowerCase()))) // Tìm kiếm trong position
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<JobOpenings> getList() {
-        jobList = jobDao.list();
         return jobList;
     }
 
@@ -94,13 +100,9 @@ public class JobOpeningsBUS {
         int maxId = jobList.stream().mapToInt(JobOpenings::getId).max().orElse(0);
         return maxId + 1;
     }
-    
-    public int getIdByPosition(String position){
-        for(JobOpenings job : jobList){
-            if(job.getPosition().equals(position)){
-                return job.getId();
-            }
-        }
-        return 0;
+
+    public int getIdByPosition(String position) {
+        return jobList.stream().filter(job -> job.getPosition().equals(position))
+                .map(JobOpenings::getId).findFirst().orElse(0);
     }
 }

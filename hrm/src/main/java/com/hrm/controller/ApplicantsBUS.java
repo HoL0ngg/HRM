@@ -5,11 +5,13 @@ import com.hrm.model.Applicants;
 import com.hrm.model.Employee;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ApplicantsBUS {
 
     private ArrayList<Applicants> applicants;
     private ArrayList<Employee> employeeList;
+    private InterviewsBUS intvBus;
 
     public ApplicantsBUS() {
         list();
@@ -69,21 +71,42 @@ public class ApplicantsBUS {
         return false;
     }
 
-    public ArrayList<Applicants> search(String id, String fullName)
-    {
-        ArrayList<Applicants> search = new ArrayList<>();
-        id = id.isEmpty() ? id="" : id;
-        fullName = fullName.isEmpty() ? fullName="" : fullName;
+//    public ArrayList<Applicants> search(String id, String fullName, String position) {
+//        ArrayList<Applicants> searchResults = new ArrayList<>();
+//        
+//        String idString = (id != null) ? id : null;
+//        String fullNameString = (fullName != null) ? fullName : "";
+//        String positionString = (position != null) ? position : "";
+//        
+//         searchResults = applicants.stream()
+//                .filter(apl -> (idString == null || String.valueOf(apl.getId()).contains(idString))
+//                && (positionString.isEmpty() || intvBus.getPositionByApplicantId(apl.getId()).toLowerCase().contains(positionString.toLowerCase()))
+//                && (fullNameString.isEmpty() || apl.getFull_name().toLowerCase().contains(fullNameString.toLowerCase())))
+//                .collect(Collectors.toCollection(ArrayList::new));
+//
+//        return searchResults;
+//    }
+    public ArrayList<Applicants> search(String searchText) {
+        intvBus = new InterviewsBUS();
         
-        for(Applicants applicant : applicants){
-            if(applicant.getId() && 
-                    applicant.getFull_name().contains(fullName)){
-                search.add(applicant);
-            }
-        }
-        return search;
+        ArrayList<Applicants> searchResults = new ArrayList<>();
+
+        String searchTextLower = searchText != null ? searchText.toLowerCase() : "";
+
+        searchResults = applicants.stream()
+                .filter(apl
+                        -> // Tìm theo ID
+                        (String.valueOf(apl.getId()).contains(searchText))
+                || // Tìm theo Full Name
+                apl.getFull_name().toLowerCase().contains(searchTextLower)
+                || // Tìm theo Position
+                intvBus.getPositionByApplicantId(apl.getId()).toLowerCase().contains(searchTextLower)
+                )
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return searchResults;
     }
-    
+
     public ArrayList<Applicants> getList() {
         return applicants;
     }
@@ -91,5 +114,13 @@ public class ApplicantsBUS {
     public int getNextId() {
         int maxId = applicants.stream().mapToInt(Applicants::getId).max().orElse(0);
         return maxId + 1;
+    }
+
+    public static void main(String[] args) {
+        ApplicantsBUS a = new ApplicantsBUS();
+        ArrayList<Applicants> applicantResults = a.search("NGuyễn");
+        for (Applicants apl : applicantResults) {
+            System.out.println("- " + apl.getFull_name() + " " + apl.getPhone());
+        }
     }
 }

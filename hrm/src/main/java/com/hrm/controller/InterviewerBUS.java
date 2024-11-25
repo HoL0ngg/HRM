@@ -23,14 +23,12 @@ public class InterviewerBUS {
         intverList = intverDao.list();
     }
 
-    public void add(Interviewer intver){
-        if(!check(intver.getEmployee_id())){
-            intverList.add(intver);
-            intverDao.add(intver);
-        }
+    public void add(Interviewer intver) {
+        intverList.add(intver);
+        intverDao.add(intver);
     }
-    
-        public boolean check(int id) {
+
+    public boolean check(int id) {
         for (Interviewer intver : intverList) {
             if (intver.getEmployee_id() == id) {
                 return true;
@@ -51,6 +49,7 @@ public class InterviewerBUS {
 //        }
 //        return list.toArray(new String[0]);
 //    }
+
     public String getFullNamesById(int id) {
         List<String> list = new ArrayList<>();
         if (intverList == null) {

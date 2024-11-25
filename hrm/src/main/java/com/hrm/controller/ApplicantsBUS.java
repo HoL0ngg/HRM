@@ -69,20 +69,21 @@ public class ApplicantsBUS {
         return false;
     }
 
-//    public ArrayList<Applicants> search(int id, String fullName)
-//    {
-//        ArrayList<Applicants> search = new ArrayList<>();
-//        id = id.isEmpty() ? id="" : id;
-//        fullName = fullName.isEmpty() ? fullName="" : fullName;
-//        
-//        for(Applicants applicant : applicants){
-//            if(applicant.getId()==(id) && 
-//                    applicant.getFull_name().contains(fullName)){
-//                search.add(applicant);
-//            }
-//        }
-//        return search;
-//    }
+    public ArrayList<Applicants> search(String id, String fullName)
+    {
+        ArrayList<Applicants> search = new ArrayList<>();
+        id = id.isEmpty() ? id="" : id;
+        fullName = fullName.isEmpty() ? fullName="" : fullName;
+        
+        for(Applicants applicant : applicants){
+            if(applicant.getId() && 
+                    applicant.getFull_name().contains(fullName)){
+                search.add(applicant);
+            }
+        }
+        return search;
+    }
+    
     public ArrayList<Applicants> getList() {
         return applicants;
     }

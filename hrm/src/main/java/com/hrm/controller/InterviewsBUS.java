@@ -37,6 +37,17 @@ public class InterviewsBUS {
         return null;
     }
 
+    public Interviews getByApplicantId(int id){
+        if (intvList == null) {
+            return null;
+        }
+        for (Interviews j : intvList) {
+            if (j.getApplicants_id() == id) {
+                return j;
+            }
+        }
+        return null;
+    }
     public String getPositionNameById(int id) {
         if (intvList == null) {
             return null;
@@ -110,6 +121,18 @@ public class InterviewsBUS {
                         return dptm.getName();
                     }
                 }
+            }
+        }
+        return null;
+    }
+    
+    public String getStageById(int id){
+        if (intvList == null) {
+            return null;
+        }
+        for (Interviews j : intvList) {
+            if (j.getApplicants_id() == id) {
+                return j.getResult();
             }
         }
         return null;

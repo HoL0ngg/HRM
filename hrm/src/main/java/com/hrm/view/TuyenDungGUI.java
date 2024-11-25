@@ -2,6 +2,8 @@ package com.hrm.view;
 
 import com.hrm.controller.ApplicantsBUS;
 import com.hrm.controller.EmployeeBus;
+import com.hrm.controller.ExcelExporter;
+import com.hrm.controller.InterviewScheduler;
 import com.hrm.controller.InterviewerBUS;
 import com.hrm.controller.InterviewsBUS;
 import com.hrm.controller.JobOpeningsBUS;
@@ -55,13 +57,16 @@ public class TuyenDungGUI extends JPanel {
     private JPanel applicantPanel;
     private JPanel interviewPanel;
     private JPanel editPanel;
+    private JPanel searchField;
 
     private CardLayout cardLayout;
     private JButton addJobBtn;
     private JButton jobOpeningListBtn;
     private JButton interviewListBtn;
     private JButton reloadBtn;
-    private JButton xuatExcelBtn;
+    private JButton exportExcelBtn;
+    private JButton searchBtn;
+    private JTextField search;
 
     private JobDetailPanel jobFormPanel;
     private JobDetailPanel jobDetailPanel;
@@ -132,6 +137,7 @@ public class TuyenDungGUI extends JPanel {
         jobOpeningListBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                searchField.add(exportExcelBtn);
                 togglePanel("Applicants");
             }
         });
@@ -162,9 +168,9 @@ public class TuyenDungGUI extends JPanel {
         toolBar.add(reloadBtn);
         applyButtonHoverEffect(reloadBtn);
 
-        JPanel searchField = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 15));
+        searchField = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 15));
         searchField.setBackground(Color.white);
-        JTextField search = new JTextField("Tìm kiếm", 30);
+        search = new JTextField("Tìm kiếm", 30);
         search.setFont(new Font("Arial", Font.PLAIN, 15));
         search.setPreferredSize(new Dimension(200, 35));
         search.setForeground(Color.GRAY);
@@ -186,10 +192,10 @@ public class TuyenDungGUI extends JPanel {
             }
         });
 
-        JButton searchBtn = createIconButton("src\\main\\java\\img\\search-interface-symbol.png");
-
+        searchBtn = createIconButton("src\\main\\java\\img\\search-interface-symbol.png");
+        exportExcelBtn = createRoundedButton("Xuất Excel", "", 100, 35);
         searchField.add(search);
-        searchField.add(searchBtn);
+        //searchField.add(searchBtn);
         searchField.add(createIconButton("src\\main\\java\\img\\filter_1.png"));
 
         headBar.add(toolBar, BorderLayout.NORTH);
@@ -245,6 +251,24 @@ public class TuyenDungGUI extends JPanel {
         applicantPanel = new JPanel(new BorderLayout());
         applicantPanel.setBackground(Color.WHITE);
         applicantPanel.add(applicantTable, BorderLayout.CENTER);
+        // Thêm sự kiện khi nhấn nút
+        exportExcelBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Chọn nơi lưu file
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Chọn nơi lưu file Excel");
+                int userSelection = fileChooser.showSaveDialog(null);
+
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    String filePath = fileChooser.getSelectedFile().getAbsolutePath() + ".xlsx";
+                    ExcelExporter exporter = new ExcelExporter();
+
+                    // Sử dụng Table để xuất Excel
+                    exporter.exportTableToExcel(applicantTable, filePath);
+                }
+            }
+        });
 
         intvBus = new InterviewsBUS();
         intvList = intvBus.getList();
@@ -481,41 +505,29 @@ public class TuyenDungGUI extends JPanel {
         }
     }
 
+    public void updateExportExcelButtonVisibility(String currentPanel) {
+
+        // Kiểm tra nếu panel hiện tại là "Applicants"
+        if (currentPanel.equals("Applicants")) {
+            exportExcelBtn.setVisible(true);
+        } else {
+            exportExcelBtn.setVisible(false);
+        }
+    }
+
     // Hàm để bật/tắt panel theo tên
     private void togglePanel(String panelName) {
         if (currentPanel.equals(panelName)) {
             // Nếu đang ở panel này, quay về homePanel
+            updateExportExcelButtonVisibility(panelName);
+
             cardLayout.show(mainPanel, "Home");
             currentPanel = "Home";
         } else {
             // Hiển thị panel được chọn và cập nhật trạng thái
+            updateExportExcelButtonVisibility(panelName);
             cardLayout.show(mainPanel, panelName);
             currentPanel = panelName;
-        }
-    }
-
-// Hàm reload dữ liệu card hiện tại
-    private void reloadBtn() {
-        // Kiểm tra card hiện tại và làm mới dữ liệu tương ứng
-        switch (currentPanel) {
-            case "Home":
-                // Làm mới danh sách công việc hoặc dữ liệu liên quan
-                loadJobList();
-                break;
-            case "AddJob":
-                // Làm mới form thêm công việc (reset form)
-                resetAddJobForm();
-                break;
-            case "Applicants":
-                // Làm mới danh sách ứng viên
-                loadApplicantList();
-                break;
-            case "Interviews":
-                // Làm mới danh sách lịch phỏng vấn
-                loadInterviewSchedule();
-                break;
-            default:
-                break;
         }
     }
 
@@ -542,19 +554,25 @@ public class TuyenDungGUI extends JPanel {
 
     }
 
-    private void resetAddJobForm() {
-        // Code để reset form thêm công việc
-        System.out.println("Đang reset form thêm công việc...");
-    }
-
     private void loadApplicantList() {
-        // Code để tải lại danh sách ứng viên
-        System.out.println("Đang tải lại danh sách ứng viên...");
+        applicantBus = new ApplicantsBUS();
+        applicantList = applicantBus.getList();
+        applicantTable = createApplicantTable(applicantList);
+        applicantPanel = new JPanel(new BorderLayout());
+        applicantPanel.setBackground(Color.WHITE);
+        applicantPanel.add(applicantTable, BorderLayout.CENTER);
+
+        mainPanel.add(applicantPanel, "Applicants");
     }
 
     private void loadInterviewSchedule() {
-        // Code để tải lại lịch phỏng vấn
-        System.out.println("Đang tải lại lịch phỏng vấn...");
+        intvList = intvBus.getList();
+        interviewTable = createInterviewTable(intvList);
+        interviewPanel = new JPanel(new BorderLayout());
+        interviewPanel.setBackground(Color.WHITE);
+        interviewPanel.add(interviewTable, BorderLayout.CENTER);
+
+        mainPanel.add(interviewPanel, "Interviews");
     }
 
     private JPanel viewAll(String title, Color headerColor, int flag) {
@@ -657,7 +675,7 @@ public class TuyenDungGUI extends JPanel {
                 position, // Vị Trí
                 department, // Phòng ban
                 date, // Ngày Nộp
-                null, // Trạng Thái (có thể cập nhật sau)
+                intvBus.getStageById(applicant.getId()), // Trạng Thái (có thể cập nhật sau)
                 applicant.getResume() // Link CV
             });
         }
@@ -679,13 +697,13 @@ public class TuyenDungGUI extends JPanel {
                     int id = selectedApplicant.getId();
                     applicantForm = new ApplicantPanel(id);
                     applicantForm.setPreferredSize(new Dimension(800, 500));
-                    applicantForm.addApplicantButton(e -> addApplicant());
-                    applicantForm.exitButton(e -> exitButton(2));
-                    addJobPanel.removeAll();
-                    addJobPanel = new JPanel();
-                    addJobPanel.setBackground(Color.WHITE);
-                    addJobPanel.add(applicantForm);
-                    mainPanel.add(addJobPanel, "Update_Applicant");
+                    applicantForm.addApplicantButton(e -> updateApplicant(id));
+                    applicantForm.exitButton(e -> exitButton(3));
+                    applicantPanel.removeAll();
+                    applicantPanel = new JPanel();
+                    applicantPanel.setBackground(Color.WHITE);
+                    applicantPanel.add(applicantForm);
+                    mainPanel.add(applicantPanel, "Update_Applicant");
                     togglePanel("Update_Applicant");
                 }
             }
@@ -711,10 +729,14 @@ public class TuyenDungGUI extends JPanel {
             String position = intvBus.getPositionById(intv.getId());
             String intverName = intverBus.getFullNamesById(intv.getId());
 
+            // Kiểm tra nếu thông tin về người phỏng vấn không có (null) và thay thế bằng giá trị mặc định
+            if (intverName == null || intverName.trim().isEmpty()) {
+                intverName = "Chưa cập nhật"; // Giá trị mặc định nếu không có người phỏng vấn
+            }
+
             // Định dạng ngày tháng
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String date = intv.getInterview_date().format(formatter);
-
+            String date = intv.getInterview_date() != null ? intv.getInterview_date().format(formatter) : "Chưa cập nhật"; // Nếu ngày phỏng vấn null, thay bằng giá trị mặc định
             // Thêm hàng dữ liệu vào bảng
             intvTable.addRow(new Object[]{
                 Integer.toString(index), // STT
@@ -771,6 +793,16 @@ public class TuyenDungGUI extends JPanel {
             togglePanel("Edit");
         } else if (flag == 2) {
             togglePanel("Home");
+        } else if (flag == 3) {
+            applicantBus = new ApplicantsBUS();
+            applicantList = applicantBus.getList();
+            applicantTable = createApplicantTable(applicantList);
+            applicantPanel.removeAll();
+            applicantPanel = new JPanel(new BorderLayout());
+            applicantPanel.setBackground(Color.WHITE);
+            applicantPanel.add(applicantTable, BorderLayout.CENTER);
+            mainPanel.add(applicantPanel, "Applicants");
+            togglePanel("Applicants");
         }
 
     }
@@ -881,52 +913,63 @@ public class TuyenDungGUI extends JPanel {
         Applicants applicant = new Applicants(applicantId, name, email, phone, resume, applicantDate);
         applicantBus.add(applicant);
 
+        // Lấy thông tin phỏng vấn
+        int intvId = intvBus.getNextId();
+        String dptm = applicantForm.departmentField.getText().trim();
+        String job = applicantForm.positionField.getText().trim();
+        int jobId = jobBus.getIdByPosition(job);
+        LocalDate intvDate = null;
+        LocalTime intvTime = LocalTime.of(0, 00);
+        String stage = "Pending";
+        String note = null;
+        String result = null;
+        Interviews intv = new Interviews(intvId, jobId, applicantId, intvDate, intvTime, stage, note, result);
+        intvBus.add(intv);
+
         JOptionPane.showMessageDialog(this, "Thông tin đã được lưu!");
-        loadJobList();
+        loadApplicantList();
         togglePanel("Home");
     }
 
-    private void updateApplicant() {
-        // Lấy thông tin ứng viên
-        int applicantId = applicantBus.getNextId();
-        String name = applicantForm.nameField.getText().trim();
-        String email = applicantForm.emailField.getText().trim();
-        String phone = applicantForm.phoneField.getText().trim();
-        String resume = applicantForm.cvLinkField.getText().trim();
-        LocalDate applicantDate = LocalDate.now();
+    private void updateApplicant(int id) {
+        // Lấy thông tin cuộc phỏng vấn từ cơ sở dữ liệu
+        Interviews intv = intvBus.getByApplicantId(id);
 
-        // Kiểm tra thông tin ứng viên
-        if (name.isEmpty() || email.isEmpty() || phone.isEmpty() || resume.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Phải điền đầy đủ các thông tin ứng viên!");
-            return;
-        }
+        // Kiểm tra nếu đã có lịch phỏng vấn (kiểm tra interview_date và interview_time)
+        boolean isNewInterview = (intv.getInterview_date() == null || intv.getInterview_time() == null);
 
-        Applicants applicant = new Applicants(applicantId, name, email, phone, resume, applicantDate);
-        applicantBus.add(applicant);
-
-        //them lich phong van
-        int intvId = intvBus.getNextId();
-        String position = applicantForm.positionField.getText().trim();
-        int jobId = jobBus.getIdByPosition(position);
+        // Cập nhật ngày phỏng vấn
         LocalDate intvDate = null;
         if (applicantForm.dateChooser.getDate() != null) {
             intvDate = new java.sql.Date(applicantForm.dateChooser.getDate().getTime()).toLocalDate();
+            if (isNewInterview) {
+                intv.setInterview_date(intvDate); // Thêm lịch phỏng vấn mới
+            } else {
+                intv.setInterview_date(intvDate); // Cập nhật ngày phỏng vấn
+            }
         }
 
+        // Cập nhật giờ phỏng vấn
         LocalTime intvTime = null;
         if (applicantForm.interviewTimeSpinner.getValue() != null) {
             Date spinnerValue = (Date) applicantForm.interviewTimeSpinner.getValue();
             intvTime = spinnerValue.toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalTime();
+            if (isNewInterview) {
+                intv.setInterview_time(intvTime); // Thêm giờ phỏng vấn mới
+            } else {
+                intv.setInterview_time(intvTime); // Cập nhật giờ phỏng vấn
+            }
         }
 
-        if (intvDate != null && intvDate.isBefore(applicantDate)) {
-            JOptionPane.showMessageDialog(null, "Ngày phỏng vấn không được trước ngày ứng tuyển!");
+        // Kiểm tra các điều kiện về ngày và giờ phỏng vấn chỉ khi thêm mới
+        if (isNewInterview && intvDate != null && intvDate.isBefore(LocalDate.now())) {
+            JOptionPane.showMessageDialog(null, "Ngày phỏng vấn không được trước ngày hôm nay!");
             return;
         }
 
-        if (intvDate != null && intvTime != null) {
+        if (isNewInterview && intvDate != null && intvTime != null) {
             LocalDateTime interviewDateTime = LocalDateTime.of(intvDate, intvTime);
             if (interviewDateTime.isBefore(LocalDateTime.now())) {
                 JOptionPane.showMessageDialog(null, "Thời gian phỏng vấn không được trước thời điểm hiện tại!");
@@ -934,13 +977,24 @@ public class TuyenDungGUI extends JPanel {
             }
         }
 
-        String stage = "Pending";
+        // Cập nhật các thông tin khác như kết quả, ghi chú, trạng thái
         String note = applicantForm.noteArea.getText().trim();
-        String result = (String) applicantForm.resultComboBox.getSelectedItem();
-        Interviews intv = new Interviews(intvId, jobId, applicantId, intvDate, intvTime, stage, note, result);
-        intvBus.add(intv);
+        intv.setNote(note);
 
-        //them nguoi phong van
+        String result = (String) applicantForm.resultComboBox.getSelectedItem();
+        intv.setResult(result);
+
+        if (intvDate != null && intvTime != null && result.equals("in progress")) {
+            intv.setInterview_stage("In progress");
+        } else if (intvDate != null && intvTime != null) {
+            intv.setInterview_stage("Completed");
+        }
+
+        // Cập nhật thông tin cuộc phỏng vấn
+        InterviewScheduler scheduler = new InterviewScheduler();
+        intvBus.set(intv); // Cập nhật vào cơ sở dữ liệu
+
+        // Thêm người phỏng vấn
         String name1 = (String) applicantForm.interviewer1ComboBox.getSelectedItem();
         String name2 = (String) applicantForm.interviewer2ComboBox.getSelectedItem();
         String name3 = (String) applicantForm.interviewer3ComboBox.getSelectedItem();
@@ -948,25 +1002,27 @@ public class TuyenDungGUI extends JPanel {
         name2 = (name2 != null && !name2.trim().isEmpty()) ? name2 : null;
         name3 = (name3 != null && !name3.trim().isEmpty()) ? name3 : null;
 
+        emplBus = new EmployeeBus();
         if (name1 != null) {
             int id1 = emplBus.getIdByName(name1);
-            Interviewer intver = new Interviewer(id1, intvId);
+            Interviewer intver = new Interviewer(id1, intv.getId());
             intverBus.add(intver);
         }
         if (name2 != null) {
             int id2 = emplBus.getIdByName(name2);
-            Interviewer intver = new Interviewer(id2, intvId);
+            Interviewer intver = new Interviewer(id2, intv.getId());
             intverBus.add(intver);
         }
         if (name3 != null) {
             int id3 = emplBus.getIdByName(name3);
-            Interviewer intver = new Interviewer(id3, intvId);
+            Interviewer intver = new Interviewer(id3, intv.getId());
             intverBus.add(intver);
         }
 
-        JOptionPane.showMessageDialog(this, "Thông tin đã được lưu!");
-        loadJobList();
-        togglePanel("Home");
+        JOptionPane.showMessageDialog(this, "Thông tin đã được cập nhật!");
+        loadApplicantList();
+        loadInterviewSchedule();
+        togglePanel("Applicants");
     }
 
     public static void main(String[] args) {

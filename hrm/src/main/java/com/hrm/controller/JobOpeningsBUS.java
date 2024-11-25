@@ -69,7 +69,7 @@ public class JobOpeningsBUS {
         return false;
     }
 
-    public ArrayList<JobOpenings> search(Integer id, String position) {
+    public ArrayList<JobOpenings> search(String id, String position) {
         ArrayList<JobOpenings> searchResults = new ArrayList<>();
 
         String idString = (id != null) ? String.valueOf(id) : null;

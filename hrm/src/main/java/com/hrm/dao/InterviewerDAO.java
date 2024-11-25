@@ -56,7 +56,7 @@ public class InterviewerDAO {
 
 public void add(Interviewer intver) {
         String sql = "INSERT INTO interviewer (employee_id, interview_id) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                     "VALUES (?, ?)";
         try (PreparedStatement pstmt = mySQL.getConnection().prepareStatement(sql)) {
             pstmt.setInt(1, intver.getEmployee_id());
             pstmt.setInt(2, intver.getInterview_id());

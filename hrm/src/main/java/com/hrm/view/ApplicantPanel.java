@@ -6,21 +6,27 @@ import com.hrm.controller.EmployeeBus;
 import com.hrm.controller.InterviewerBUS;
 import com.hrm.controller.InterviewsBUS;
 import com.hrm.controller.JobOpeningsBUS;
+import com.hrm.model.Applicants;
 import com.hrm.model.Department;
+import com.hrm.model.Interviews;
 import com.hrm.model.JobOpenings;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import javax.swing.border.Border;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ApplicantPanel extends JPanel {
 
     // Declare all components
-    public JTextField positionField, departmentField;
+    public JTextField positionField, departmentField, nameInfo, phoneInfo, emailInfo, cvInfo;
     public JTextArea nameField, phoneField, emailField;
     public JTextArea cvLinkField;
     public JDateChooser dateChooser;
@@ -32,23 +38,34 @@ public class ApplicantPanel extends JPanel {
     public JSpinner interviewTimeSpinner;
 
     private InterviewsBUS intvBus;
+    private Interviews intv;
     private InterviewerBUS intverBus;
     //private ApplicantsBUS applicantBus;
     private JobOpeningsBUS jobBus;
     private JobOpenings job;
     private EmployeeBus empBus;
+    private EmployeeBus emp;
     private DepartmentBUS dptmBus;
+    private Applicants appli;
+    private ApplicantsBUS appliBus;
 
     public ApplicantPanel(int id) {
         jobBus = new JobOpeningsBUS();
         intvBus = new InterviewsBUS();
         empBus = new EmployeeBus();
         dptmBus = new DepartmentBUS();
-        job = jobBus.get(id);
+        appliBus = new ApplicantsBUS();
+        appli = appliBus.get(id);
+        intv = intvBus.getByApplicantId(id);
         init();
     }
-    
-    public ApplicantPanel(int id, int flag){
+
+    public ApplicantPanel(int id, int flag) {
+        jobBus = new JobOpeningsBUS();
+        intvBus = new InterviewsBUS();
+        dptmBus = new DepartmentBUS();
+        job = jobBus.get(id);
+
         setLayout(new BorderLayout());
 
         JPanel headerPanel = createHeaderPanel("Đề xuất ứng viên");
@@ -66,7 +83,7 @@ public class ApplicantPanel extends JPanel {
     private void init() {
         setLayout(new BorderLayout());
 
-        JPanel headerPanel = createHeaderPanel("Đề xuất ứng viên");
+        JPanel headerPanel = createHeaderPanel("Cập nhật ứng viên");
         add(headerPanel, BorderLayout.NORTH);
 
         // Form Panel
@@ -78,7 +95,7 @@ public class ApplicantPanel extends JPanel {
         add(footerPanel, BorderLayout.SOUTH);
     }
 
-    private JPanel createFormPanel1(){
+    private JPanel createFormPanel1() {
         JPanel left = new JPanel(new GridBagLayout());
         left.setBackground(new Color(255, 204, 153));
 
@@ -92,9 +109,37 @@ public class ApplicantPanel extends JPanel {
         Font fieldFont = new Font("Arial", Font.PLAIN, 16);
         Border fieldBorder = BorderFactory.createLineBorder(Color.DARK_GRAY, 1);
 
-        // Row 1
         gbc.gridx = 0;
         gbc.gridy = 1;
+        JLabel dptm = new JLabel("Phòng ban");
+        dptm.setFont(labelFont);
+        left.add(dptm, gbc);
+
+        gbc.gridx = 1;
+        Department department = dptmBus.get(job.getDepartment_id());
+        departmentField = new JTextField(department.getName());
+        departmentField.setFont(fieldFont);
+        departmentField.setBorder(fieldBorder);
+        //departmentField.setRows(1);
+        departmentField.setColumns(20);
+        left.add(departmentField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        JLabel position = new JLabel("Vị trí tuyển dụng");
+        position.setFont(labelFont);
+        left.add(position, gbc);
+
+        gbc.gridx = 1;
+        positionField = new JTextField(job.getPosition());
+        positionField.setFont(fieldFont);
+        positionField.setBorder(fieldBorder);
+        //positionField.setRows(1);
+        positionField.setColumns(20);
+        left.add(positionField, gbc);
+        // Row 1
+        gbc.gridx = 0;
+        gbc.gridy = 3;
 
         JLabel name = new JLabel("Họ và tên");
         name.setFont(labelFont);
@@ -105,14 +150,14 @@ public class ApplicantPanel extends JPanel {
         nameField.setFont(fieldFont);
         nameField.setBorder(fieldBorder);
         nameField.setRows(1);
-        nameField.setColumns(15);
+        nameField.setColumns(20);
         nameField.setLineWrap(true);
         nameField.setWrapStyleWord(true);
         left.add(nameField, gbc);
 
         // Row 2
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 4;
         JLabel phone = new JLabel("Số điện thoại");
         phone.setFont(labelFont);
         left.add(phone, gbc);
@@ -122,12 +167,12 @@ public class ApplicantPanel extends JPanel {
         phoneField.setFont(fieldFont);
         phoneField.setBorder(fieldBorder);
         phoneField.setRows(1);
-        phoneField.setColumns(15);
+        phoneField.setColumns(20);
         left.add(phoneField, gbc);
 
         // Row 3
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 5;
         JLabel email = new JLabel("Email");
         email.setFont(labelFont);
         left.add(email, gbc);
@@ -137,12 +182,12 @@ public class ApplicantPanel extends JPanel {
         emailField.setFont(fieldFont);
         emailField.setBorder(fieldBorder);
         emailField.setRows(1);
-        emailField.setColumns(15);
+        emailField.setColumns(20);
         left.add(emailField, gbc);
 
         // Row 4
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 6;
         JLabel cv = new JLabel("CV");
         cv.setFont(labelFont);
         left.add(cv, gbc);
@@ -151,13 +196,13 @@ public class ApplicantPanel extends JPanel {
         cvLinkField = new JTextArea();
         cvLinkField.setFont(fieldFont);
         cvLinkField.setBorder(fieldBorder);
-        cvLinkField.setRows(1);
-        cvLinkField.setColumns(15);
+        cvLinkField.setRows(2);
+        cvLinkField.setColumns(20);
         left.add(cvLinkField, gbc);
-        
+
         return left;
     }
-    
+
     private JPanel createFormPanel2() {
         JPanel formPanel = new JPanel(new GridLayout(1, 2));
 
@@ -185,14 +230,11 @@ public class ApplicantPanel extends JPanel {
         left.add(name, gbc);
 
         gbc.gridx = 1;
-        nameField = new JTextArea();
-        nameField.setFont(fieldFont);
-        nameField.setBorder(fieldBorder);
-        nameField.setRows(1);
-        nameField.setColumns(15);
-        nameField.setLineWrap(true);
-        nameField.setWrapStyleWord(true);
-        left.add(nameField, gbc);
+        nameInfo = new JTextField(appli.getFull_name());
+        nameInfo.setFont(fieldFont);
+        nameInfo.setBorder(fieldBorder);
+        nameInfo.setColumns(15);
+        left.add(nameInfo, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -201,8 +243,8 @@ public class ApplicantPanel extends JPanel {
         right.add(dptm, gbc);
 
         gbc.gridx = 1;
-        Department department = dptmBus.get(job.getDepartment_id());
-        departmentField = new JTextField(department.getName());
+        String dptmName = intvBus.getDepartmentName(appli.getId());
+        departmentField = new JTextField(dptmName);
         departmentField.setFont(fieldFont);
         departmentField.setBorder(fieldBorder);
         //departmentField.setRows(1);
@@ -217,12 +259,11 @@ public class ApplicantPanel extends JPanel {
         left.add(phone, gbc);
 
         gbc.gridx = 1;
-        phoneField = new JTextArea();
-        phoneField.setFont(fieldFont);
-        phoneField.setBorder(fieldBorder);
-        phoneField.setRows(1);
-        phoneField.setColumns(15);
-        left.add(phoneField, gbc);
+        phoneInfo = new JTextField(appli.getPhone());
+        phoneInfo.setFont(fieldFont);
+        phoneInfo.setBorder(fieldBorder);
+        phoneInfo.setColumns(15);
+        left.add(phoneInfo, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -231,7 +272,8 @@ public class ApplicantPanel extends JPanel {
         right.add(position, gbc);
 
         gbc.gridx = 1;
-        positionField = new JTextField(job.getPosition());
+        String jobName = intvBus.getPositionByApplicantId(appli.getId());
+        positionField = new JTextField(jobName);
         positionField.setFont(fieldFont);
         positionField.setBorder(fieldBorder);
         //positionField.setRows(1);
@@ -246,12 +288,11 @@ public class ApplicantPanel extends JPanel {
         left.add(email, gbc);
 
         gbc.gridx = 1;
-        emailField = new JTextArea();
-        emailField.setFont(fieldFont);
-        emailField.setBorder(fieldBorder);
-        emailField.setRows(1);
-        emailField.setColumns(15);
-        left.add(emailField, gbc);
+        emailInfo = new JTextField(appli.getEmail());
+        emailInfo.setFont(fieldFont);
+        emailInfo.setBorder(fieldBorder);
+        emailInfo.setColumns(15);
+        left.add(emailInfo, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -262,6 +303,7 @@ public class ApplicantPanel extends JPanel {
         gbc.gridx = 1;
         String[] results = {"in progress", "passed", "failed"};
         resultComboBox = new JComboBox<>(results);
+        resultComboBox.setSelectedItem(intv.getResult());
         right.add(resultComboBox, gbc);
 
         // Row 4
@@ -272,12 +314,11 @@ public class ApplicantPanel extends JPanel {
         left.add(cv, gbc);
 
         gbc.gridx = 1;
-        cvLinkField = new JTextArea();
-        cvLinkField.setFont(fieldFont);
-        cvLinkField.setBorder(fieldBorder);
-        cvLinkField.setRows(1);
-        cvLinkField.setColumns(15);
-        left.add(cvLinkField, gbc);
+        cvInfo = new JTextField(appli.getResume());
+        cvInfo.setFont(fieldFont);
+        cvInfo.setBorder(fieldBorder);
+        cvInfo.setColumns(15);
+        left.add(cvInfo, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -298,6 +339,7 @@ public class ApplicantPanel extends JPanel {
         gbc.gridheight = 1; // Reset lại
 
         // Row 5
+        // row 5: Xử lý ngày phỏng vấn (JDateChooser)
         gbc.gridx = 0;
         gbc.gridy = 5;
         JLabel dl = new JLabel("Lịch phỏng vấn");
@@ -305,19 +347,41 @@ public class ApplicantPanel extends JPanel {
         left.add(dl, gbc);
 
         gbc.gridx = 1;
+        LocalDate localDate = intv.getInterview_date();
         dateChooser = new JDateChooser();
-        //dateChooser.setDateFormatString("dd/MM/yyyy");
+
+// Kiểm tra nếu ngày phỏng vấn không phải null trước khi gán giá trị
+        if (localDate != null) {
+            Date date1 = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            dateChooser.setDate(date1);
+        } else {
+            dateChooser.setDate(null); // Nếu giá trị là null, để trống
+        }
+
         dateChooser.setPreferredSize(new Dimension(120, 25));
         left.add(dateChooser, gbc);
 
-        // row 6
+// row 6: Xử lý giờ phỏng vấn (JSpinner)
         gbc.gridx = 1;
         gbc.gridy = 6;
 
-        interviewTimeSpinner = new JSpinner(new SpinnerDateModel());
+        LocalTime localTime = intv.getInterview_time();
+        interviewTimeSpinner = new JSpinner();
+
+// Kiểm tra nếu giờ phỏng vấn không phải null trước khi gán giá trị
+        if (localTime != null) {
+            Date date2 = Date.from(localTime.atDate(LocalDate.now()) // Kết hợp với ngày hiện tại
+                    .atZone(ZoneId.systemDefault()) // Chuyển sang thời gian theo múi giờ hệ thống
+                    .toInstant());
+            interviewTimeSpinner.setModel(new SpinnerDateModel(date2, null, null, java.util.Calendar.HOUR_OF_DAY));
+        } else {
+            // Nếu giờ phỏng vấn là null, bạn có thể thiết lập một giá trị mặc định, ví dụ: giờ hiện tại
+            Date currentDate = new Date(); // Thời gian hiện tại
+            interviewTimeSpinner.setModel(new SpinnerDateModel(currentDate, null, null, java.util.Calendar.HOUR_OF_DAY));
+        }
+
         JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(interviewTimeSpinner, "HH:mm");
         interviewTimeSpinner.setEditor(timeEditor);
-        interviewTimeSpinner.setValue(new java.util.Date()); // default to current time
         left.add(interviewTimeSpinner, gbc);
 
         // Row 7

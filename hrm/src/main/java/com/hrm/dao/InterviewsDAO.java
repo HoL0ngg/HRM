@@ -49,7 +49,7 @@ public class InterviewsDAO {
     }
 
     public void set(Interviews intv) {
-        String sql = "UPDATE job_openings SET "
+        String sql = "UPDATE interviews SET "
                 + "job_open_id = ?, applicants_id = ?, interview_date = ?, interview_time = ?, interview_stage = ?, note = ?, result = ? "
                 + "WHERE id = ?";
         try (PreparedStatement pstmt = mySQL.getConnection().prepareStatement(sql)) {
@@ -71,7 +71,7 @@ public class InterviewsDAO {
     }
 
     public void setStage(Interviews intv) {
-        String sql = "UPDATE job_openings SET "
+        String sql = "UPDATE interviews SET "
                 + "interview_stage = ?, note = ?, result = ? "
                 + "WHERE id = ?";
         try (PreparedStatement pstmt = mySQL.getConnection().prepareStatement(sql)) {

@@ -152,6 +152,8 @@ public class MainFrame extends JFrame {
                 BaoCaoLabel.setFont(MenuFont);
                 contentPane.add(BaoCaoPanel);
                 contentPane.add(BaoCaoLabel);
+                BaoCaoPanel.addMouseListener(controller);
+
 
                 RoundedPanel PhatTrienPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/promotion.png").getAbsolutePath());

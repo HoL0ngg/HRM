@@ -152,7 +152,6 @@ public class SalaryNhanVien extends javax.swing.JFrame {
         txtChuyenCan = new javax.swing.JLabel();
         txtNgayHieuLuc = new javax.swing.JLabel();
         txtTongLuong = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 245, 249));
@@ -191,7 +190,7 @@ public class SalaryNhanVien extends javax.swing.JFrame {
         );
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jLabel2.setText("Chi tiết lương tháng ");
+        jLabel2.setText("Chi tiết lương  ");
 
         txtViTri.setFont(new java.awt.Font("Segoe UI", 0, 45)); // NOI18N
 
@@ -253,9 +252,6 @@ public class SalaryNhanVien extends javax.swing.JFrame {
         txtTongLuong.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         txtTongLuong.setText(" ");
 
-        jComboBox1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -266,8 +262,6 @@ public class SalaryNhanVien extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -322,9 +316,7 @@ public class SalaryNhanVien extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtHoTen, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -439,7 +431,6 @@ public class SalaryNhanVien extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnYeuCauThayDoi;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -481,4 +472,38 @@ public class SalaryNhanVien extends javax.swing.JFrame {
         this.txtNgayHieuLuc.setText(salary.getPayday()+"");
         this.txtGhiChu.setText(salary.getNote()+" ");
     }
+    private void loadDataForSelectedMonth() {
+    int selectedMonth = this.cbbthang.getSelectedIndex() + 1; // Lấy tháng từ ComboBox
+    SalaryDAO salaryDAO = SalaryDAO.getInstance();
+
+    // Lấy danh sách lương theo tháng đã chọn
+    ArrayList<Salary> salaryList = salaryDAO.selectByMonth(selectedMonth);
+
+    // Kiểm tra xem có dữ liệu hay không
+    if (!salaryList.isEmpty()) {
+        // Giả sử lấy lương của nhân viên đầu tiên trong danh sách (hoặc bạn có thể chọn nhân viên khác)
+        Salary salary = salaryList.get(0);
+
+        // Cập nhật các trường thông tin
+        txtTongLuongTheoGio.setText(salary.getHourly_salary().toString());
+        txtTongLuongTangCa.setText(salary.getOvertime_hourly_salary().toString());
+        txtChuyenCan.setText(String.valueOf(salary.getAttendance()));
+        txtThuong.setText(salary.getBonus().toString());
+        txtKhauTru.setText(salary.getDeductions().toString());
+        txtTongLuong.setText(salary.getnet_salary().toString());
+        txtNgayHieuLuc.setText(salary.getPayday().toString());
+        txtGhiChu.setText(salary.getNote());
+    } else {
+        // Nếu không có dữ liệu cho tháng này, xóa các giá trị trong các trường
+        txtTongLuongTheoGio.setText("");
+        txtTongLuongTangCa.setText("");
+        txtChuyenCan.setText("");
+        txtThuong.setText("");
+        txtKhauTru.setText("");
+        txtTongLuong.setText("");
+        txtNgayHieuLuc.setText("");
+        txtGhiChu.setText("");
+    }
+}
+
 }

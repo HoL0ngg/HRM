@@ -1,19 +1,16 @@
 com\hrm\view\ChamCongFrame$3.class
 com\hrm\model\SalaryChangeHistory.class
 com\hrm\view\LoginFrame$4.class
-com\hrm\view\ReportView1$1.class
 com\hrm\view\SalaryFrame$23.class
 com\hrm\view\TuyenDungGUI$1.class
 com\hrm\view\SalaryFrame$13.class
 com\hrm\view\SalaryUpdateDialog$1.class
 com\hrm\view\ReportSaveView.class
 com\hrm\view\MainFrame$1.class
-com\hrm\view\ReportEmployeeView$1.class
 com\hrm\view\SalaryFrame$10.class
 com\hrm\view\SalaryFrame$20.class
 com\hrm\controller\MainController.class
 com\hrm\view\SalaryUpdateDialog.class
-com\hrm\view\ReportView1.class
 com\hrm\view\SalaryFrame$26.class
 com\hrm\view\SalaryFrame$4.class
 com\hrm\utils\StatusRenderer.class
@@ -25,7 +22,6 @@ com\hrm\view\SalaryFrame$25.class
 com\hrm\controller\EnterController.class
 com\hrm\controller\ChamCongController.class
 com\hrm\model\Interviews$interviews_stage.class
-com\hrm\view\ReportOverrallView.class
 com\hrm\view\ChamCongFrame$1.class
 com\hrm\model\Position.class
 com\hrm\view\ReportEffectWorkView.class
@@ -37,7 +33,6 @@ com\hrm\view\SalaryFrame$18.class
 com\hrm\model\Employee$Status.class
 com\hrm\model\TimeKeeping.class
 com\hrm\view\LoginFrame$3.class
-com\hrm\view\ReportEmployeeView.class
 com\hrm\dao\SalaryChangeHistoryDAO.class
 com\hrm\view\TrainingDevelopmentView.class
 com\hrm\model\TimeKeeping$Status.class
@@ -87,7 +82,6 @@ com\hrm\view\SalaryNhanVien$2.class
 com\hrm\model\Account.class
 com\hrm\view\SalaryFrame$14.class
 com\hrm\view\ChamCongFrame$4.class
-com\hrm\view\ReportEmployeeView$2.class
 com\hrm\view\SalaryFrame$15.class
 com\hrm\view\LoginFrame$2.class
 com\hrm\view\SalaryDetailDialog.class
@@ -110,5 +104,3 @@ com\hrm\view\LoginFrame$1.class
 com\hrm\view\SalaryFrame$21.class
 com\hrm\view\ChamCongFrame.class
 com\hrm\view\RoundedPanel.class
-com\hrm\view\ReportOverrallView$1.class
-com\hrm\view\ReportView1$2.class

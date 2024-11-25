@@ -360,9 +360,9 @@ public class SalaryNhanVien extends javax.swing.JFrame {
                             .addComponent(txtTongLuong)
                             .addComponent(jLabel10))))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(txtNgayHieuLuc))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtNgayHieuLuc)
+                    .addComponent(jLabel11))
                 .addContainerGap(204, Short.MAX_VALUE))
         );
 
@@ -472,38 +472,7 @@ public class SalaryNhanVien extends javax.swing.JFrame {
         this.txtNgayHieuLuc.setText(salary.getPayday()+"");
         this.txtGhiChu.setText(salary.getNote()+" ");
     }
-    private void loadDataForSelectedMonth() {
-    int selectedMonth = this.cbbthang.getSelectedIndex() + 1; // Lấy tháng từ ComboBox
-    SalaryDAO salaryDAO = SalaryDAO.getInstance();
+    
 
-    // Lấy danh sách lương theo tháng đã chọn
-    ArrayList<Salary> salaryList = salaryDAO.selectByMonth(selectedMonth);
-
-    // Kiểm tra xem có dữ liệu hay không
-    if (!salaryList.isEmpty()) {
-        // Giả sử lấy lương của nhân viên đầu tiên trong danh sách (hoặc bạn có thể chọn nhân viên khác)
-        Salary salary = salaryList.get(0);
-
-        // Cập nhật các trường thông tin
-        txtTongLuongTheoGio.setText(salary.getHourly_salary().toString());
-        txtTongLuongTangCa.setText(salary.getOvertime_hourly_salary().toString());
-        txtChuyenCan.setText(String.valueOf(salary.getAttendance()));
-        txtThuong.setText(salary.getBonus().toString());
-        txtKhauTru.setText(salary.getDeductions().toString());
-        txtTongLuong.setText(salary.getnet_salary().toString());
-        txtNgayHieuLuc.setText(salary.getPayday().toString());
-        txtGhiChu.setText(salary.getNote());
-    } else {
-        // Nếu không có dữ liệu cho tháng này, xóa các giá trị trong các trường
-        txtTongLuongTheoGio.setText("");
-        txtTongLuongTangCa.setText("");
-        txtChuyenCan.setText("");
-        txtThuong.setText("");
-        txtKhauTru.setText("");
-        txtTongLuong.setText("");
-        txtNgayHieuLuc.setText("");
-        txtGhiChu.setText("");
-    }
-}
 
 }

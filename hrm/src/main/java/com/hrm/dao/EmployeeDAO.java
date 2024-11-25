@@ -52,6 +52,7 @@ public class EmployeeDAO implements DAOInterface<Employee> {
            + "JOIN departments d ON e.departments_id = d.id "
            + "WHERE e.isDeleted = 0";
         
+        
         Connection con = JDBCUtil.createConnection();
         ArrayList<Employee> employeeList = new ArrayList<>();
 

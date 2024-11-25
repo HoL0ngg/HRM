@@ -29,6 +29,7 @@ public class MainFrame extends JFrame {
                 this.employee = employee;
                 this.init();
         }
+        
 
         private void init() {
                 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

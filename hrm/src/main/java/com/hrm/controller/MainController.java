@@ -12,6 +12,7 @@ import com.hrm.view.CongViecFrame;
 import com.hrm.view.LoginFrame;
 import com.hrm.view.MainFrame;
 import com.hrm.view.SalaryFrame;
+import com.hrm.view.SalaryNhanVien;
 
 public class MainController implements MouseListener {
     private MainFrame mainFrame;
@@ -36,8 +37,14 @@ public class MainController implements MouseListener {
                 mainFrame.dispose();
                 break;
             case "LuongPanel":
-                new SalaryFrame().setVisible(true);
+                if (mainFrame.getEmployee().getId()==27 || mainFrame.getEmployee().getId()== 421 ){
+                new SalaryFrame(mainFrame.getEmployee());
                 mainFrame.dispose();
+                }
+                else {
+                    new SalaryNhanVien(mainFrame.getEmployee());
+                }
+                
                 break;
             case "CongViecPanel":
                 new CongViecFrame(EmployeeDAO.getInstance().selectByID(mainFrame.getEmployee().getId()));

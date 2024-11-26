@@ -17,8 +17,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class EmployeeDAO implements DAOInterface<Employee> {
+    
+     private MySQLConnect mySQL = new MySQLConnect();
     public EmployeeDAO() {
     }
 
@@ -39,6 +43,26 @@ public class EmployeeDAO implements DAOInterface<Employee> {
     @Override
     public boolean capnhat(Employee object) {
         throw new UnsupportedOperationException("Unimplemented method 'capnhat'");
+    }
+
+    public ArrayList<Employee> getNameList() {
+        // TODO Auto-generated method stub
+        ArrayList<Employee> empList = new ArrayList<>();
+        String sql = "SELECT id, name FROM employee WHERE 1";
+        try (ResultSet rs = mySQL.executeQuery(sql)) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+
+                Employee emp = new Employee(id, name);
+                empList.add(emp);
+            }
+            rs.close();
+            mySQL.disConnect();
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return empList;
     }
 
     @Override

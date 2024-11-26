@@ -5,28 +5,30 @@
 package com.hrm.model;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  *
  * @author MSI
  */
 public class Interviews {
+
     private int id;
     private int job_open_id;
     private int applicants_id;
-    private LocalDate interviews_date;
+    private LocalDate interview_date;
+    private LocalTime interview_time;
+    private String interview_stage, note, result;
 
-    private enum interviews_stage {
-    };
-
-    private String note;
-
-    public Interviews(int id, int job_open_id, int applicants_id, LocalDate interviews_date, String note) {
+    public Interviews(int id, int job_open_id, int applicants_id, LocalDate interview_date, LocalTime interview_time, String interview_stage, String note, String result) {
         this.id = id;
         this.job_open_id = job_open_id;
         this.applicants_id = applicants_id;
-        this.interviews_date = interviews_date;
+        this.interview_date = interview_date;
+        this.interview_stage = interview_stage;
+        this.interview_time = interview_time;
         this.note = note;
+        this.result = result;
     }
 
     public int getId() {
@@ -53,12 +55,28 @@ public class Interviews {
         this.applicants_id = applicants_id;
     }
 
-    public LocalDate getInterviews_date() {
-        return interviews_date;
+    public LocalDate getInterview_date() {
+        return interview_date;
     }
 
-    public void setInterviews_date(LocalDate interviews_date) {
-        this.interviews_date = interviews_date;
+    public void setInterview_date(LocalDate interview_date) {
+        this.interview_date = interview_date;
+    }
+
+    public LocalTime getInterview_time() {
+        return interview_time;
+    }
+
+    public void setInterview_time(LocalTime interview_time) {
+        this.interview_time = interview_time;
+    }
+
+    public String getInterview_stage() {
+        return interview_stage;
+    }
+
+    public void setInterview_stage(String interview_stage) {
+        this.interview_stage = interview_stage;
     }
 
     public String getNote() {
@@ -67,6 +85,14 @@ public class Interviews {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 
 }

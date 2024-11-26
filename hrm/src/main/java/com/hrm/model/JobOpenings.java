@@ -8,15 +8,17 @@ public class JobOpenings {
     private String position;
     private LocalDate opening_date;
     private LocalDate closing_date;
-    private String status;
+    private String salary,status,detail;
 
-    public JobOpenings(int id, int department_id, String position, LocalDate opening_date, LocalDate closing_date, String status) {
+    public JobOpenings(int id, int department_id, String position,String salary, LocalDate opening_date, LocalDate closing_date, String status,String detail) {
         this.id = id;
         this.department_id = department_id;
         this.position = position;
         this.opening_date = opening_date;
         this.closing_date = closing_date;
         this.status = status;
+        this.salary = salary;
+        this.detail = detail;
     }
 
     public int getId() {
@@ -25,6 +27,22 @@ public class JobOpenings {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public void setSalary(String salary) {
+        this.salary = salary;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public int getDepartment_id() {

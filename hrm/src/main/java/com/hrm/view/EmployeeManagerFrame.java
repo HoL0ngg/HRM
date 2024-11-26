@@ -428,7 +428,7 @@ public class EmployeeManagerFrame extends javax.swing.JFrame {
             tableData[i][2] = history.getOldSalary();
             tableData[i][3] = history.getNewSalary();
             tableData[i][4] = history.getReasons();
-            tableData[i][5] = history.getChangeDate();
+            tableData[i][5] = history.getchangeDateBrowse();
             tableData[i][6] = history.getApprovedBy().getName();
             tableData[i][7] = history.getComments();
         }

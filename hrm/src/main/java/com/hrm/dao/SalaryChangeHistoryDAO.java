@@ -68,13 +68,6 @@ public class SalaryChangeHistoryDAO implements DAOInterface<SalaryChangeHistory>
                     int approvedById = rs.getInt("approved_by_id");
                     String approvedByName = rs.getString("approved_by_name");
                     Employee approvedBy = new Employee(approvedById, approvedByName);
-<<<<<<< HEAD
-                    salaryChangeHistory = new SalaryChangeHistory(rs.getInt("id"), employee,
-                            rs.getBigDecimal("old_salary"), rs.getBigDecimal("new_salary"), rs.getString("reasons"),
-                            (LocalDate) rs.getObject("change_date", LocalDate.class), approvedBy,
-                            rs.getString("comments"), rs.getString("status"));
-                }
-=======
                     salaryChangeHistory = new SalaryChangeHistory(
                         rs.getInt("id"),
                         employee,
@@ -87,7 +80,6 @@ public class SalaryChangeHistoryDAO implements DAOInterface<SalaryChangeHistory>
                         rs.getString("comments"),
                         rs.getString("status")
                 );                }
->>>>>>> VietHoang
             } catch (Throwable var19) {
                 if (pst != null) {
                     try {
@@ -127,17 +119,13 @@ public class SalaryChangeHistoryDAO implements DAOInterface<SalaryChangeHistory>
             try {
                 ResultSet rs = pst.executeQuery();
 
-                while (rs.next()) {
+                while(rs.next()) {
                     int id = rs.getInt("id");
                     BigDecimal oldSalary = rs.getBigDecimal("old_salary");
                     BigDecimal newSalary = rs.getBigDecimal("new_salary");
                     String reasons = rs.getString("reasons");
-<<<<<<< HEAD
-                    LocalDate changeDate = (LocalDate) rs.getObject("change_date", LocalDate.class);
-=======
                     LocalDate changeDateSend = (LocalDate)rs.getObject("change_date_send", LocalDate.class);
                     LocalDate changeDateBrowse= (LocalDate)rs.getObject("change_date_browse", LocalDate.class);
->>>>>>> VietHoang
                     String comments = rs.getString("comments");
                     String status = rs.getString("status");
                     int employeeId = rs.getInt("employee_id");
@@ -154,11 +142,6 @@ public class SalaryChangeHistoryDAO implements DAOInterface<SalaryChangeHistory>
                     Employee approvedBy = new Employee();
                     approvedBy.setId(approvedById);
                     approvedBy.setName(approvedByName);
-<<<<<<< HEAD
-                    SalaryChangeHistory salaryChangeHistory = new SalaryChangeHistory(id, employee, oldSalary,
-                            newSalary, reasons, changeDate, approvedBy, comments, status);
-                    salaryChangeHistoryList.add(salaryChangeHistory);
-=======
                     SalaryChangeHistory salaryChangeHistory = new SalaryChangeHistory(
                         id,
                         employee,
@@ -171,7 +154,6 @@ public class SalaryChangeHistoryDAO implements DAOInterface<SalaryChangeHistory>
                         comments,
                         status
                 );                    salaryChangeHistoryList.add(salaryChangeHistory);
->>>>>>> VietHoang
                 }
             } catch (Throwable var28) {
                 if (pst != null) {
@@ -213,17 +195,13 @@ public class SalaryChangeHistoryDAO implements DAOInterface<SalaryChangeHistory>
             try {
                 ResultSet rs = pst.executeQuery();
 
-                while (rs.next()) {
+                while(rs.next()) {
                     int id = rs.getInt("id");
                     BigDecimal oldSalary = rs.getBigDecimal("old_salary");
                     BigDecimal newSalary = rs.getBigDecimal("new_salary");
                     String reasons = rs.getString("reasons");
-<<<<<<< HEAD
-                    LocalDate changeDate = (LocalDate) rs.getObject("change_date", LocalDate.class);
-=======
                     LocalDate changeDateSend = (LocalDate)rs.getObject("change_date_send", LocalDate.class);
                     LocalDate changeDateBrowse= (LocalDate)rs.getObject("change_date_browse", LocalDate.class);
->>>>>>> VietHoang
                     String comments = rs.getString("comments");
                     String status = rs.getString("status");
                     int employeeId = rs.getInt("employee_id");
@@ -236,12 +214,7 @@ public class SalaryChangeHistoryDAO implements DAOInterface<SalaryChangeHistory>
                     Employee approvedBy = new Employee();
                     approvedBy.setId(approvedById);
                     approvedBy.setName(approvedByName);
-<<<<<<< HEAD
-                    SalaryChangeHistory salaryChangeHistory = new SalaryChangeHistory(id, employee, oldSalary,
-                            newSalary, reasons, changeDate, approvedBy, comments, status);
-=======
                     SalaryChangeHistory salaryChangeHistory = new SalaryChangeHistory(id, employee, oldSalary, newSalary, reasons, changeDateSend,changeDateBrowse, approvedBy, comments, status);
->>>>>>> VietHoang
                     salaryChangeHistoryList.add(salaryChangeHistory);
                 }
             } catch (Throwable var26) {
@@ -270,58 +243,6 @@ public class SalaryChangeHistoryDAO implements DAOInterface<SalaryChangeHistory>
     }
 
     public boolean update(SalaryChangeHistory history) {
-<<<<<<< HEAD
-        String sql = "UPDATE salary_change_history SET new_salary = ?, reasons = ?, comments = ?, approved_by = ?, status = ? WHERE id = ?";
-        Connection con = JDBCUtil.createConnection();
-        boolean updated = false;
-
-        try {
-            PreparedStatement pst = con.prepareStatement(sql);
-
-            try {
-                pst.setBigDecimal(1, history.getNewSalary());
-                pst.setString(2, history.getReasons());
-                pst.setString(3, history.getComments());
-                pst.setInt(4, history.getApprovedBy().getId());
-                pst.setString(5, history.getStatus());
-                pst.setInt(6, history.getId());
-                updated = pst.executeUpdate() > 0;
-            } catch (Throwable var14) {
-                if (pst != null) {
-                    try {
-                        pst.close();
-                    } catch (Throwable var13) {
-                        var14.addSuppressed(var13);
-                    }
-                }
-
-                throw var14;
-            }
-
-            if (pst != null) {
-                pst.close();
-            }
-        } catch (SQLException var15) {
-            SQLException e = var15;
-            e.printStackTrace();
-        } finally {
-            JDBCUtil.closeConnection(con);
-        }
-
-        return updated;
-    }
-
-    public ArrayList<SalaryChangeHistory> selectByMonthdaxem(int month) {
-        String sql = "SELECT sch.id, e.id AS employee_id, e.name AS employee_name, sch.old_salary, " +
-                "sch.new_salary, sch.change_date, sch.reasons, sch.approved_by, sch.comments " +
-                "FROM salary_change_history sch " +
-                "JOIN employee e ON sch.employee_id = e.id " +
-                "LEFT JOIN employee e2 ON sch.approved_by = e2.id " + // LEFT JOIN để lấy tên người duyệt
-                "WHERE MONTH(sch.change_date) = ?"; // Lọc theo tháng
-
-        Connection con = JDBCUtil.createConnection();
-        ArrayList<SalaryChangeHistory> historyList = new ArrayList<>();
-=======
     String sql = "UPDATE salary_change_history "
             + "SET comments = ?, approved_by = ?, status = ?, change_date_browse = ? "
             + "WHERE id = ?";
@@ -452,11 +373,9 @@ public class SalaryChangeHistoryDAO implements DAOInterface<SalaryChangeHistory>
 
     try {
         PreparedStatement pst = con.prepareStatement(sql);
->>>>>>> VietHoang
 
         try {
-            PreparedStatement pst = con.prepareStatement(sql);
-            pst.setInt(1, month); // Truyền tháng vào tham số
+            pst.setInt(1, month); // Chỉ truyền tháng vào tham số
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
@@ -467,10 +386,9 @@ public class SalaryChangeHistoryDAO implements DAOInterface<SalaryChangeHistory>
                 LocalDate changeDateSend = rs.getDate("change_date_send").toLocalDate();
                 LocalDate changeDateBrowse = rs.getDate("change_date_Browse").toLocalDate();
                 String reasons = rs.getString("reasons");
-                String approvedBy = rs.getString("e2.name"); // Lấy tên người duyệt
-                String comments = rs.getString("comments");
+                String status = rs.getString("status");
 
-                // Tạo đối tượng SalaryChangeHistory và gán giá trị
+                // Tạo đối tượng SalaryChangeHistory với thông tin cần thiết
                 SalaryChangeHistory history = new SalaryChangeHistory();
                 history.setId(id);
                 history.setEmployeeName(employeeName);
@@ -479,85 +397,35 @@ public class SalaryChangeHistoryDAO implements DAOInterface<SalaryChangeHistory>
                 history.setchangeDateSend(changeDateSend);
                 history.setchangeDateBrowse(changeDateBrowse);
                 history.setReasons(reasons);
-                history.setApprovedBy(approvedBy); // Người duyệt
-                history.setComments(comments); // Phản hồi
+                history.setStatus(status);
 
                 // Thêm vào danh sách kết quả
                 historyList.add(history);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            JDBCUtil.closeConnection(con);
-        }
-
-        return historyList;
-    }
-
-    public ArrayList<SalaryChangeHistory> selectByMonth(int month) {
-        String sql = "SELECT sch.id, e.name AS employee_name, sch.old_salary, sch.new_salary, sch.change_date, " +
-                "sch.reasons, sch.status " +
-                "FROM salary_change_history sch " +
-                "JOIN employee e ON sch.employee_id = e.id " +
-                "WHERE MONTH(sch.change_date) = ?"; // Chỉ lọc theo tháng
-
-<<<<<<< HEAD
-        Connection con = JDBCUtil.createConnection();
-        ArrayList<SalaryChangeHistory> historyList = new ArrayList<>();
-
-        try {
-            PreparedStatement pst = con.prepareStatement(sql);
-
-            try {
-                pst.setInt(1, month); // Chỉ truyền tháng vào tham số
-                ResultSet rs = pst.executeQuery();
-
-                while (rs.next()) {
-                    int id = rs.getInt("id");
-                    String employeeName = rs.getString("employee_name");
-                    BigDecimal oldSalary = rs.getBigDecimal("old_salary");
-                    BigDecimal newSalary = rs.getBigDecimal("new_salary");
-                    LocalDate changeDate = rs.getDate("change_date").toLocalDate();
-                    String reasons = rs.getString("reasons");
-                    String status = rs.getString("status");
-
-                    // Tạo đối tượng SalaryChangeHistory với thông tin cần thiết
-                    SalaryChangeHistory history = new SalaryChangeHistory();
-                    history.setId(id);
-                    history.setEmployeeName(employeeName);
-                    history.setOldSalary(oldSalary);
-                    history.setNewSalary(newSalary);
-                    history.setChangeDate(changeDate);
-                    history.setReasons(reasons);
-                    history.setStatus(status);
-
-                    // Thêm vào danh sách kết quả
-                    historyList.add(history);
-                }
-            } catch (Throwable var32) {
-                if (pst != null) {
-                    try {
-                        pst.close();
-                    } catch (Throwable var31) {
-                        var32.addSuppressed(var31);
-                    }
-                }
-
-                throw var32;
-            }
-
+        } catch (Throwable var32) {
             if (pst != null) {
-                pst.close();
+                try {
+                    pst.close();
+                } catch (Throwable var31) {
+                    var32.addSuppressed(var31);
+                }
             }
-        } catch (SQLException var33) {
-            var33.printStackTrace();
-        } finally {
-            JDBCUtil.closeConnection(con);
+
+            throw var32;
         }
 
-        return historyList;
+        if (pst != null) {
+            pst.close();
+        }
+    } catch (SQLException var33) {
+        var33.printStackTrace();
+    } finally {
+        JDBCUtil.closeConnection(con);
     }
-=======
+
+    return historyList;
+}
+
 public ArrayList<SalaryChangeHistory> selectByEmployeeId1(int employeeId) {
     String sql = "SELECT sch.*, e.name AS employee_name, sch.old_salary, sch.new_salary, sch.change_date_send, sch.change_date_browse, approved.id as approved_by_id, approved.name as approved_by_name, " +
                  "sch.reasons, sch.status " +
@@ -672,6 +540,5 @@ public ArrayList<SalaryChangeHistory> selectByEmployeeId2(int employeeId) {
 
     return salaryChangeHistoryList;
 }
->>>>>>> VietHoang
 
 }

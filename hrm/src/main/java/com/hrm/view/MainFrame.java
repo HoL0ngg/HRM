@@ -197,6 +197,7 @@ public class MainFrame extends JFrame {
                 MuctieuLabel.setFont(MenuFont);
                 contentPane.add(MuctieuLabel);
                 contentPane.add(MucTieuPanel);
+                MucTieuPanel.addMouseListener(controller);
 
                 RoundedPanel ExitPanel = new RoundedPanel(20,
                                 new File("hrm/src/main/resources/img/exit.png").getAbsolutePath());

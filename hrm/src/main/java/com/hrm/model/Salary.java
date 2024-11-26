@@ -19,17 +19,17 @@ public class Salary {
     private BigDecimal overtimeSalary;
     private LocalDate payday;
     private String note;
-    private BigDecimal tax;
-    private BigDecimal social_insurance;
     private int attendance;
     private Position position;
-
+    private SalaryChangeHistory salaryChangeHistory;
+    private BigDecimal hourly_salary ;
+    private BigDecimal overtime_hourly_salary;
+    private BigDecimal total_overtime_shifts;
+    private float total_hourly_work;
     public Salary() {
     }
 
-    public Salary(int id, int employeeId, BigDecimal positionSalary, BigDecimal bonus, BigDecimal deductions,
-            BigDecimal net_salary, BigDecimal overtimeSalary, LocalDate payday, String note, int attendance,
-            BigDecimal tax, BigDecimal social_insurance) {
+    public Salary(int id, int employeeId, BigDecimal positionSalary, BigDecimal bonus, BigDecimal deductions, BigDecimal net_salary, BigDecimal overtimeSalary, LocalDate payday, String note, int attendance, BigDecimal hourly_salary, BigDecimal overtime_hourly_salary, BigDecimal total_overtime_shifts, float total_hourly_work) {
         this.id = id;
         this.employeeId = employeeId;
         this.positionSalary = positionSalary;
@@ -40,13 +40,14 @@ public class Salary {
         this.payday = payday;
         this.note = note;
         this.attendance = attendance;
-        this.tax = tax;
-        this.social_insurance = social_insurance;
+        this.hourly_salary = hourly_salary;
+        this.overtime_hourly_salary = overtime_hourly_salary;
+        this.total_overtime_shifts = total_overtime_shifts;
+        this.total_hourly_work = total_hourly_work;
+        
     }
 
-    public Salary(int id, Employee employee, BigDecimal positionSalary, BigDecimal bonus, BigDecimal deductions,
-            BigDecimal net_salary, BigDecimal overtimeSalary, LocalDate payday, String note, int attendance,
-            Position position, BigDecimal tax, BigDecimal social_insurance) {
+    public Salary(int id, Employee employee,SalaryChangeHistory salaryChangeHistory, BigDecimal positionSalary, BigDecimal bonus, BigDecimal deductions, BigDecimal net_salary, BigDecimal overtimeSalary, LocalDate payday, String note, int attendance, Position position,BigDecimal hourly_salary, BigDecimal overtime_hourly_salary, BigDecimal total_overtime_shifts, float total_hourly_work) {
         this.id = id;
         this.employee = employee;
         this.employeeId = employee.getId();
@@ -59,23 +60,45 @@ public class Salary {
         this.note = note;
         this.attendance = attendance;
         this.position = position;
+        this.hourly_salary = hourly_salary;
+        this.overtime_hourly_salary = overtime_hourly_salary;
+        this.total_overtime_shifts = total_overtime_shifts;
+        this.total_hourly_work = total_hourly_work;
+        this.salaryChangeHistory = salaryChangeHistory;
+    }
+    public BigDecimal getHourly_salary() {
+        return hourly_salary;
     }
 
-    public BigDecimal getTax() {
-        return tax;
+    public void setHourly_salary(BigDecimal hourly_salary) {
+        this.hourly_salary = hourly_salary;
     }
 
-    public void setTax(BigDecimal tax) {
-        this.tax = tax;
+    // Getter and Setter for overtime_hourly_salary
+    public BigDecimal getOvertime_hourly_salary() {
+        return overtime_hourly_salary;
     }
 
-    // Getter và Setter cho social_insurance
-    public BigDecimal getSocialInsurance() {
-        return social_insurance;
+    public void setOvertime_hourly_salary(BigDecimal overtime_hourly_salary) {
+        this.overtime_hourly_salary = overtime_hourly_salary;
     }
 
-    public void setSocialInsurance(BigDecimal social_insurance) {
-        this.social_insurance = social_insurance;
+    // Getter and Setter for total_overtime_shifts
+    public BigDecimal getTotal_overtime_shifts() {
+        return total_overtime_shifts;
+    }
+
+    public void setTotal_overtime_shifts(BigDecimal total_overtime_shifts) {
+        this.total_overtime_shifts = total_overtime_shifts;
+    }
+
+    // Getter and Setter for total_hourly_work
+    public float getTotal_hourly_work() {
+        return total_hourly_work;
+    }
+
+    public void setTotal_hourly_work(float total_hourly_work) {
+        this.total_hourly_work = total_hourly_work;
     }
 
     public int getId() {
@@ -89,7 +112,12 @@ public class Salary {
     public int getEmployeeId() {
         return this.employeeId;
     }
-
+    public void setSalaryChangeHistory(SalaryChangeHistory salaryChangeHistory){
+        this.salaryChangeHistory = salaryChangeHistory;
+    }
+    public SalaryChangeHistory getsalaryChangeHistory(){
+        return salaryChangeHistory;
+    }
     public void setEmployeeId(int employeeId) {
         this.employeeId = employeeId;
     }
@@ -183,5 +211,9 @@ public class Salary {
                 + String.valueOf(this.deductions) + ", net_salary=" + String.valueOf(this.net_salary)
                 + ", overtimeSalary=" + String.valueOf(this.overtimeSalary) + ", payday=" + String.valueOf(this.payday)
                 + ", note=" + this.note + ", attendance=" + this.attendance + "]";
+    }
+
+    public Salary get(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

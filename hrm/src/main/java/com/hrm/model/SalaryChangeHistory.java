@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.hrm.model;
 
 import java.math.BigDecimal;
@@ -10,12 +5,15 @@ import java.time.LocalDate;
 
 public class SalaryChangeHistory {
     private int id;
+    
     private Employee employee;
+    
     private BigDecimal oldSalary;
     private BigDecimal newSalary;
     private String reasons;
-    private LocalDate changeDate;
-    private Employee approvedBy;
+    private LocalDate changeDateSend;
+    private LocalDate changeDateBrowse;
+    private Employee approvedBy;  // Thay đổi từ int sang Employee để lưu thông tin người duyệt
     private String comments;
     private String status;
     private String employeeName;
@@ -23,19 +21,34 @@ public class SalaryChangeHistory {
     public SalaryChangeHistory() {
     }
 
-    public SalaryChangeHistory(int id, Employee employee, BigDecimal oldSalary, BigDecimal newSalary, String reasons,
-            LocalDate changeDate, Employee approvedBy, String comments, String status) {
+    public SalaryChangeHistory(int id, Employee employee ,BigDecimal oldSalary, BigDecimal newSalary, String reasons, LocalDate changeDateSend,LocalDate changeDateBrowse, Employee approvedBy, String comments, String status) {
         this.id = id;
+        
         this.employee = employee;
+        
         this.oldSalary = oldSalary;
         this.newSalary = newSalary;
         this.reasons = reasons;
-        this.changeDate = changeDate;
+        this.changeDateSend = changeDateSend;
+        this.changeDateBrowse = changeDateBrowse;
         this.approvedBy = approvedBy;
         this.comments = comments;
         this.status = status;
     }
-
+   
+    public LocalDate getchangeDateBrowse(){
+        return this.changeDateBrowse;
+    }
+    public void setchangeDateBrowse(LocalDate changeDateBrowse ){
+        this.changeDateBrowse = changeDateBrowse;
+    }
+    
+    public LocalDate getchangeDateSend(){
+        return this.changeDateSend;
+    }
+    public void setchangeDateSend(LocalDate changeDateSend ){
+        this.changeDateSend = changeDateSend;
+    }
     public void setEmployeeName(String employeeName) {
         this.employeeName = employeeName;
     }
@@ -84,13 +97,7 @@ public class SalaryChangeHistory {
         this.reasons = reasons;
     }
 
-    public LocalDate getChangeDate() {
-        return this.changeDate;
-    }
-
-    public void setChangeDate(LocalDate changeDate) {
-        this.changeDate = changeDate;
-    }
+  
 
     public Employee getApprovedBy() {
         return this.approvedBy;
@@ -118,15 +125,17 @@ public class SalaryChangeHistory {
 
     @Override
     public String toString() {
-        int var10000 = this.id;
-        return "SalaryChangeHistory{id=" + var10000 + ", employee=" + this.employee.getName() + ", oldSalary="
-                + String.valueOf(this.oldSalary) + ", newSalary=" + String.valueOf(this.newSalary) + ", reasons='"
-                + this.reasons + "', changeDate=" + String.valueOf(this.changeDate) + ", approvedBy="
-                + this.approvedBy.getName() + ", comments='" + this.comments + "', status='" + this.status + "'}";
-    }
-
-    public void setApprovedBy(String approvedBy) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from
-                                                                       // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "SalaryChangeHistory{" +
+                "id=" + id +
+                ", oldSalary=" + oldSalary +
+                ", newSalary=" + newSalary +
+                ", reasons='" + reasons + '\'' +
+                ", changeDateSend=" + changeDateSend +
+                ", changeDateBrowse=" + changeDateBrowse +
+                ", employee=" + employee.getName() +
+                ", approvedBy=" + (approvedBy != null ? approvedBy.getName() : "N/A") + // Lấy tên người duyệt
+                ", comments='" + comments + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

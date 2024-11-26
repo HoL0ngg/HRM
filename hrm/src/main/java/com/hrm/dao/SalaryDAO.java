@@ -10,6 +10,7 @@ import com.hrm.model.Employee;
 import com.hrm.model.Position;
 import com.hrm.model.Salary;
 import com.hrm.model.Employee.Gender;
+import com.hrm.model.SalaryChangeHistory;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,7 +44,13 @@ public class SalaryDAO implements DAOInterface<Salary> {
 
     @Override
     public ArrayList<Salary> selectAll() {
-        String sql = "SELECT s.*, e.id as employee_id, e.name as employee_name, e.gender, e.phone_number, p.id as position_id, p.name as position_name FROM salaries s JOIN employee e ON s.employee_id = e.id JOIN position p ON e.position_id = p.id";
+        String sql = "SELECT s.*, e.id as employee_id, e.name as employee_name, e.gender, e.phone_number, " +
+             "p.id as position_id, p.name as position_name, sch.reasons AS salary_change_reasons " +
+             "FROM salaries s " +
+             "JOIN employee e ON s.employee_id = e.id " +
+             "JOIN position p ON e.position_id = p.id " +
+             "LEFT JOIN salary_change_history sch ON sch.employee_id = e.id ";
+             
         Connection con = JDBCUtil.createConnection();
         ArrayList<Salary> salaryList = new ArrayList();
 
@@ -65,6 +72,7 @@ public class SalaryDAO implements DAOInterface<Salary> {
                     int attendance = rs.getInt("attendance");
                     int employeeId = rs.getInt("employee_id");
                     String employeeName = rs.getString("employee_name");
+                    String reasons = rs.getString("salary_change_reasons");
                     String genderStr = rs.getString("gender").toLowerCase();
                     Employee.Gender gender = Gender.valueOf(genderStr);
                     String phoneNumber = rs.getString("phone_number");
@@ -76,10 +84,14 @@ public class SalaryDAO implements DAOInterface<Salary> {
                     int positionId = rs.getInt("position_id");
                     String positionName = rs.getString("position_name");
                     Position position = new Position(positionId, 0, positionName);
-                    BigDecimal tax = rs.getBigDecimal("tax");
-                    BigDecimal social_insurance = rs.getBigDecimal("social_insurance");
-                    Salary salary = new Salary(id, employee, positionSalary, bonus, deductions, net_salary,
-                            overtimeSalary, payday, note, attendance, position, tax, social_insurance);
+                    BigDecimal hourly_salary = rs.getBigDecimal("hourly_salary");
+                    BigDecimal overtime_hourly_salary = rs.getBigDecimal("overtime_hourly_salary");
+                    BigDecimal total_overtime_shifts = rs.getBigDecimal("total_overtime_shifts");
+                    float total_hourly_work = rs.getFloat("total_hourly_work");
+                    SalaryChangeHistory salaryChangeHistory = new SalaryChangeHistory();
+                    salaryChangeHistory.setReasons(reasons);
+                    Salary salary = new Salary(id, employee, salaryChangeHistory, positionSalary, bonus, deductions, net_salary,
+                            overtimeSalary, payday, note, attendance, position,hourly_salary,overtime_hourly_salary,total_overtime_shifts,total_hourly_work);
                     salaryList.add(salary);
                 }
             } catch (Throwable var31) {
@@ -128,10 +140,12 @@ public class SalaryDAO implements DAOInterface<Salary> {
                     LocalDate payday = (LocalDate) rs.getObject("payday", LocalDate.class);
                     String note = rs.getString("note");
                     int attendance = rs.getInt("attendance");
-                    BigDecimal tax = rs.getBigDecimal("tax");
-                    BigDecimal social_insurance = rs.getBigDecimal("social_insurance");
+                    BigDecimal hourly_salary = rs.getBigDecimal("hourly_salary");
+                    BigDecimal overtime_hourly_salary = rs.getBigDecimal("overtime_hourly_salary");
+                    BigDecimal total_overtime_shifts = rs.getBigDecimal("total_overtime_shifts");
+                    float total_hourly_work = rs.getFloat("total_hourly_work");
                     salary = new Salary(id, employeeId, positionSalary, bonus, deductions, net_salary, overtimeSalary,
-                            payday, note, attendance, tax, social_insurance);
+                            payday, note, attendance,hourly_salary,overtime_hourly_salary,total_overtime_shifts,total_hourly_work);
                 }
             } catch (Throwable var22) {
                 if (pst != null) {
@@ -164,7 +178,13 @@ public class SalaryDAO implements DAOInterface<Salary> {
     }
 
     public ArrayList<Salary> selectByMonth(int month) {
-        String sql = "SELECT s.*, e.id as employee_id, e.name as employee_name, e.gender, e.phone_number, p.id as position_id, p.name as position_name FROM salaries s JOIN employee e ON s.employee_id = e.id JOIN position p ON e.position_id = p.id WHERE MONTH(s.payday) = ?";
+        String sql = "SELECT s.*, e.id as employee_id, e.name as employee_name, e.gender, e.phone_number, " +
+             "p.id as position_id, p.name as position_name, sch.reasons AS salary_change_reasons " +
+             "FROM salaries s " +
+             "JOIN employee e ON s.employee_id = e.id " +
+             "JOIN position p ON e.position_id = p.id " +
+             "LEFT JOIN salary_change_history sch ON sch.employee_id = e.id "
+             + "WHERE MONTH(s.payday) = ?";
         Connection con = JDBCUtil.createConnection();
         ArrayList<Salary> salaryList = new ArrayList();
 
@@ -187,6 +207,7 @@ public class SalaryDAO implements DAOInterface<Salary> {
                     int attendance = rs.getInt("attendance");
                     int employeeId = rs.getInt("employee_id");
                     String employeeName = rs.getString("employee_name");
+                    String reasons = rs.getString("salary_change_reasons");
                     String genderStr = rs.getString("gender").toLowerCase();
                     Employee.Gender gender = Gender.valueOf(genderStr);
                     String phoneNumber = rs.getString("phone_number");
@@ -197,11 +218,15 @@ public class SalaryDAO implements DAOInterface<Salary> {
                     employee.setPhone_mumber(phoneNumber);
                     int positionId = rs.getInt("position_id");
                     String positionName = rs.getString("position_name");
-                    BigDecimal tax = rs.getBigDecimal("tax");
-                    BigDecimal social_insurance = rs.getBigDecimal("social_insurance");
+                    BigDecimal hourly_salary = rs.getBigDecimal("hourly_salary");
+                    BigDecimal overtime_hourly_salary = rs.getBigDecimal("overtime_hourly_salary");
+                    BigDecimal total_overtime_shifts = rs.getBigDecimal("total_overtime_shifts");
+                    float total_hourly_work = rs.getFloat("total_hourly_work");
                     Position position = new Position(positionId, 0, positionName);
-                    Salary salary = new Salary(id, employee, positionSalary, bonus, deductions, net_salary,
-                            overtimeSalary, payday, note, attendance, position, tax, social_insurance);
+                    SalaryChangeHistory salaryChangeHistory = new SalaryChangeHistory();
+                    salaryChangeHistory.setReasons(reasons);
+                    Salary salary = new Salary(id, employee,salaryChangeHistory ,positionSalary, bonus, deductions, net_salary,
+                            overtimeSalary, payday, note, attendance, position,hourly_salary,overtime_hourly_salary,total_overtime_shifts,total_hourly_work);
                     salaryList.add(salary);
                 }
             } catch (Throwable var32) {
@@ -228,6 +253,12 @@ public class SalaryDAO implements DAOInterface<Salary> {
 
         return salaryList;
     }
+public boolean updateSalary(int employeeID, BigDecimal bonus, BigDecimal attendance, BigDecimal deductions, String note, LocalDate payday, BigDecimal net_salary,BigDecimal hourly_salary , BigDecimal overtime_hourly_salary) {
+    // Câu lệnh SQL để cập nhật thông tin lương
+    String sql = "UPDATE salaries SET bonus = ?, attendance = ?, deductions = ?, note = ?, payday = ?, net_salary = ? , hourly_salary = ? , overtime_hourly_salary = ?  "
+            + "WHERE employee_id = ?";
+    Connection con = JDBCUtil.createConnection(); // Kết nối đến cơ sở dữ liệu
+    boolean updated = false;
 
     public Salary selectByEmployeeID2(int employeeId) {
         String sql = "SELECT s.*, e.id as employee_id, e.name as employee_name, e.gender, e.phone_number, " +
@@ -240,35 +271,26 @@ public class SalaryDAO implements DAOInterface<Salary> {
         Salary salary = null;
 
         try {
-            PreparedStatement pst = con.prepareStatement(sql);
-            pst.setInt(1, employeeId);
-            ResultSet rs = pst.executeQuery();
-
-            if (rs.next()) {
-                int id = rs.getInt("id");
-                BigDecimal positionSalary = rs.getBigDecimal("position_salary");
-                BigDecimal bonus = rs.getBigDecimal("bonus");
-                BigDecimal deductions = rs.getBigDecimal("deductions");
-                BigDecimal netSalary = rs.getBigDecimal("net_salary");
-                BigDecimal overtimeSalary = rs.getBigDecimal("overtime_salary");
-                LocalDate payday = rs.getObject("payday", LocalDate.class);
-                String note = rs.getString("note");
-                int attendance = rs.getInt("attendance");
-
-                // Tạo đối tượng Employee
-                Employee employee = new Employee();
-                employee.setId(rs.getInt("employee_id"));
-                employee.setName(rs.getString("employee_name"));
-                employee.setGender(Employee.Gender.valueOf(rs.getString("gender").toLowerCase()));
-                employee.setPhone_mumber(rs.getString("phone_number"));
-
-                // Tạo đối tượng Position
-                Position position = new Position();
-                position.setId(rs.getInt("position_id"));
-                position.setName(rs.getString("position_name"));
-
-                // Khởi tạo Salary
-                salary = new Salary(id, employee, positionSalary, bonus, deductions, netSalary, overtimeSalary, payday, note, attendance, position);
+            // Thiết lập các tham số cho câu truy vấn
+            pst.setBigDecimal(1, bonus); // Thưởng
+            pst.setBigDecimal(2, attendance); // Chuyên cần
+            pst.setBigDecimal(3, deductions); // Khấu trừ
+            pst.setString(4, note); // Ghi chú
+            pst.setDate(5, java.sql.Date.valueOf(payday)); // Ngày hiệu lực (payday)
+            pst.setBigDecimal(6, net_salary); // Tổng lương sau khi tính toán
+            pst.setBigDecimal(7,hourly_salary);
+            pst.setBigDecimal(8,overtime_hourly_salary);
+           pst.setInt(9, employeeID); // ID của nhân viên
+            // Thực thi câu truy vấn và kiểm tra xem có bản ghi nào bị ảnh hưởng không
+            updated = pst.executeUpdate() > 0;
+        } catch (Throwable ex) {
+            // Đảm bảo rằng PreparedStatement được đóng đúng cách nếu có lỗi xảy ra
+            if (pst != null) {
+                try {
+                    pst.close();
+                } catch (Throwable suppressed) {
+                    ex.addSuppressed(suppressed);
+                }
             }
 
             pst.close();
@@ -292,27 +314,96 @@ public class SalaryDAO implements DAOInterface<Salary> {
             pst.setInt(2, employeeId); // ID nhân viên
             pst.setBigDecimal(3, positionSalary); // Lương cơ bản
 
-            // Thực thi câu lệnh và nhận số hàng bị ảnh hưởng
-            result = pst.executeUpdate();
 
-            if (result > 0) {
-                System.out.println("Thêm lương cơ bản thành công với ID lương: " + id);
-            } else {
-                System.out.println("Thêm lương cơ bản thất bại.");
+public ArrayList<Salary> selectByEmployeeIdforDanhSachLuong(int employeeId) {
+    // Câu truy vấn SQL
+    String sql = "SELECT s.*, e.id as employee_id, e.name as employee_name, e.gender, e.phone_number, " +
+             "p.id as position_id, p.name as position_name, sch.reasons AS salary_change_reasons ,sch.comments AS Comment " +
+             "FROM salaries s " +
+             "JOIN employee e ON s.employee_id = e.id " +
+             "JOIN position p ON e.position_id = p.id " +
+             "LEFT JOIN salary_change_history sch ON sch.employee_id = e.id " +
+             
+             "WHERE s.employee_id = ?";
+
+
+    // Khởi tạo kết nối và danh sách kết quả
+    Connection con = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    ArrayList<Salary> salaryList = new ArrayList<>();
+
+    try {
+        // Tạo kết nối
+        con = JDBCUtil.createConnection();
+
+        // Chuẩn bị câu truy vấn
+        pst = con.prepareStatement(sql);
+        pst.setInt(1, employeeId); // Thiết lập employeeId vào câu truy vấn
+
+        // Thực thi truy vấn
+        rs = pst.executeQuery();
+
+        // Lặp qua kết quả
+        while (rs.next()) {
+            // Lấy thông tin từ ResultSet
+            int id = rs.getInt("id");
+            BigDecimal positionSalary = rs.getBigDecimal("position_salary");
+            BigDecimal bonus = rs.getBigDecimal("bonus");
+            BigDecimal deductions = rs.getBigDecimal("deductions");
+            BigDecimal net_salary = rs.getBigDecimal("net_salary");
+            BigDecimal overtimeSalary = rs.getBigDecimal("overtime_salary");
+            LocalDate payday = rs.getObject("payday", LocalDate.class);
+            String note = rs.getString("note");
+            int attendance = rs.getInt("attendance");
+            int employeeIdResult = rs.getInt("employee_id");
+            String employeeName = rs.getString("employee_name");
+            String reasons = rs.getString("salary_change_reasons");
+            if (reasons == null) {
+                reasons = "Không có lý do thay đổi lương"; // Giá trị mặc định nếu reasons là NULL
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            JDBCUtil.closeConnection(con);
+            String Comment = rs.getString("Comment");
+            SalaryChangeHistory salaryChangeHistory = new SalaryChangeHistory();
+            salaryChangeHistory.setReasons(reasons);
+            salaryChangeHistory.setComments(Comment);
+            String genderStr = rs.getString("gender").toLowerCase();
+            Employee.Gender gender = Employee.Gender.valueOf(genderStr); // Chuyển đổi giới tính
+            String phoneNumber = rs.getString("phone_number");
+            
+            BigDecimal hourly_salary = rs.getBigDecimal("hourly_salary");
+            BigDecimal overtime_hourly_salary = rs.getBigDecimal("overtime_hourly_salary");
+            BigDecimal total_overtime_shifts = rs.getBigDecimal("total_overtime_shifts");
+            float total_hourly_work = rs.getFloat("total_hourly_work");
+            // Tạo đối tượng Employee
+            Employee employee = new Employee();
+            employee.setId(employeeIdResult);
+            employee.setName(employeeName);
+            employee.setGender(gender);
+            employee.setPhone_mumber(phoneNumber);
+
+            // Tạo đối tượng Position
+            int positionId = rs.getInt("position_id");
+            String positionName = rs.getString("position_name");
+            Position position = new Position(positionId, 0, positionName);
+                System.out.println("Comment: " + Comment);
+
+            
+            
+
+// Tạo đối tượng SalaryChangeHistory
+            
+            // Tạo đối tượng Salary và thêm vào danh sách
+            Salary salary = new Salary(id, employee, salaryChangeHistory,positionSalary, bonus, deductions, net_salary, overtimeSalary, payday, note, attendance, position, hourly_salary,overtime_hourly_salary,total_overtime_shifts,total_hourly_work);
+            salaryList.add(salary);
         }
 
         return result;
     }
 
-    public int findMaxId() {
-        String sql = "SELECT MAX(id) AS max_id FROM salaries";
-        Connection con = JDBCUtil.createConnection();
-        int maxId = -1; // Giá trị mặc định nếu không tìm thấy
+    System.out.println("Query: " + pst.toString());
+    System.out.println("Reasons: " + employeeId);
+    return salaryList;
+}
 
         try (PreparedStatement pst = con.prepareStatement(sql);
                 ResultSet rs = pst.executeQuery()) {

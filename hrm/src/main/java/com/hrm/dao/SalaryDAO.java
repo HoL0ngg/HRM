@@ -268,8 +268,7 @@ public class SalaryDAO implements DAOInterface<Salary> {
                 position.setName(rs.getString("position_name"));
 
                 // Khởi tạo Salary
-                salary = new Salary(id, employee, positionSalary, bonus, deductions, netSalary, overtimeSalary, payday,
-                        note, attendance, position);
+                salary = new Salary(id, employee, positionSalary, bonus, deductions, netSalary, overtimeSalary, payday, note, attendance, position);
             }
 
             pst.close();

@@ -45,8 +45,29 @@ public class Employee {
     private String image;
     private int isDeleted;
 
-    // Constructor không đối số
-    // Constructor không đối số
+public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(int isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
     public Employee() {
     }
 

@@ -495,6 +495,53 @@ public ArrayList<SalaryChangeHistory> selectByEmployeeId1(int employeeId) {
     return historyList;
 }
 
+
+public ArrayList<SalaryChangeHistory> selectByEmployeeName2(String employeeName) {
+    String sql = "SELECT sch.*, e.id as employee_id, e.name as employee_name, e.gender, e.phone_number, approved.id as approved_by_id, approved.name as approved_by_name "
+                + "FROM salary_change_history sch "
+                + "JOIN employee e ON sch.employee_id = e.id "
+                + "JOIN employee approved ON sch.approved_by = approved.id "
+                + "WHERE e.name like ? ";
+    Connection con = JDBCUtil.createConnection();
+    ArrayList<SalaryChangeHistory> salaryChangeHistoryList = new ArrayList<>();
+
+    try (PreparedStatement pst = con.prepareStatement(sql)) {
+        pst.setString(1, employeeName); // Đặt tham số employeeId vào câu truy vấn
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            int employeeId = rs.getInt("employee_id");
+            BigDecimal oldSalary = rs.getBigDecimal("old_salary");
+            BigDecimal newSalary = rs.getBigDecimal("new_salary");
+            String reasons = rs.getString("reasons");
+            LocalDate changeDateSend = rs.getObject("change_date_send", LocalDate.class);
+            LocalDate changeDateBrowse = rs.getObject("change_date_browse", LocalDate.class);
+            String comments = rs.getString("comments");
+            String status = rs.getString("status");
+            
+            String employeeNameres = rs.getString("employee_name");
+            Employee employee = new Employee();
+            employee.setId(employeeId);
+            employee.setName(employeeNameres);
+
+            int approvedById = rs.getInt("approved_by_id");
+            String approvedByName = rs.getString("approved_by_name");
+            Employee approvedBy = new Employee();
+            approvedBy.setId(approvedById);
+            approvedBy.setName(approvedByName);
+
+            SalaryChangeHistory salaryChangeHistory = new SalaryChangeHistory(id, employee, oldSalary, newSalary, reasons, changeDateSend, changeDateBrowse, approvedBy, comments, status);
+            salaryChangeHistoryList.add(salaryChangeHistory);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        JDBCUtil.closeConnection(con);
+    }
+
+    return salaryChangeHistoryList;
+}
 public ArrayList<SalaryChangeHistory> selectByEmployeeId2(int employeeId) {
     String sql = "SELECT sch.*, e.id as employee_id, e.name as employee_name, e.gender, e.phone_number, approved.id as approved_by_id, approved.name as approved_by_name "
                 + "FROM salary_change_history sch "
@@ -540,5 +587,69 @@ public ArrayList<SalaryChangeHistory> selectByEmployeeId2(int employeeId) {
 
     return salaryChangeHistoryList;
 }
+public ArrayList<SalaryChangeHistory> selectByEmployeeName1(String employeeName) {
+    String sql = "SELECT sch.*, e.name AS employee_name, sch.old_salary, sch.new_salary, sch.change_date_send, sch.change_date_browse, approved.id as approved_by_id, approved.name as approved_by_name, " +
+                 "sch.reasons, sch.status " +
+                 "FROM salary_change_history sch " +
+                 "JOIN employee e ON sch.employee_id = e.id " +
+                 "JOIN employee approved ON sch.approved_by = approved.id " +
+                 "WHERE e.name LIKE ? ";  // Lọc theo ID nhân viên
 
+    Connection con = JDBCUtil.createConnection();
+    ArrayList<SalaryChangeHistory> historyList = new ArrayList<>();
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+
+    try {
+        pst = con.prepareStatement(sql);
+        pst.setString(1, employeeName); // Gán ID nhân viên vào tham số
+        rs = pst.executeQuery();
+
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            int employeeIdResult = rs.getInt("employee_id");
+            
+           String employeeNameResult = rs.getString("employee_name");
+            
+            BigDecimal oldSalary = rs.getBigDecimal("old_salary");
+            BigDecimal newSalary = rs.getBigDecimal("new_salary");
+
+            // Lấy và xử lý các trường DATE với việc kiểm tra null
+            LocalDate changeDateSend = rs.getDate("change_date_send") != null ? rs.getDate("change_date_send").toLocalDate() : null;
+            LocalDate changeDateBrowse = rs.getDate("change_date_browse") != null ? rs.getDate("change_date_browse").toLocalDate() : null;
+            
+            String reasons = rs.getString("reasons");
+            String status = rs.getString("status");
+            int approvedById = rs.getInt("approved_by_id");
+                    String approvedByName = rs.getString("approved_by_name");
+                    Employee approvedBy = new Employee();
+                    approvedBy.setId(approvedById);
+                    approvedBy.setName(approvedByName);
+            Employee employee = new Employee();
+            employee.setName(employeeNameResult);
+            employee.setId(employeeIdResult);
+            String comments = rs.getString("comments");
+            // Tạo đối tượng SalaryChangeHistory và gán giá trị
+            SalaryChangeHistory salaryChangeHistory = new SalaryChangeHistory(id, employee, oldSalary, newSalary, reasons, changeDateSend, changeDateBrowse, approvedBy, comments, status);
+            historyList.add(salaryChangeHistory);
+        }
+    } catch (SQLException e) {
+        System.err.println("Lỗi khi truy vấn dữ liệu SalaryChangeHistory: " + e.getMessage());
+        e.printStackTrace();
+    } finally {
+        try {
+            if (rs != null) {
+                rs.close();  // Đảm bảo đóng ResultSet
+            }
+            if (pst != null) {
+                pst.close(); // Đảm bảo đóng PreparedStatement
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi đóng tài nguyên: " + e.getMessage());
+        }
+        JDBCUtil.closeConnection(con); // Đóng kết nối
+    }
+
+    return historyList;
+}
 }

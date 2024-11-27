@@ -521,4 +521,85 @@ private void closeResources(PreparedStatement pst, ResultSet rs) {
 
         return maxId;
     }
+    public ArrayList<Salary> selectByEmployeeNameforDanhSachLuong(String employeeName) {
+    // Câu truy vấn SQL
+    String sql = """
+        SELECT s.*, 
+               e.id AS employee_id, 
+               e.name AS employee_name, 
+               e.gender, 
+               e.phone_number, 
+               p.id AS position_id, 
+               p.name AS position_name, 
+               sch.reasons AS salary_change_reasons, 
+               sch.comments AS Comment 
+        FROM salaries s
+        JOIN employee e ON s.employee_id = e.id
+        JOIN position p ON e.position_id = p.id
+        LEFT JOIN salary_change_history sch ON sch.employee_id = e.id
+        WHERE e.name LIKE ?
+    """;
+
+    ArrayList<Salary> salaryList = new ArrayList<>();
+    try (Connection con = JDBCUtil.createConnection();
+         PreparedStatement pst = con.prepareStatement(sql)) {
+
+        // Thiết lập tham số
+        pst.setString(1, "%" + employeeName + "%"); // Tìm kiếm theo tên với LIKE
+
+        // Thực thi câu truy vấn
+        ResultSet rs = pst.executeQuery();
+
+        // Lặp qua kết quả
+        while (rs.next()) {
+            // Lấy thông tin từ ResultSet
+            int id = rs.getInt("id");
+            BigDecimal positionSalary = rs.getBigDecimal("position_salary");
+            BigDecimal bonus = rs.getBigDecimal("bonus");
+            BigDecimal deductions = rs.getBigDecimal("deductions");
+            BigDecimal net_salary = rs.getBigDecimal("net_salary");
+            BigDecimal overtimeSalary = rs.getBigDecimal("overtime_salary");
+            LocalDate payday = rs.getObject("payday", LocalDate.class);
+            String note = rs.getString("note");
+            int attendance = rs.getInt("attendance");
+            int employeeId = rs.getInt("employee_id");
+            String employeeNameResult = rs.getString("employee_name");
+            String reasons = rs.getString("salary_change_reasons");
+            if (reasons == null) {
+                reasons = "Không có lý do thay đổi lương"; // Giá trị mặc định nếu reasons là NULL
+            }
+            String comment = rs.getString("Comment");
+            SalaryChangeHistory salaryChangeHistory = new SalaryChangeHistory();
+            salaryChangeHistory.setReasons(reasons);
+            salaryChangeHistory.setComments(comment);
+            String genderStr = rs.getString("gender").toLowerCase();
+            Employee.Gender gender = Employee.Gender.valueOf(genderStr); // Chuyển đổi giới tính
+            String phoneNumber = rs.getString("phone_number");
+
+            BigDecimal hourly_salary = rs.getBigDecimal("hourly_salary");
+            BigDecimal overtime_hourly_salary = rs.getBigDecimal("overtime_hourly_salary");
+            BigDecimal total_overtime_shifts = rs.getBigDecimal("total_overtime_shifts");
+            float total_hourly_work = rs.getFloat("total_hourly_work");
+
+            // Tạo đối tượng Employee
+            Employee employee = new Employee();
+            employee.setId(employeeId);
+            employee.setName(employeeNameResult);
+            employee.setGender(gender);
+            employee.setPhone_mumber(phoneNumber);
+
+            // Tạo đối tượng Position
+            int positionId = rs.getInt("position_id");
+            String positionName = rs.getString("position_name");
+            Position position = new Position(positionId, 0, positionName);
+
+            // Tạo đối tượng Salary và thêm vào danh sách
+            Salary salary = new Salary(id, employee, salaryChangeHistory, positionSalary, bonus, deductions, net_salary, overtimeSalary, payday, note, attendance, position, hourly_salary, overtime_hourly_salary, total_overtime_shifts, total_hourly_work);
+            salaryList.add(salary);
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace(); // In ra thông báo lỗi SQL nếu có
+    }
+    return salaryList;
+}
 }

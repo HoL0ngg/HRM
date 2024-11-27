@@ -59,15 +59,21 @@ public class MainController implements MouseListener {
                 mainFrame.dispose();
                 break;
                 
+            case "DapTaoPanel":
+            	try {
+            	    new TrainingDevelopmentView(mainFrame.getEmployee()).setVisible(true);
+            	} catch (Exception ex) {
+            	    ex.printStackTrace();
+            	}
+                mainFrame.dispose();
+                break;
+                
             case "BaoCaoPanel":
                 new BaoCaoFrame(mainFrame.getEmployee());
                 mainFrame.dispose();
                 break;
                 
-            case "PhatTrienPanel":
-            	new TrainingDevelopmentView(EmployeeDAO.getInstance().selectByID(mainFrame.getEmployee().getId()));
-                mainFrame.dispose();
-                break;
+            
                 
             case "MucTieuPanel":
                 new muctieuframe(mainFrame.getEmployee());

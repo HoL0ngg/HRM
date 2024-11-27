@@ -1,5 +1,6 @@
 package com.hrm.view;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import com.hrm.controller.ApplicantsBUS;
 import com.hrm.controller.EmployeeBus;
 import com.hrm.controller.ExcelExporter;
@@ -8,6 +9,7 @@ import com.hrm.controller.InterviewerBUS;
 import com.hrm.controller.InterviewsBUS;
 import com.hrm.controller.JobOpeningsBUS;
 import com.hrm.model.Applicants;
+import com.hrm.model.Employee;
 import com.hrm.model.Interviewer;
 import com.hrm.model.Interviews;
 import com.hrm.model.JobOpenings;
@@ -22,6 +24,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -34,7 +37,7 @@ import java.util.stream.Collectors;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public class TuyenDungGUI extends JPanel {
+public class TuyenDungGUI extends JFrame {
 
     private static TuyenDungGUI instance;
     private static final int WIDTH = 1000;
@@ -85,39 +88,119 @@ public class TuyenDungGUI extends JPanel {
     private ApplicantsBUS applicantBus;
     private EmployeeBus emplBus;
     private ArrayList<Applicants> applicantList;
+    private Employee employee;
 
-    public TuyenDungGUI() {
+    public TuyenDungGUI(Employee employee) {
+
+//        try {
+//            UIManager.setLookAndFeel(new FlatLightLaf());
+//        } catch (UnsupportedLookAndFeelException ex) {
+//            ex.printStackTrace();
+//        }
+
         jobList = new ArrayList<>();
         jobBus = new JobOpeningsBUS();
         applicantBus = new ApplicantsBUS();
-        init();
+        this.employee = employee;
+        this.init();
     }
 
-    public static TuyenDungGUI getInstance() {
-        if (instance == null) {
-            instance = new TuyenDungGUI();
-        }
-        return instance;
-    }
-
+//    public static TuyenDungGUI getInstance() {
+//        if (instance == null) {
+//            instance = new TuyenDungGUI();
+//        }
+//        return instance;
+//    }
     public void init() {
+
+        setTitle("Quản lý tuyển dụng");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1000, 750);
+        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-        setSize(WIDTH, HEIGHT);
+        //setSize(WIDTH, HEIGHT);
         setBackground(Color.white);
 
-        add(createHeaderPanel(), BorderLayout.NORTH);
-        add(createContentPanel(), BorderLayout.CENTER);
+        JPanel contentPane = new JPanel();
+        contentPane.setLayout(new BorderLayout(0, 0)); // Dùng BorderLayout để quản lý các panel, bỏ padding
+        contentPane.setBorder(new EmptyBorder(0, 0, 0, 0)); // Không có padding thừa
+        contentPane.setBackground(Color.WHITE); // Đặt màu nền cho contentPane là trắng
+        setContentPane(contentPane);
+
+// Navbar Panel
+        JPanel navBarPanel = new JPanel(new BorderLayout());
+        navBarPanel.setBackground(new Color(245, 143, 82));
+        navBarPanel.setPreferredSize(new Dimension(1000, 50)); // Chiều cao cố định cho navbar
+        navBarPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50)); // Ngăn không cho navbar thay đổi chiều cao
+
+        // Tiêu đề và nút Back (bên trái navbar)
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        titlePanel.setOpaque(false);
+
+        Image backBtnImage = new ImageIcon(new File("src/main/resources/img/left-arrow.png").getAbsolutePath())
+                .getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        JLabel backLabel = new JLabel(new ImageIcon(backBtnImage));
+        backLabel.setName("quaylai");
+
+        // Sự kiện quay lại
+        backLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                goBack();
+            }
+        });
+
+        JLabel titleLabel = new JLabel("TUYỂN DỤNG", SwingConstants.LEFT);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setForeground(Color.WHITE);
+
+        titlePanel.add(backLabel);
+        titlePanel.add(titleLabel);
+        navBarPanel.add(titlePanel, BorderLayout.WEST); // Thêm title vào trái của navbar
+
+        // Avatar và tên người dùng (bên phải navbar)
+        JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        userPanel.setOpaque(false);
+
+        String[] iconPaths = {
+            "src/main/resources/img/bubble-chat.png",
+            "src/main/resources/img/bell.png",
+            "src/main/resources/img/set-up.png",
+            "src/main/resources/img/profile.png"
+        };
+
+        for (String path : iconPaths) {
+            Image iconImage = new ImageIcon(new File(path).getAbsolutePath())
+                    .getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+            JLabel iconLabel = new JLabel(new ImageIcon(iconImage));
+            userPanel.add(iconLabel);
+        }
+
+        JLabel userNameLabel = new JLabel(employee.getName());
+        userNameLabel.setFont(new Font("Arial", Font.BOLD, 15));
+        userNameLabel.setForeground(Color.WHITE);
+        userPanel.add(userNameLabel);
+
+        navBarPanel.add(userPanel, BorderLayout.EAST); // Thêm userPanel vào bên phải navbar
+        contentPane.add(navBarPanel, BorderLayout.NORTH); // Thêm navbar vào phần Bắc của JFrame
+
+        
+        contentPane.add(createHeaderPanel(), BorderLayout.CENTER);
+        contentPane.add(createContentPanel(), BorderLayout.SOUTH);
+        
+        setVisible(true);
     }
 
     private JPanel createHeaderPanel() {
         headBar = new JPanel(new BorderLayout());
         //headBar.setBounds(20, 20, WIDTH, 170);
-        headBar.setPreferredSize(new Dimension(WIDTH, 130));
+        headBar.setPreferredSize(new Dimension(WIDTH, 120));
+        headBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 120));
 
-        JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 15));
+        JPanel toolBar = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 8));
         toolBar.setBackground(Color.white);
 
-        addJobBtn = createRoundedButton("Thêm bài đăng", "src\\main\\java\\img\\plus.png", 150, 35);
+        addJobBtn = createRoundedButton("Thêm bài đăng", "src\\main\\java\\img\\plus.png", 150, 30);
         addJobBtn.putClientProperty("originalColor", addJobBtn.getBackground());
         addJobBtn.addActionListener(new ActionListener() {
             @Override
@@ -135,7 +218,7 @@ public class TuyenDungGUI extends JPanel {
         toolBar.add(addJobBtn);
         applyButtonHoverEffect(addJobBtn);
 
-        jobOpeningListBtn = createRoundedButton("Danh sách ứng viên", "src\\main\\java\\img\\rectangle-list.png", 150, 35);
+        jobOpeningListBtn = createRoundedButton("Danh sách ứng viên", "src\\main\\java\\img\\rectangle-list.png", 150, 30);
         jobOpeningListBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -147,7 +230,7 @@ public class TuyenDungGUI extends JPanel {
         toolBar.add(jobOpeningListBtn);
         applyButtonHoverEffect(jobOpeningListBtn);
 
-        interviewListBtn = createRoundedButton("Lịch phỏng vấn", "src\\main\\java\\img\\calendar-day.png", 150, 35);
+        interviewListBtn = createRoundedButton("Lịch phỏng vấn", "src\\main\\java\\img\\calendar-day.png", 150, 30);
         interviewListBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -157,7 +240,7 @@ public class TuyenDungGUI extends JPanel {
         toolBar.add(interviewListBtn);
         applyButtonHoverEffect(interviewListBtn);
 
-        reloadBtn = createRoundedButton("Chỉnh sửa", "src\\main\\java\\img\\wrench-alt.png", 150, 35);
+        reloadBtn = createRoundedButton("Chỉnh sửa", "src\\main\\java\\img\\wrench-alt.png", 150, 30);
         reloadBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -170,12 +253,12 @@ public class TuyenDungGUI extends JPanel {
         toolBar.add(reloadBtn);
         applyButtonHoverEffect(reloadBtn);
 
-        searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 15));
+        searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 5));
         searchPanel.setBackground(Color.white);
 
         search = new JTextField("Tìm kiếm...", 30);
         search.setFont(new Font("Arial", Font.PLAIN, 15));
-        search.setPreferredSize(new Dimension(150, 35));
+        search.setPreferredSize(new Dimension(150, 30));
         search.setForeground(Color.GRAY);
 
         clear = new JButton("X");
@@ -183,7 +266,7 @@ public class TuyenDungGUI extends JPanel {
         //clear.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         searchField = new JPanel(new BorderLayout());
-        searchField.setPreferredSize(new Dimension(200, 40));
+        searchField.setPreferredSize(new Dimension(200, 30));
         searchField.add(search, BorderLayout.CENTER);
         searchField.add(clear, BorderLayout.EAST);
 
@@ -209,7 +292,7 @@ public class TuyenDungGUI extends JPanel {
                         loadApplicantList();
                         togglePanel("Applicants");
                         break;
-                        
+
                     case "InterviewSearch":
                         loadInterviewSchedule();
                         togglePanel("Interviews");
@@ -279,6 +362,7 @@ public class TuyenDungGUI extends JPanel {
         mainPanel = new JPanel(cardLayout);
         //mainPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         mainPanel.setBackground(Color.WHITE);
+        mainPanel.setPreferredSize(new Dimension(1000, 520));
 
         homePanel = new JPanel(new GridLayout(2, 1, 0, 30));
         homePanel.setBackground(Color.white);
@@ -287,7 +371,7 @@ public class TuyenDungGUI extends JPanel {
 
         scrollPane1 = new JScrollPane(homePanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane1.getVerticalScrollBar().setUnitIncrement(14);
-        scrollPane1.setPreferredSize(new Dimension(WIDTH - 146, HEIGHT - 190));
+        //scrollPane1.setPreferredSize(new Dimension(1000, 750 - 170));
 
         jobFormPanel = new JobDetailPanel();
         jobFormPanel.addButtonListener(e -> completeBtn());
@@ -527,6 +611,12 @@ public class TuyenDungGUI extends JPanel {
         return jobCard;
     }
 
+    private void goBack() {
+        this.dispose();
+        // Mở JFrame khác (ReportEffectWorkView)
+        new MainFrame(employee).setVisible(true);
+    }
+    
     private void applyButtonHoverEffect(JButton button) {
         button.addMouseListener(new MouseAdapter() {
             @Override
@@ -854,7 +944,7 @@ public class TuyenDungGUI extends JPanel {
                 mainPanel.add(applicantPanel, "ApplicantSearch");
                 togglePanel("ApplicantSearch");
                 break;
-                
+
             case "Interviews":
                 ArrayList<Interviews> intvResults = intvBus.search(searchText);
 
@@ -1187,11 +1277,6 @@ public class TuyenDungGUI extends JPanel {
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Recruitment Panel");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 700);
-        frame.add(new TuyenDungGUI());
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
+        
     }
 }

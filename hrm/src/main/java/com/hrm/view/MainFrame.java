@@ -121,6 +121,7 @@ public class MainFrame extends JFrame {
                 TuyenDungLabel.setFont(MenuFont);
                 contentPane.add(TuyenDungPanel);
                 contentPane.add(TuyenDungLabel);
+                TuyenDungPanel.addMouseListener(controller);
 
                 RoundedPanel LuongPanel = new RoundedPanel(20,
                                 new File("../hrm/src/main/resources/img/financial-profit.png").getAbsolutePath());
@@ -186,6 +187,7 @@ public class MainFrame extends JFrame {
                 CaiDatLabel.setFont(MenuFont);
                 contentPane.add(CaiDatLabel);
                 contentPane.add(CaiDatPanel);
+                CaiDatPanel.addMouseListener(controller);
 
                 RoundedPanel MucTieuPanel = new RoundedPanel(20,
                                 new File("../hrm/src/main/resources/img/targeted.png").getAbsolutePath());

@@ -3,29 +3,38 @@ package com.hrm.model;
 import java.time.LocalDate;
 
 public class TrainingDevelopment {
-    private String trainingDevelopment;
-    private String achievement;
-
-    public TrainingDevelopment(String trainingDevelopment, String achievement) {
-        this.trainingDevelopment = trainingDevelopment;
-        this.achievement = achievement;
-    }
-
-    public String getTrainingDevelopment() {
-        return trainingDevelopment;
-    }
-
-    public void setTrainingDevelopment(String trainingDevelopment) {
-        this.trainingDevelopment = trainingDevelopment;
-    }
-
-    public String getAchievement() {
-        return achievement;
-    }
-
-    public void setAchievement(String achievement) {
-        this.achievement = achievement;
-    }
+//    private String trainingDevelopment;
+//    private String achievement;
+//
+//    private int id;
+//    private String name, description;
+//    private LocalDate startDate, endDate;
+//    private String tatus;
+//
+//    public TrainingDevelopment(int id, String name, String description, LocalDate startDate, LocalDate endDate, String status) {
+//        this.id = id;
+//        this.name = name;
+//        this.description = description;
+//        this.startDate = startDate;
+//        this.endDate = endDate;
+//        this.status = status;
+//    }
+//
+//    public int getId() {
+//        return id;
+//    }
+//
+//    public void setId(int id) {
+//        this.id = id;
+//    }
+//
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
         private int id;
     private String name;
     private String description;

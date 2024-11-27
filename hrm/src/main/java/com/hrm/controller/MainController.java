@@ -16,9 +16,13 @@ import com.hrm.view.EmployeeManagerFrame;
 import com.hrm.view.SalaryFrame;
 import com.hrm.view.SalaryNhanVien;
 import com.hrm.view.TrainingDevelopmentView;
+import com.hrm.view.SettingGUI;
+import com.hrm.view.TuyenDungGUI;
 import com.hrm.view.muctieuframe;
+import javax.swing.JFrame;
 
 public class MainController implements MouseListener {
+
     private MainFrame mainFrame;
 
     public MainController(MainFrame mainFrame) {
@@ -52,6 +56,7 @@ public class MainController implements MouseListener {
                     new SalaryNhanVien(mainFrame.getEmployee());
                     mainFrame.dispose();
                 }
+
                 break;
                 
             case "CongViecPanel":
@@ -73,6 +78,12 @@ public class MainController implements MouseListener {
                 new muctieuframe(mainFrame.getEmployee());
                 mainFrame.dispose();
                 break;
+            case "TuyenDungPanel":
+                new TuyenDungGUI(mainFrame.getEmployee());
+                mainFrame.dispose();
+                break;
+            case "CaiDatPanel":
+                new SettingGUI(mainFrame.getEmployee());
         }
     }
 

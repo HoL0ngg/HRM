@@ -118,4 +118,43 @@ public class DepartmentDAO implements DAOInterface<Department> {
 
         return department;
     }
+     public Integer getManagerIdByDepartment(int departmentId) {
+        String sql = "SELECT manager_id FROM departments WHERE id = ?";
+        try (Connection con = JDBCUtil.createConnection();
+             PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setInt(1, departmentId);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("manager_id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+      public boolean updateManager(int departmentId, int managerId) {
+        String sql = "UPDATE departments SET manager_id = ? WHERE id = ?";
+        try (Connection conn = JDBCUtil.createConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, managerId);
+            pst.setInt(2, departmentId);
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean removeManager(int departmentId) {
+        String sql = "UPDATE departments SET manager_id = NULL WHERE id = ?";
+        try (Connection conn = JDBCUtil.createConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, departmentId);
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
 }

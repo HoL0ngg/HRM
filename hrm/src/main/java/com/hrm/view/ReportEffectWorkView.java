@@ -74,7 +74,7 @@ public class ReportEffectWorkView extends JFrame {
         // Thêm sự kiện cho nút quay lại trang chủ
         BackLabel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                goBack();
+//                goBack();
             }
         });
 
@@ -301,13 +301,13 @@ public class ReportEffectWorkView extends JFrame {
 
 
     
-    private void goBack() {
-    	// Đóng JFrame hiện tại
-        SwingUtilities.getWindowAncestor(this).dispose();
-
-        // Mở MainFrame (hoặc JFrame chính của bạn)
-        new ReportView1(employee).setVisible(true);
-    }
+//    private void goBack() {
+//    	// Đóng JFrame hiện tại
+//        SwingUtilities.getWindowAncestor(this).dispose();
+//
+//        // Mở MainFrame (hoặc JFrame chính của bạn)
+//        new ReportView1(employee).setVisible(true);
+//    }
 
     private Integer[] generateYearOptions() {
         int currentYear = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);

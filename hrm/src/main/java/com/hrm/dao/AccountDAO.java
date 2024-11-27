@@ -73,26 +73,38 @@ public class AccountDAO implements DAOInterface<Account> {
         return user;
     }
 
-    @Override
-    public ArrayList<Account> selectAll() {
-        return null;
-    }
-
     public Employee DangNhap(String user, String password) {
         String sql = "select * from account where username = ?";
         Connection con = JDBCUtil.createConnection();
         Employee employee = null;
-        try (PreparedStatement pst = con.prepareStatement(sql)) {
-            pst.setString(1, user);
-            ResultSet rs = pst.executeQuery();
+        try {
+            PreparedStatement pst = con.prepareStatement(sql);
 
-            if (rs.next()) {
-                if (password.equals(rs.getString("password"))) {
-                    employee = EmployeeDAO.getInstance().getNamebyId(rs.getInt("employee_id"));
+            try {
+                pst.setString(1, user);
+                ResultSet rs = pst.executeQuery();
+                if (rs.next()) {
+                    if (password.equals(rs.getString("password"))) {
+                        employee = EmployeeDAO.getInstance().getNamebyId(rs.getInt("employee_id"));
+                    }
                 }
+            } catch (Throwable var9) {
+                if (pst != null) {
+                    try {
+                        pst.close();
+                    } catch (Throwable var8) {
+                        var9.addSuppressed(var8);
+                    }
+                }
+
+                throw var9;
             }
 
-        } catch (SQLException e) {
+            if (pst != null) {
+                pst.close();
+            }
+        } catch (SQLException var10) {
+            SQLException e = var10;
             e.printStackTrace();
         }
 
@@ -100,4 +112,9 @@ public class AccountDAO implements DAOInterface<Account> {
         return employee;
     }
 
+    @Override
+    public ArrayList<Account> selectAll() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'selectAll'");
+    }
 }

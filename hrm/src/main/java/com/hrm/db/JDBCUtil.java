@@ -21,6 +21,8 @@ public class JDBCUtil {
         } catch (SQLException var4) {
             SQLException e = var4;
             e.printStackTrace();
+
+            System.out.println("3igZeus: connect faild " + var4);
         }
 
         return con;

@@ -86,5 +86,4 @@ public class TimeKeeping {
     public void setStatus(Status status) {
         this.status = status;
     }
-
 }

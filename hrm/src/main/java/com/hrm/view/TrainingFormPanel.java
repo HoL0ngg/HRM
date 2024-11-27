@@ -57,7 +57,7 @@ public class TrainingFormPanel extends JPanel {
         eBus = new EmployeeBus();
         trainerBus = new TrainerBUS();
         tdBus = new TrainingDevelopmentBUS();
-        td = tdBus.get(id);
+ ////////////       td = tdBus.get(id);
         detail();
     }
 

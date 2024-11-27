@@ -5,10 +5,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import com.hrm.Main;
 import com.hrm.controller.ReportController;
 
-
+import com.formdev.flatlaf.FlatLightLaf;
 import java.util.List;
 
 import com.hrm.dao.ReportDAO;
@@ -17,9 +16,8 @@ import com.hrm.model.Employee;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
-public class ReportOverrallView extends JFrame {
+public class ReportOverallView extends JFrame {
 	private JTable table;
     private DefaultTableModel tableModel;
     private ReportController reportController;
@@ -27,11 +25,18 @@ public class ReportOverrallView extends JFrame {
     private JComboBox<Integer> monthFromComboBox;
     private JComboBox<Integer> monthToComboBox;
     private ReportDAO reportDAO; // Thêm đối tượng DAO
-    private Employee employee;
+    private static Employee employee;
 
-    public ReportOverrallView(Employee employee) {
-            this.employee = employee;
-            this.init();
+    public ReportOverallView(Employee employee) {
+    	// Cài đặt FlatLaf trước khi khởi tạo JFrame
+        try {
+            UIManager.setLookAndFeel(new FlatLightLaf()); // Chọn kiểu giao diện
+        } catch (UnsupportedLookAndFeelException ex) {
+            ex.printStackTrace();
+        }
+
+        this.employee = employee;
+        this.init();
     }
 
     public void init() {
@@ -233,9 +238,29 @@ public class ReportOverrallView extends JFrame {
 
      // Sự kiện cho nút Lưu vào (chưa thực hiện gì)
      saveButton.addActionListener(e -> {
-         // Không làm gì khi nhấn nút này
-    	 showSuccessNotification();
-     });
+    	    // Lấy dữ liệu từ giao diện
+    	    String ghiChu = ghiChuLabel.getText(); // Ghi chú từ JLabel
+    	    String monthFrom = monthFromComboBox.getSelectedItem().toString(); // Tháng bắt đầu
+    	    String monthTo = monthToComboBox.getSelectedItem().toString();     // Tháng kết thúc
+    	    String year = yearComboBox.getSelectedItem().toString();           // Năm
+
+    	    // Kiểm tra nếu monthFrom và monthTo giống nhau
+    	    String reportTitle;
+    	    if (monthFrom.equals(monthTo)) {
+    	        reportTitle = ghiChu + " Tháng " + monthFrom + " năm " + year;
+    	    } else {
+    	        reportTitle = ghiChu + " Từ Tháng " + monthFrom + " đến Tháng " + monthTo + " năm " + year;
+    	    }
+
+    	    // Dữ liệu khác
+    	    int createdBy = employee.getId(); // ID người tạo
+    	    String results = "Đã lưu"; // Trạng thái mặc định
+
+    	    // Gọi phương thức lưu trong Controller
+    	    new ReportController().saveReport(createdBy, reportTitle, results);
+    	    showSuccessNotification();
+    	});
+
 
         // Panel chứa table
         tableModel = new DefaultTableModel(
@@ -303,11 +328,9 @@ public class ReportOverrallView extends JFrame {
     
  // Hàm xử lý quay lại trang chủ
     private void goBack() {
-    	// Đóng JFrame hiện tại
-        SwingUtilities.getWindowAncestor(this).dispose();
-
-        // Mở MainFrame (hoặc JFrame chính của bạn)
-        new ReportEmployeeView(employee).setVisible(true);
+    	this.dispose();
+        // Mở JFrame khác (ReportEffectWorkView)
+        new BaoCaoFrame(employee).setVisible(true);
     }
 
     private Integer[] generateYearOptions() {
@@ -357,16 +380,32 @@ public class ReportOverrallView extends JFrame {
 
     private void exportToExcel() {
         try {
-            // Lấy năm và tháng từ các ComboBox
-            int year = (int) yearComboBox.getSelectedItem();
-            int monthFrom = (int) monthFromComboBox.getSelectedItem();
-            int monthTo = (int) monthToComboBox.getSelectedItem();
+        	String ghiChu = "Báo cáo và thống kê nhân sự tổng quan"; // Ghi chú từ JLabel
+    	    String monthFrom = monthFromComboBox.getSelectedItem().toString(); // Tháng bắt đầu
+    	    String monthTo = monthToComboBox.getSelectedItem().toString();     // Tháng kết thúc
+    	    String year = yearComboBox.getSelectedItem().toString();           // Năm
+    	    
+    	    
 
-            // Tạo tên file động
-            String fileName = "Báo cáo nhân sự tổng quan từ tháng " + monthFrom + " - tháng " + monthTo + " năm " + year + ".xlsx";
+    	    // Kiểm tra nếu monthFrom và monthTo giống nhau
+    	    String fileName;
+    	    if (monthFrom.equals(monthTo)) {
+    	    	fileName = ghiChu + " Tháng " + monthFrom + " năm " + year + ".xlsx";
+    	    } else {
+    	    	fileName = ghiChu + " Từ Tháng " + monthFrom + " đến Tháng " + monthTo + " năm " + year + ".xlsx";
+    	    }
+    	    
+    	    int monthFromE = (int) monthFromComboBox.getSelectedItem();
+    	    int monthToE = (int) monthToComboBox.getSelectedItem();
+    	    int yearE = (int) yearComboBox.getSelectedItem();
+    	    
+    	    if (monthFromE > monthToE) {
+                JOptionPane.showMessageDialog(this, "Tháng bắt đầu không được lớn hơn tháng kết thúc.");
+                return;
+            }
             
             // Chuyển dữ liệu từ table vào danh sách dữ liệu để xuất
-            List<Object[]> data = reportController.getEmployeeReport();
+            List<Object[]> data = reportController.searchReports(yearE, monthFromE, monthToE);
             String[] columnNames = {"Năm", "Tháng", "Tổng số nhân viên", "Nhân viên mới", "Nhân viên đã nghỉ"};
 
             // Xuất dữ liệu ra file Excel
@@ -377,4 +416,6 @@ public class ReportOverrallView extends JFrame {
             JOptionPane.showMessageDialog(this, "Lỗi khi xuất dữ liệu ra Excel: " + e.getMessage());
         }
     }
+    
+    
 }

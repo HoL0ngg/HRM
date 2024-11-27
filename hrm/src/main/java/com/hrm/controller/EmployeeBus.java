@@ -25,6 +25,15 @@ public class EmployeeBus {
         empDao = new EmployeeDAO();
         empList = empDao.getNameList();
         dptmBus = new DepartmentBUS();
+        empList = empDao.getNameList();
+    }
+    
+    public List<String> getList(){
+        List<String> list = new ArrayList<>();
+        for(Employee e : empList){
+            list.add(e.getName());
+        }
+        return list;
     }
 
     public int getIdByName(String name){

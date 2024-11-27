@@ -22,14 +22,22 @@ public class ReportDAO {
     // Phương thức lấy danh sách dữ liệu
     public List<Object[]> getEmployeeReport() {
         List<Object[]> reportData = new ArrayList<>();
-        String query = "SELECT YEAR(hire_date) AS year, " +
-                       "MONTH(hire_date) AS month, " +
-                       "COUNT(*) AS total_employees, " +
-                       "SUM(CASE WHEN hire_date >= CURDATE() - INTERVAL 1 MONTH THEN 1 ELSE 0 END) AS new_employees, " +
-                       "SUM(CASE WHEN status = 'off' THEN 1 ELSE 0 END) AS resigned_employees " +
-                       "FROM employee " +
-                       "GROUP BY YEAR(hire_date), MONTH(hire_date) " +  // Nhóm theo năm và tháng
-                       "ORDER BY year, month";  // Sắp xếp theo năm và tháng
+        String query = "WITH EmployeeStatus AS ( " +
+                       "  SELECT YEAR(hire_date) AS year, " +
+                       "         MONTH(hire_date) AS month, " +
+                       "         COUNT(*) AS hired_in_month, " +
+                       "         SUM(CASE WHEN status = 'off' THEN 1 ELSE 0 END) AS resigned_up_to_month " +
+                       "  FROM employee " +
+                       "  GROUP BY YEAR(hire_date), MONTH(hire_date) " +
+                       ") " +
+                       "SELECT year, month, " +
+                       "       (SELECT COUNT(*) FROM employee " +
+                       "        WHERE hire_date <= LAST_DAY(DATE(CONCAT(year, '-', month, '-01'))) " +
+                       "          AND (status != 'off' OR status IS NULL)) AS total_employees, " +
+                       "       hired_in_month AS new_employees, " +
+                       "       resigned_up_to_month AS resigned_employees " +
+                       "FROM EmployeeStatus " +
+                       "ORDER BY year, month";
 
         try (Connection connection = mySQL.getConnection(); 
              Statement stmt = connection.createStatement(); 
@@ -47,6 +55,7 @@ public class ReportDAO {
         }
         return reportData;
     }
+
     
     public List<Object[]> getEmployeeWorkEffect() {
         List<Object[]> reportData = new ArrayList<>();
@@ -78,14 +87,22 @@ public class ReportDAO {
     // Phương thức lấy dữ liệu báo cáo theo năm và tháng
     public List<Object[]> getEmployeeReportByMonthRange(int year, int monthFrom, int monthTo) {
         List<Object[]> reportData = new ArrayList<>();
-        String query = "SELECT YEAR(hire_date) AS year, " +
-                       "MONTH(hire_date) AS month, " +
-                       "COUNT(*) AS total_employees, " +
-                       "SUM(CASE WHEN hire_date >= CURDATE() - INTERVAL 1 MONTH THEN 1 ELSE 0 END) AS new_employees, " +
-                       "SUM(CASE WHEN status = 'off' THEN 1 ELSE 0 END) AS resigned_employees " +
-                       "FROM employee " +
-                       "WHERE YEAR(hire_date) = ? AND MONTH(hire_date) BETWEEN ? AND ? " +
-                       "GROUP BY YEAR(hire_date), MONTH(hire_date) " +
+        String query = "WITH EmployeeStatus AS ( " +
+                       "  SELECT YEAR(hire_date) AS year, " +
+                       "         MONTH(hire_date) AS month, " +
+                       "         COUNT(*) AS hired_in_month, " +
+                       "         SUM(CASE WHEN status = 'off' THEN 1 ELSE 0 END) AS resigned_up_to_month " +
+                       "  FROM employee " +
+                       "  WHERE YEAR(hire_date) = ? AND MONTH(hire_date) BETWEEN ? AND ? " +
+                       "  GROUP BY YEAR(hire_date), MONTH(hire_date) " +
+                       ") " +
+                       "SELECT year, month, " +
+                       "       (SELECT COUNT(*) FROM employee " +
+                       "        WHERE hire_date <= LAST_DAY(DATE(CONCAT(year, '-', month, '-01'))) " +
+                       "          AND (status != 'off' OR status IS NULL)) AS total_employees, " +
+                       "       hired_in_month AS new_employees, " +
+                       "       resigned_up_to_month AS resigned_employees " +
+                       "FROM EmployeeStatus " +
                        "ORDER BY year, month";
 
         try (Connection connection = mySQL.getConnection(); 
@@ -109,6 +126,7 @@ public class ReportDAO {
         }
         return reportData;
     }
+
     
 
 

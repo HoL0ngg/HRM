@@ -4,7 +4,6 @@
  */
 package com.hrm.view;
 
-
 import com.hrm.dao.DepartmentDAO;
 import com.hrm.dao.EmployeeDAO;
 import com.hrm.dao.SalaryChangeHistoryDAO;
@@ -18,8 +17,6 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -27,7 +24,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -51,67 +47,64 @@ import javax.swing.table.DefaultTableModel;
  */
 
 public class SalaryFrame extends javax.swing.JFrame {
-      private JPopupMenu filterMenu;
-      private Employee employee;
-      private SalaryFrame Mainframe;
+    private JPopupMenu filterMenu;
+    private Employee employee;
+
     public Employee getEmployee() {
-                return employee;
+        return employee;
     }
-//    public SalaryFrame(SalaryFrame Mainframe) {
-//        this.Mainframe = Mainframe;
-//        init();
-//    }
-     
-      public JTextField getTxtSearch() {
+    // public SalaryFrame(SalaryFrame Mainframe) {
+    // this.Mainframe = Mainframe;
+    // init();
+    // }
+
+    public JTextField getTxtSearch() {
         return txtSearch;
     }
-    
+
     public SalaryFrame(Employee employee) {
-            this.employee = employee;
-            init();
+        this.employee = employee;
+        init();
     }
-    private void init(){
+
+    private void init() {
         initComponents();
         addEvents();
         setVisible(true);
-        
-           
-                loadListSalariesToTable();
-                loadDataToYeuCauTangLuongTable();
-                loadDataToYeuCauTangLuongDaXemTable();
-                
-                Image FilterIcon = new ImageIcon(
+
+        loadListSalariesToTable();
+        loadDataToYeuCauTangLuongTable();
+        loadDataToYeuCauTangLuongDaXemTable();
+
+        Image FilterIcon = new ImageIcon(
                 new File("../hrm/src/main/resources/img/filter.png").getAbsolutePath())
                 .getImage()
                 .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-                this.jLabel20.setIcon(new ImageIcon(FilterIcon));
-                
-                
-                Image reset = new ImageIcon(
+        this.jLabel20.setIcon(new ImageIcon(FilterIcon));
+
+        Image reset = new ImageIcon(
                 new File("../hrm/src/main/resources/img/refresh_icon.png").getAbsolutePath())
                 .getImage()
                 .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-                this.jblDanhSachLuong.setIcon(new ImageIcon(reset));
-                this.sapxep1.setIcon(new ImageIcon(FilterIcon));
-                this.sapxep2.setIcon(new ImageIcon(FilterIcon));
-                this.rs1.setIcon(new ImageIcon(reset));
-                this.rs2.setIcon(new ImageIcon(reset));
-                addEvents();
+        this.jblDanhSachLuong.setIcon(new ImageIcon(reset));
+        this.sapxep1.setIcon(new ImageIcon(FilterIcon));
+        this.sapxep2.setIcon(new ImageIcon(FilterIcon));
+        this.rs1.setIcon(new ImageIcon(reset));
+        this.rs2.setIcon(new ImageIcon(reset));
+        addEvents();
     }
+
     private void addEvents() {
-        
-        
+
         jblback.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MainFrame mainframe = new MainFrame(employee);
-                mainframe.setVisible(true);
+                new MainFrame(employee);
                 dispose();
             }
-        }
-        );
+        });
     }
-    
+
     public JTable getTblDanhSachLuong() {
         return tblDanhSachLuong;
     }
@@ -119,52 +112,46 @@ public class SalaryFrame extends javax.swing.JFrame {
     public JPanel getPanel() {
         return jPanel1;
     }
-    
-  
-   
-    
 
     // Biến lưu giá trị lọc
     private String selectedDepartment = null; // Phòng ban
-    //private String selectedStatus = null;     // Trạng thái (On/Off)
-    private String selectedWorkType = null;   // Hình thức làm việc (Part-time/Full-time)
-    private BigDecimal  selecedSalaryMin = null;
-    private BigDecimal  selecedSalaryMax = null;
-    
-    
-        
-        /*
-         * Creates new form Salarytest
-         */
-        
-        public SalaryFrame() {
-                init();
-           
-                loadListSalariesToTable();
-                loadDataToYeuCauTangLuongTable();
-                loadDataToYeuCauTangLuongDaXemTable();
-                
-                Image FilterIcon = new ImageIcon(
+    // private String selectedStatus = null; // Trạng thái (On/Off)
+    private String selectedWorkType = null; // Hình thức làm việc (Part-time/Full-time)
+    private BigDecimal selecedSalaryMin = null;
+    private BigDecimal selecedSalaryMax = null;
+
+    /*
+     * Creates new form Salarytest
+     */
+
+    public SalaryFrame() {
+        init();
+
+        loadListSalariesToTable();
+        loadDataToYeuCauTangLuongTable();
+        loadDataToYeuCauTangLuongDaXemTable();
+
+        Image FilterIcon = new ImageIcon(
                 new File("../hrm/src/main/resources/img/filter.png").getAbsolutePath())
                 .getImage()
                 .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-                this.jLabel20.setIcon(new ImageIcon(FilterIcon));
-                
-                
-                Image reset = new ImageIcon(
+        this.jLabel20.setIcon(new ImageIcon(FilterIcon));
+
+        Image reset = new ImageIcon(
                 new File("../hrm/src/main/resources/img/refresh_icon.png").getAbsolutePath())
                 .getImage()
                 .getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-                this.jblDanhSachLuong.setIcon(new ImageIcon(reset));
-                addEvents();
-        }
-        
-        /**
-         * This method is called from within the constructor to initialize the form.
-         * WARNING: Do NOT modify this code. The content of this method is always
-         * regenerated by the Form Editor.
-         */
-        // <editor-fold defaultstate="collapsed" desc="Generated
+        this.jblDanhSachLuong.setIcon(new ImageIcon(reset));
+        addEvents();
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -555,7 +542,7 @@ public class SalaryFrame extends javax.swing.JFrame {
         jScrollPane3.setViewportView(tblDanhSachLuong);
 
         cbbThang.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbbThang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
+        cbbThang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
         cbbThang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbbThangActionPerformed(evt);
@@ -707,7 +694,7 @@ public class SalaryFrame extends javax.swing.JFrame {
         });
 
         cbbThang1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbbThang1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
+        cbbThang1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
         cbbThang1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbbThang1ActionPerformed(evt);
@@ -821,7 +808,7 @@ public class SalaryFrame extends javax.swing.JFrame {
         });
 
         cbbThang2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbbThang2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
+        cbbThang2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
         cbbThang2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbbThang2ActionPerformed(evt);
@@ -977,7 +964,7 @@ public class SalaryFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void lableFilterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lableFilterMouseClicked
+    private void lableFilterMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_lableFilterMouseClicked
 
         if (filterMenu == null) {
             initializeFilterMenu();
@@ -985,75 +972,105 @@ public class SalaryFrame extends javax.swing.JFrame {
         // Hiển thị menu ngay dưới nút bộ lọc
         filterMenu.show(lableFilter, 0, lableFilter.getHeight());
         System.out.println("Filter menu displayed");
-    }//GEN-LAST:event_lableFilterMouseClicked
+    }// GEN-LAST:event_lableFilterMouseClicked
 
-    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtSearchActionPerformed
         SalaryDAO salaryDAO = SalaryDAO.getInstance();
-        int selectedid = Integer.parseInt(txtSearch.getText().trim());
-        ArrayList<Salary> salaryList = salaryDAO.selectByEmployeeIdforDanhSachLuong(selectedid);
-        // Sử dụng phương thức selectByEmployeeID thay vì selectByID
-        //        Salary salary = salaryDAO.selectByEmployeeId(selectedid);
 
-        // Nếu tìm thấy Salary, cập nhật bảng dữ liệu
-        if (salaryList != null) {
-            Object[][] tableData = new Object[1][9]; // Chỉ có một dòng vì chỉ tìm một nhân viên
+        try {
+            // Lấy giá trị từ ô tìm kiếm và kiểm tra xem có phải số nguyên không
+            String searchValue = txtSearch.getText().trim();
 
-            for (int i = 0; i < salaryList.size(); ++i) {
-                Salary salary = (Salary) salaryList.get(i);
-                tableData[i][0] = salary.getEmployee().getId();
-                tableData[i][1] = salary.getEmployee().getName();
-                tableData[i][2] = salary.getPosition().getName();
-                tableData[i][3] = salary.getPositionSalary();
-                tableData[i][4] = salary.getOvertimeSalary();
-                tableData[i][5] = salary.getAttendance();
-                tableData[i][6] = salary.getBonus();
-                tableData[i][7] = salary.getDeductions();
-                tableData[i][8] = salary.getnet_salary();
+            // Kiểm tra nếu ô tìm kiếm rỗng
+            if (searchValue.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên hoặc tên nhân viên!");
+                return;
             }
-            // Tạo model cho bảng và cập nhật
-            DefaultTableModel model = new DefaultTableModel(tableData,
-                new String[] { "Mã nhân viên", "Họ và tên", "Vị trí",
-                    "Lương theo giờ", "Lương tăng ca", "Chuyên cần", "Thưởng", "Khấu trừ",
-                    "Tổng lương" });
-            this.tblDanhSachLuong.setModel(model);
-        } else {
-            // Nếu không tìm thấy thông tin lương, có thể hiển thị thông báo hoặc để trống bảng
-            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin lương cho nhân viên này!");
-        }
-    }//GEN-LAST:event_txtSearchActionPerformed
 
-    private void cbbThangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbThangActionPerformed
-        int selectedMonth = this.cbbThang.getSelectedIndex() + 1;
-                SalaryDAO salaryDAO = SalaryDAO.getInstance();
-                ArrayList<Salary> salaryList = salaryDAO.selectByMonth(selectedMonth);
+
+            Object searchParam; // Khai báo biến searchParam có thể là số hoặc chuỗi
+            ArrayList<Salary> salaryList;
+
+            // Nếu là số, tìm kiếm theo ID nhân viên
+            try {
+                // Kiểm tra nếu giá trị là số
+                searchParam = Integer.parseInt(searchValue);
+                // Thực hiện tìm kiếm theo ID
+                salaryList = salaryDAO.selectByEmployeeIdforDanhSachLuong((Integer) searchParam);
+            } catch (NumberFormatException e) {
+                // Nếu không phải số, gán vào searchParam dưới dạng String (tên nhân viên)
+                searchParam = searchValue;
+                // Thực hiện tìm kiếm theo tên
+                salaryList = salaryDAO.selectByEmployeeNameforDanhSachLuong((String) searchParam);
+            }
+//            System.out.println("Search value: " + searchValue); // Debug
+
+            // Kiểm tra nếu danh sách lương không rỗng
+            if (salaryList != null && !salaryList.isEmpty()) {
                 Object[][] tableData = new Object[salaryList.size()][9];
 
+                // Lặp qua danh sách lương và cập nhật dữ liệu cho bảng
                 for (int i = 0; i < salaryList.size(); ++i) {
-                        Salary salary = (Salary) salaryList.get(i);
-                        tableData[i][0] = salary.getEmployee().getId();
-                        tableData[i][1] = salary.getEmployee().getName();
-                        tableData[i][2] = salary.getPosition().getName();
-                        tableData[i][3] = salary.getPositionSalary();
-                        tableData[i][4] = salary.getOvertimeSalary();
-                        tableData[i][5] = salary.getAttendance();
-                        tableData[i][6] = salary.getBonus();
-                        tableData[i][7] = salary.getDeductions();
-                        tableData[i][8] = salary.getnet_salary();
+                    Salary salary = salaryList.get(i);
+                    tableData[i][0] = salary.getEmployee().getId();
+                    tableData[i][1] = salary.getEmployee().getName();
+                    tableData[i][2] = salary.getPosition().getName();
+                    tableData[i][3] = salary.getPositionSalary();
+                    tableData[i][4] = salary.getOvertimeSalary();
+                    tableData[i][5] = salary.getAttendance();
+                    tableData[i][6] = salary.getBonus();
+                    tableData[i][7] = salary.getDeductions();
+                    tableData[i][8] = salary.getnet_salary();
                 }
 
+                // Tạo model cho bảng và cập nhật
                 DefaultTableModel model = new DefaultTableModel(tableData,
-                                new String[] { "Mã nhân viên", "Họ và tên", "Vị trí",
-                                                "Lương theo giờ", "Lương tăng ca", "Chuyên cần", "Thưởng", "Khấu trừ",
-                                                "Tổng lương" });
+                        new String[] { "Mã nhân viên", "Họ và tên", "Vị trí",
+                                "Lương theo giờ", "Lương tăng ca", "Chuyên cần", "Thưởng", "Khấu trừ",
+                                "Tổng lương" });
                 this.tblDanhSachLuong.setModel(model);
-    }//GEN-LAST:event_cbbThangActionPerformed
+            } else {
+                // Hiển thị thông báo nếu không tìm thấy dữ liệu
+                JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin lương!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Log lỗi cho việc gỡ lỗi
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình xử lý dữ liệu!");
+        }
+    }// GEN-LAST:event_txtSearchActionPerformed
 
-    private void tblDanhSachLuongMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDanhSachLuongMouseClicked
+    private void cbbThangActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbbThangActionPerformed
+        int selectedMonth = this.cbbThang.getSelectedIndex();
+        SalaryDAO salaryDAO = SalaryDAO.getInstance();
+        ArrayList<Salary> salaryList = salaryDAO.selectByMonth(selectedMonth);
+        Object[][] tableData = new Object[salaryList.size()][9];
+
+        for (int i = 0; i < salaryList.size(); ++i) {
+            Salary salary = (Salary) salaryList.get(i);
+            tableData[i][0] = salary.getEmployee().getId();
+            tableData[i][1] = salary.getEmployee().getName();
+            tableData[i][2] = salary.getPosition().getName();
+            tableData[i][3] = salary.getPositionSalary();
+            tableData[i][4] = salary.getOvertimeSalary();
+            tableData[i][5] = salary.getAttendance();
+            tableData[i][6] = salary.getBonus();
+            tableData[i][7] = salary.getDeductions();
+            tableData[i][8] = salary.getnet_salary();
+        }
+
+        DefaultTableModel model = new DefaultTableModel(tableData,
+                new String[] { "Mã nhân viên", "Họ và tên", "Vị trí",
+                        "Lương theo giờ", "Lương tăng ca", "Chuyên cần", "Thưởng", "Khấu trừ",
+                        "Tổng lương" });
+        this.tblDanhSachLuong.setModel(model);
+    }// GEN-LAST:event_cbbThangActionPerformed
+
+    private void tblDanhSachLuongMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tblDanhSachLuongMouseClicked
         int row = tblDanhSachLuong.rowAtPoint(evt.getPoint());
         if (row >= 0) {
             // Lấy employeeId từ hàng đã chọn
-            int employeeId = (int) tblDanhSachLuong.getValueAt(row, 0);  // Giả sử cột 0 là employee_id
-            
+            int employeeId = (int) tblDanhSachLuong.getValueAt(row, 0); // Giả sử cột 0 là employee_id
+
             // Gọi phương thức để lấy thông tin lương chi tiết từ database
             SalaryDAO salaryDAO = SalaryDAO.getInstance();
             ArrayList<Salary> salaryDetails = salaryDAO.selectByEmployeeIdforDanhSachLuong(employeeId);
@@ -1061,159 +1078,166 @@ public class SalaryFrame extends javax.swing.JFrame {
             // Kiểm tra nếu danh sách có lương cho nhân viên
             if (!salaryDetails.isEmpty()) {
                 // Lấy thông tin chi tiết từ đối tượng Salary
-                Salary salaryDetail = salaryDetails.get(0);  // Lấy thông tin lương chi tiết (nếu có)
-                
+                Salary salaryDetail = salaryDetails.get(0); // Lấy thông tin lương chi tiết (nếu có)
+
                 String employeeName = salaryDetail.getEmployee().getName();
                 String position = salaryDetail.getPosition().getName();
-                BigDecimal totalSalary = salaryDetail.getHourly_salary();  // Lương theo giờ
-                BigDecimal overtimeSalary = salaryDetail.getOvertimeSalary();  // Lương tăng ca
+                BigDecimal totalSalary = salaryDetail.getHourly_salary(); // Lương theo giờ
+                BigDecimal overtimeSalary = salaryDetail.getOvertimeSalary(); // Lương tăng ca
                 BigDecimal bonus = salaryDetail.getBonus();
                 int attendance = salaryDetail.getAttendance();
                 BigDecimal deductions = salaryDetail.getDeductions();
-                BigDecimal netSalary = salaryDetail.getnet_salary();  // Tổng lương
+                BigDecimal netSalary = salaryDetail.getnet_salary(); // Tổng lương
                 LocalDate payday = salaryDetail.getPayday();
                 String note = salaryDetail.getNote();
-                
+
                 // Gọi phương thức để hiển thị thông tin chi tiết trong SalaryDetailDialog
                 SalaryDetailDialog.showSalaryDetailDialog(
-                    (JFrame) null,  // parent frame có thể là null
-                    employeeName,   // Tên nhân viên
-                    position,       // Vị trí công việc
-                    totalSalary,    // Tổng lương theo giờ
-                    overtimeSalary, // Tổng lương tăng ca
-                    bonus,          // Thưởng
-                    attendance,     // Chuyên cần
-                    deductions,     // Khấu trừ
-                    netSalary,      // Tổng lương (net salary)
-                    payday,         // Ngày hiệu lực
-                    note            // Ghi chú
+                        (JFrame) null, // parent frame có thể là null
+                        employeeName, // Tên nhân viên
+                        position, // Vị trí công việc
+                        totalSalary, // Tổng lương theo giờ
+                        overtimeSalary, // Tổng lương tăng ca
+                        bonus, // Thưởng
+                        attendance, // Chuyên cần
+                        deductions, // Khấu trừ
+                        netSalary, // Tổng lương (net salary)
+                        payday, // Ngày hiệu lực
+                        note // Ghi chú
                 );
             } else {
                 // Xử lý trường hợp không có dữ liệu (nếu cần)
                 JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin lương.");
             }
         }
-    }//GEN-LAST:event_tblDanhSachLuongMouseClicked
+    }// GEN-LAST:event_tblDanhSachLuongMouseClicked
 
-    private void TangDanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TangDanMouseClicked
+    private void TangDanMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_TangDanMouseClicked
         SalaryDAO salaryDAO = SalaryDAO.getInstance();
-    ArrayList<Salary> salaryList = salaryDAO.selectAll(); // selectAll thay vì selectByMonth
-    
-    // Sắp xếp danh sách salaryList theo netSalary tăng dần
-    Collections.sort(salaryList, (Salary s1, Salary s2) -> s1.getnet_salary().compareTo(s2.getnet_salary()) // So sánh getnet_salary theo thứ tự tăng dần
+        ArrayList<Salary> salaryList = salaryDAO.selectAll(); // selectAll thay vì selectByMonth
+
+        // Sắp xếp danh sách salaryList theo netSalary tăng dần
+        Collections.sort(salaryList, (Salary s1, Salary s2) -> s1.getnet_salary().compareTo(s2.getnet_salary()) // So
+                                                                                                                // sánh
+                                                                                                                // getnet_salary
+                                                                                                                // theo
+                                                                                                                // thứ
+                                                                                                                // tự
+                                                                                                                // tăng
+                                                                                                                // dần
         );
-    
-    // Tạo dữ liệu cho bảng
-    Object[][] tableData = new Object[salaryList.size()][9];
-    for (int i = 0; i < salaryList.size(); ++i) {
-        Salary salary = salaryList.get(i);
-        tableData[i][0] = salary.getEmployee().getId();
-        tableData[i][1] = salary.getEmployee().getName();
-        tableData[i][2] = salary.getPosition().getName();
-        tableData[i][3] = salary.getPositionSalary();
-        tableData[i][4] = salary.getOvertimeSalary();
-        tableData[i][5] = salary.getAttendance();
-        tableData[i][6] = salary.getBonus();
-        tableData[i][7] = salary.getDeductions();
-        tableData[i][8] = salary.getnet_salary();
-    }
 
-    // Cập nhật lại bảng với dữ liệu đã sắp xếp
-    DefaultTableModel model = new DefaultTableModel(tableData,
-            new String[] { "Mã nhân viên", "Họ và tên", "Vị trí", 
-                          "Lương theo giờ", "Lương tăng ca", "Chuyên cần", 
-                          "Thưởng", "Khấu trừ", "Tổng lương" });
-    this.tblDanhSachLuong.setModel(model);
-    }//GEN-LAST:event_TangDanMouseClicked
+        // Tạo dữ liệu cho bảng
+        Object[][] tableData = new Object[salaryList.size()][9];
+        for (int i = 0; i < salaryList.size(); ++i) {
+            Salary salary = salaryList.get(i);
+            tableData[i][0] = salary.getEmployee().getId();
+            tableData[i][1] = salary.getEmployee().getName();
+            tableData[i][2] = salary.getPosition().getName();
+            tableData[i][3] = salary.getPositionSalary();
+            tableData[i][4] = salary.getOvertimeSalary();
+            tableData[i][5] = salary.getAttendance();
+            tableData[i][6] = salary.getBonus();
+            tableData[i][7] = salary.getDeductions();
+            tableData[i][8] = salary.getnet_salary();
+        }
 
-    private void GiamDanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GiamDanMouseClicked
+        // Cập nhật lại bảng với dữ liệu đã sắp xếp
+        DefaultTableModel model = new DefaultTableModel(tableData,
+                new String[] { "Mã nhân viên", "Họ và tên", "Vị trí",
+                        "Lương theo giờ", "Lương tăng ca", "Chuyên cần",
+                        "Thưởng", "Khấu trừ", "Tổng lương" });
+        this.tblDanhSachLuong.setModel(model);
+    }// GEN-LAST:event_TangDanMouseClicked
+
+    private void GiamDanMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_GiamDanMouseClicked
         SalaryDAO salaryDAO = SalaryDAO.getInstance();
-    ArrayList<Salary> salaryList = salaryDAO.selectAll(); // selectAll thay vì selectByMonth
-    
-    // Sắp xếp danh sách salaryList theo netSalary giảm dần
-    Collections.sort(salaryList, (Salary s1, Salary s2) -> s2.getnet_salary().compareTo(s1.getnet_salary()) // So sánh netSalary theo thứ tự giảm dần
+        ArrayList<Salary> salaryList = salaryDAO.selectAll(); // selectAll thay vì selectByMonth
+
+        // Sắp xếp danh sách salaryList theo netSalary giảm dần
+        Collections.sort(salaryList, (Salary s1, Salary s2) -> s2.getnet_salary().compareTo(s1.getnet_salary()) // So
+                                                                                                                // sánh
+                                                                                                                // netSalary
+                                                                                                                // theo
+                                                                                                                // thứ
+                                                                                                                // tự
+                                                                                                                // giảm
+                                                                                                                // dần
         );
-    
-    // Tạo dữ liệu cho bảng
-    Object[][] tableData = new Object[salaryList.size()][9];
-    for (int i = 0; i < salaryList.size(); ++i) {
-        Salary salary = salaryList.get(i);
-        tableData[i][0] = salary.getEmployee().getId();
-        tableData[i][1] = salary.getEmployee().getName();
-        tableData[i][2] = salary.getPosition().getName();
-        tableData[i][3] = salary.getPositionSalary();
-        tableData[i][4] = salary.getOvertimeSalary();
-        tableData[i][5] = salary.getAttendance();
-        tableData[i][6] = salary.getBonus();
-        tableData[i][7] = salary.getDeductions();
-        tableData[i][8] = salary.getnet_salary();
-    }
 
-    // Cập nhật lại bảng với dữ liệu đã sắp xếp
-    DefaultTableModel model = new DefaultTableModel(tableData,
-            new String[] { "Mã nhân viên", "Họ và tên", "Vị trí", 
-                          "Lương theo giờ", "Lương tăng ca", "Chuyên cần", 
-                          "Thưởng", "Khấu trừ", "Tổng lương" });
-    this.tblDanhSachLuong.setModel(model);
-    }//GEN-LAST:event_GiamDanMouseClicked
+        // Tạo dữ liệu cho bảng
+        Object[][] tableData = new Object[salaryList.size()][9];
+        for (int i = 0; i < salaryList.size(); ++i) {
+            Salary salary = salaryList.get(i);
+            tableData[i][0] = salary.getEmployee().getId();
+            tableData[i][1] = salary.getEmployee().getName();
+            tableData[i][2] = salary.getPosition().getName();
+            tableData[i][3] = salary.getPositionSalary();
+            tableData[i][4] = salary.getOvertimeSalary();
+            tableData[i][5] = salary.getAttendance();
+            tableData[i][6] = salary.getBonus();
+            tableData[i][7] = salary.getDeductions();
+            tableData[i][8] = salary.getnet_salary();
+        }
 
-    private void jLabel20MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel20MouseClicked
-        if(jPanel7.isVisible()){
+        // Cập nhật lại bảng với dữ liệu đã sắp xếp
+        DefaultTableModel model = new DefaultTableModel(tableData,
+                new String[] { "Mã nhân viên", "Họ và tên", "Vị trí",
+                        "Lương theo giờ", "Lương tăng ca", "Chuyên cần",
+                        "Thưởng", "Khấu trừ", "Tổng lương" });
+        this.tblDanhSachLuong.setModel(model);
+    }// GEN-LAST:event_GiamDanMouseClicked
+
+    private void jLabel20MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel20MouseClicked
+        if (jPanel7.isVisible()) {
             jPanel7.setVisible(false);
         } else {
             jPanel7.setVisible(true);
         }
         revalidate();
         repaint();
-    }//GEN-LAST:event_jLabel20MouseClicked
+    }// GEN-LAST:event_jLabel20MouseClicked
 
-    private void txtSearch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearch1ActionPerformed
+    private void txtSearch1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtSearch1ActionPerformed
         SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
-        int selectedid = Integer.parseInt(txtSearch1.getText().trim());
-        ArrayList<SalaryChangeHistory> salaryList = salaryChangeHistoryDAO.selectByEmployeeId1(selectedid);
 
-        // Nếu danh sách không rỗng, cập nhật bảng dữ liệu
-        if (salaryList != null && !salaryList.isEmpty()) {
-            Object[][] tableData = new Object[salaryList.size()][8]; // Tạo mảng phù hợp với số dòng dữ liệu
+        try {
+            // Lấy giá trị từ ô tìm kiếm và kiểm tra xem có phải số nguyên không
+            String searchValue = txtSearch1.getText().trim();
 
-            for (int i = 0; i < salaryList.size(); ++i) {
-                SalaryChangeHistory history = salaryList.get(i);
-                tableData[i][0] = history.getId();
-                tableData[i][1] = selectedid;
-                tableData[i][2] = history.getEmployeeName();
-                tableData[i][3] = history.getOldSalary();
-                tableData[i][4] = history.getNewSalary();
-                tableData[i][5] = history.getchangeDateSend();
-                tableData[i][6] = history.getReasons();
-                tableData[i][7] = history.getStatus();
+            // Kiểm tra nếu ô tìm kiếm rỗng
+            if (searchValue.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên hoặc tên nhân viên!");
+                return;
             }
 
-            // Tạo model cho bảng và cập nhật
-            DefaultTableModel model = new DefaultTableModel(tableData,
-                new String[] { "Mã","Mã nhân viên", "Họ và tên", "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", "Lý do", "Trạng thái" });
-            this.tblYeuCauTangLuong.setModel(model);
-            this.tblYeuCauTangLuong.getColumnModel().getColumn(7).setCellRenderer(new StatusRenderer());
-        } else {
-            // Nếu không tìm thấy thông tin, hiển thị thông báo
-            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin thay đổi lương cho nhân viên này!");
-        }
-    }//GEN-LAST:event_txtSearch1ActionPerformed
 
-    private void cbbThang1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbThang1ActionPerformed
-               int selectedMonth = this.cbbThang1.getSelectedIndex() + 1;
+            Object searchParam; // Khai báo biến searchParam có thể là số hoặc chuỗi
+            ArrayList<SalaryChangeHistory> historyList; // Sử dụng đúng kiểu dữ liệu
 
-                this.tblYeuCauTangLuong.setRowHeight(30);
+            // Nếu là số, tìm kiếm theo ID nhân viên
+            try {
+                // Kiểm tra nếu giá trị là số
+                searchParam = Integer.parseInt(searchValue);
+                // Thực hiện tìm kiếm theo ID
+                historyList = salaryChangeHistoryDAO.selectByEmployeeId1((Integer) searchParam);
+            } catch (NumberFormatException e) {
+                // Nếu không phải số, gán vào searchParam dưới dạng String (tên nhân viên)
+                searchParam = searchValue;
+                // Thực hiện tìm kiếm theo tên nhân viên
+                historyList = salaryChangeHistoryDAO.selectByEmployeeName1((String) searchParam);
+            }
+            System.out.println(searchParam);
 
-                SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
-                // Sử dụng đúng kiểu dữ liệu cho danh sách SalaryChangeHistory
-                ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectByMonthDaXem(selectedMonth); 
-                Object[][] tableData = new Object[salaryChangeList.size()][8];
+            // Nếu danh sách không rỗng, cập nhật bảng dữ liệu
+            if (historyList != null && !historyList.isEmpty()) {
+                Object[][] tableData = new Object[historyList.size()][8]; // Tạo mảng phù hợp với số dòng dữ liệu
 
-                for (int i = 0; i < salaryChangeList.size(); ++i) {
-                    SalaryChangeHistory history = salaryChangeList.get(i);// Không cần ép kiểu nữa vì đã khai báo đúng kiểu
+                for (int i = 0; i < historyList.size(); ++i) {
+                    SalaryChangeHistory history = historyList.get(i);
                     tableData[i][0] = history.getId();
-                    tableData[i][1] = history.getEmployee().getId();
-                    tableData[i][2] = history.getEmployee().getName();  // Sử dụng employeeName thay vì getEmployee().getName()
+                    tableData[i][1] = history.getEmployee().getId(); // Lấy mã nhân viên từ đối tượng history
+                    tableData[i][2] = history.getEmployee().getName();
                     tableData[i][3] = history.getOldSalary();
                     tableData[i][4] = history.getNewSalary();
                     tableData[i][5] = history.getchangeDateSend();
@@ -1221,26 +1245,93 @@ public class SalaryFrame extends javax.swing.JFrame {
                     tableData[i][7] = history.getStatus();
                 }
 
+                // Tạo model cho bảng và cập nhật
                 DefaultTableModel model = new DefaultTableModel(tableData,
-                    new String[] { "Mã","Mã nhân viên", "Nhân viên", "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", "Lý do", "Trạng thái" });
+                    new String[] { "Mã", "Mã nhân viên", "Họ và tên", "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", "Lý do", "Trạng thái" });
                 this.tblYeuCauTangLuong.setModel(model);
                 this.tblYeuCauTangLuong.getColumnModel().getColumn(7).setCellRenderer(new StatusRenderer());
+            } else {
+                // Nếu không tìm thấy thông tin, hiển thị thông báo
+                JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin thay đổi lương cho nhân viên này!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình xử lý dữ liệu!");
 
-    }//GEN-LAST:event_cbbThang1ActionPerformed
+        }
+    }// GEN-LAST:event_txtSearch1ActionPerformed
 
-    private void txtSearch2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearch2ActionPerformed
+    private void cbbThang1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbbThang1ActionPerformed
+        int selectedMonth = this.cbbThang1.getSelectedIndex();
+
+        this.tblYeuCauTangLuong.setRowHeight(30);
+
         SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
-        int selectedid = Integer.parseInt(txtSearch2.getText().trim());
-        ArrayList<SalaryChangeHistory> salaryList = salaryChangeHistoryDAO.selectByEmployeeId2(selectedid);
+        // Sử dụng đúng kiểu dữ liệu cho danh sách SalaryChangeHistory
+        ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectByMonthDaXem(selectedMonth);
+        Object[][] tableData = new Object[salaryChangeList.size()][8];
+
+        for (int i = 0; i < salaryChangeList.size(); ++i) {
+            SalaryChangeHistory history = salaryChangeList.get(i);// Không cần ép kiểu nữa vì đã khai báo đúng kiểu
+            tableData[i][0] = history.getId();
+            tableData[i][1] = history.getEmployee().getId();
+            tableData[i][2] = history.getEmployee().getName(); // Sử dụng employeeName thay vì getEmployee().getName()
+            tableData[i][3] = history.getOldSalary();
+            tableData[i][4] = history.getNewSalary();
+            tableData[i][5] = history.getchangeDateSend();
+            tableData[i][6] = history.getReasons();
+            tableData[i][7] = history.getStatus();
+        }
+
+        DefaultTableModel model = new DefaultTableModel(tableData,
+                new String[] { "Mã", "Mã nhân viên", "Nhân viên", "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", "Lý do",
+                        "Trạng thái" });
+        this.tblYeuCauTangLuong.setModel(model);
+        this.tblYeuCauTangLuong.getColumnModel().getColumn(7).setCellRenderer(new StatusRenderer());
+
+    }// GEN-LAST:event_cbbThang1ActionPerformed
+
+    private void txtSearch2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtSearch2ActionPerformed
+        SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
+
+        try {
+            // Lấy giá trị từ ô tìm kiếm và kiểm tra xem có phải số nguyên không
+            String searchValue = txtSearch2.getText().trim();
+
+            // Kiểm tra nếu ô tìm kiếm rỗng
+            if (searchValue.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên hoặc tên nhân viên!");
+                return;
+            }
+
+            Object searchParam; // Khai báo biến searchParam có thể là số hoặc chuỗi
+            ArrayList<SalaryChangeHistory> historyList; // Sử dụng đúng kiểu dữ liệu
+
+            // Nếu là số, tìm kiếm theo ID nhân viên
+            try {
+                // Kiểm tra nếu giá trị là số
+                searchParam = Integer.parseInt(searchValue);
+                // Thực hiện tìm kiếm theo ID
+                historyList = salaryChangeHistoryDAO.selectByEmployeeId2((Integer) searchParam);
+            } catch (NumberFormatException e) {
+                // Nếu không phải số, gán vào searchParam dưới dạng String (tên nhân viên)
+                searchParam = searchValue;
+                // Thực hiện tìm kiếm theo tên nhân viên
+                historyList = salaryChangeHistoryDAO.selectByEmployeeName2((String) searchParam);
+            }
+            System.out.println(searchParam);
+
 
         // Nếu danh sách không rỗng, cập nhật bảng dữ liệu
-        if (salaryList != null && !salaryList.isEmpty()) {
-            Object[][] tableData = new Object[salaryList.size()][8]; // Tạo mảng phù hợp với số dòng dữ liệu
+        if (historyList != null && !historyList.isEmpty()) {
+            Object[][] tableData = new Object[historyList.size()][8]; // Tạo mảng phù hợp với số dòng dữ liệu
 
-            for (int i = 0; i < salaryList.size(); ++i) {
-                SalaryChangeHistory history = salaryList.get(i);
+
+            for (int i = 0; i < historyList.size(); ++i) {
+                SalaryChangeHistory history = historyList.get(i);
                 
-                tableData[i][0] = selectedid;
+                tableData[i][0] = history.getEmployee().getId();
+
                 tableData[i][1] = history.getEmployee().getName();
                 tableData[i][2] = history.getOldSalary();
                 tableData[i][3] = history.getNewSalary();
@@ -1252,75 +1343,82 @@ public class SalaryFrame extends javax.swing.JFrame {
 
             // Tạo model cho bảng và cập nhật
             DefaultTableModel model = new DefaultTableModel(tableData,
-                new String[] { "Mã nhân viên", "Họ và tên", "Lương hiện tại", "Lương đề xuất", "Ngày thay đổi", "Người duyệt", "Phản hồi" });
+
+                new String[] { "Mã nhân viên", "Họ và tên", "Lương hiện tại", "Lương đề xuất","Lý do yêu cầu " ,"Ngày thay đổi", "Người duyệt", "Phản hồi" });
+
             this.tblYeuCauTangLuong1.setModel(model);
-            
+
         } else {
             // Nếu không tìm thấy thông tin, hiển thị thông báo
             JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin thay đổi lương cho nhân viên này!");
         }
-    }//GEN-LAST:event_txtSearch2ActionPerformed
 
-    private void cbbThang2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbThang2ActionPerformed
-         int selectedMonth = this.cbbThang2.getSelectedIndex() + 1;
-    this.tblYeuCauTangLuong1.setRowHeight(30);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình xử lý dữ liệu!");
+        }
+    }// GEN-LAST:event_txtSearch2ActionPerformed
 
-    // Lấy danh sách yêu cầu tăng lương theo tháng
-    SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
-    ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectByMonthDaXem1(selectedMonth);
+    private void cbbThang2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cbbThang2ActionPerformed
+        int selectedMonth = this.cbbThang2.getSelectedIndex();
+        this.tblYeuCauTangLuong1.setRowHeight(30);
 
-    // Tạo bảng dữ liệu cho JTable
-    Object[][] tableData = new Object[salaryChangeList.size()][8];
+        // Lấy danh sách yêu cầu tăng lương theo tháng
+        SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
+        ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectByMonthDaXem1(selectedMonth);
 
-    for (int i = 0; i < salaryChangeList.size(); ++i) {
-        SalaryChangeHistory history = salaryChangeList.get(i);
+        // Tạo bảng dữ liệu cho JTable
+        Object[][] tableData = new Object[salaryChangeList.size()][8];
 
-        // Gán dữ liệu vào các cột của bảng
-        tableData[i][0] = history.getEmployee().getId();
-        tableData[i][1] = history.getEmployee().getName();  // Họ và tên
-        tableData[i][2] = history.getOldSalary();     // Lương hiện tại
-        tableData[i][3] = history.getNewSalary();     // Lương đề xuất
-        tableData[i][4] = history.getReasons();       // Lý do yêu cầu
-        tableData[i][5] = history.getchangeDateBrowse();    // Ngày thay đổi
-        tableData[i][6] = history.getApprovedBy().getName();    // Người duyệt
-        tableData[i][7] = history.getComments();      // Phản hồi
-    }
+        for (int i = 0; i < salaryChangeList.size(); ++i) {
+            SalaryChangeHistory history = salaryChangeList.get(i);
 
-    // Tạo model cho bảng và hiển thị trên JTable
-    DefaultTableModel model = new DefaultTableModel(tableData, new String[] {
-        "Mã nhân viên", "Họ và tên", "Lương hiện tại", "Lương đề xuất", 
-        "Lý do yêu cầu", "Ngày thay đổi", "Người duyệt", "Phản hồi"
-    });
+            // Gán dữ liệu vào các cột của bảng
+            tableData[i][0] = history.getEmployee().getId();
+            tableData[i][1] = history.getEmployee().getName(); // Họ và tên
+            tableData[i][2] = history.getOldSalary(); // Lương hiện tại
+            tableData[i][3] = history.getNewSalary(); // Lương đề xuất
+            tableData[i][4] = history.getReasons(); // Lý do yêu cầu
+            tableData[i][5] = history.getchangeDateBrowse(); // Ngày thay đổi
+            tableData[i][6] = history.getApprovedBy().getName(); // Người duyệt
+            tableData[i][7] = history.getComments(); // Phản hồi
+        }
 
-    // Cập nhật bảng với model mới
-    this.tblYeuCauTangLuong1.setModel(model);
+        // Tạo model cho bảng và hiển thị trên JTable
+        DefaultTableModel model = new DefaultTableModel(tableData, new String[] {
+                "Mã nhân viên", "Họ và tên", "Lương hiện tại", "Lương đề xuất",
+                "Lý do yêu cầu", "Ngày thay đổi", "Người duyệt", "Phản hồi"
+        });
 
-    }//GEN-LAST:event_cbbThang2ActionPerformed
+        // Cập nhật bảng với model mới
+        this.tblYeuCauTangLuong1.setModel(model);
 
-    private void tblYeuCauTangLuong1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblYeuCauTangLuong1MouseClicked
+    }// GEN-LAST:event_cbbThang2ActionPerformed
+
+    private void tblYeuCauTangLuong1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tblYeuCauTangLuong1MouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_tblYeuCauTangLuong1MouseClicked
+    }// GEN-LAST:event_tblYeuCauTangLuong1MouseClicked
 
-    private void jblDanhSachLuongMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jblDanhSachLuongMouseClicked
+    private void jblDanhSachLuongMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jblDanhSachLuongMouseClicked
         loadListSalariesToTable();
-    }//GEN-LAST:event_jblDanhSachLuongMouseClicked
+    }// GEN-LAST:event_jblDanhSachLuongMouseClicked
 
-    private void jblbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jblbackActionPerformed
-   
-    }//GEN-LAST:event_jblbackActionPerformed
+    private void jblbackActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jblbackActionPerformed
 
-    private void sapxep1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sapxep1MouseClicked
-        if(jPanel10.isVisible()){
+    }// GEN-LAST:event_jblbackActionPerformed
+
+    private void sapxep1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_sapxep1MouseClicked
+        if (jPanel10.isVisible()) {
             jPanel10.setVisible(false);
         } else {
             jPanel10.setVisible(true);
         }
         revalidate();
         repaint();
-              
-    }//GEN-LAST:event_sapxep1MouseClicked
 
-    private void tangdan1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tangdan1MouseClicked
+    }// GEN-LAST:event_sapxep1MouseClicked
+
+    private void tangdan1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tangdan1MouseClicked
         SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
         ArrayList<SalaryChangeHistory> salaryList = salaryChangeHistoryDAO.selectAllWithEmployee();
 
@@ -1343,32 +1441,32 @@ public class SalaryFrame extends javax.swing.JFrame {
             tableData[i][3] = salary.getOldSalary();
             tableData[i][4] = salary.getNewSalary();
             tableData[i][5] = salary.getchangeDateSend();
-            
+
             tableData[i][6] = salary.getReasons();
             tableData[i][7] = salary.getStatus();
         }
 
         // Cập nhật lại bảng với dữ liệu đã sắp xếp
         DefaultTableModel model = new DefaultTableModel(tableData,
-                new String[] { "Mã","Mã nhân viên", "Nhân viên", 
-                              "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", 
-                              "Lý do", "Trạng thái" });
+                new String[] { "Mã", "Mã nhân viên", "Nhân viên",
+                        "Lương cũ", "Lương mới", "Ngày gửi yêu cầu",
+                        "Lý do", "Trạng thái" });
         this.tblYeuCauTangLuong.setModel(model);
         this.tblYeuCauTangLuong.getColumnModel().getColumn(7).setCellRenderer(new StatusRenderer());
-    
-    }//GEN-LAST:event_tangdan1MouseClicked
 
-    private void giamdan1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_giamdan1MouseClicked
+    }// GEN-LAST:event_tangdan1MouseClicked
+
+    private void giamdan1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_giamdan1MouseClicked
         SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
         ArrayList<SalaryChangeHistory> salaryList = salaryChangeHistoryDAO.selectAllWithEmployee();
 
         // Sắp xếp danh sách theo oldSalary và newSalary tăng dần
         Collections.sort(salaryList, (SalaryChangeHistory s1, SalaryChangeHistory s2) -> {
-        int compareOldSalary = s2.getOldSalary().compareTo(s1.getOldSalary()); // Đổi thứ tự để giảm dần
-        if (compareOldSalary != 0) {
-            return compareOldSalary; // Nếu khác nhau, trả về kết quả so sánh
-        }
-        return s2.getNewSalary().compareTo(s1.getNewSalary()); // So sánh newSalary giảm dần
+            int compareOldSalary = s2.getOldSalary().compareTo(s1.getOldSalary()); // Đổi thứ tự để giảm dần
+            if (compareOldSalary != 0) {
+                return compareOldSalary; // Nếu khác nhau, trả về kết quả so sánh
+            }
+            return s2.getNewSalary().compareTo(s1.getNewSalary()); // So sánh newSalary giảm dần
         });
 
         // Tạo dữ liệu cho bảng
@@ -1381,35 +1479,35 @@ public class SalaryFrame extends javax.swing.JFrame {
             tableData[i][3] = salary.getOldSalary();
             tableData[i][4] = salary.getNewSalary();
             tableData[i][5] = salary.getchangeDateSend();
-            
+
             tableData[i][6] = salary.getReasons();
             tableData[i][7] = salary.getStatus();
         }
 
         // Cập nhật lại bảng với dữ liệu đã sắp xếp
         DefaultTableModel model = new DefaultTableModel(tableData,
-                new String[] { "Mã","Mã nhân viên", "Nhân viên", 
-                              "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", 
-                              "Lý do", "Trạng thái" });
+                new String[] { "Mã", "Mã nhân viên", "Nhân viên",
+                        "Lương cũ", "Lương mới", "Ngày gửi yêu cầu",
+                        "Lý do", "Trạng thái" });
         this.tblYeuCauTangLuong.setModel(model);
         this.tblYeuCauTangLuong.getColumnModel().getColumn(7).setCellRenderer(new StatusRenderer());
-    }//GEN-LAST:event_giamdan1MouseClicked
+    }// GEN-LAST:event_giamdan1MouseClicked
 
-    private void rs1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rs1MouseClicked
+    private void rs1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_rs1MouseClicked
         loadDataToYeuCauTangLuongTable();
-    }//GEN-LAST:event_rs1MouseClicked
+    }// GEN-LAST:event_rs1MouseClicked
 
-    private void sapxep2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sapxep2MouseClicked
-        if(jPanel11.isVisible()){
+    private void sapxep2MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_sapxep2MouseClicked
+        if (jPanel11.isVisible()) {
             jPanel11.setVisible(false);
         } else {
             jPanel11.setVisible(true);
         }
         revalidate();
         repaint();
-    }//GEN-LAST:event_sapxep2MouseClicked
+    }// GEN-LAST:event_sapxep2MouseClicked
 
-    private void tangdan2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tangdan2MouseClicked
+    private void tangdan2MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tangdan2MouseClicked
         SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
         ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectAllWithEmployee();
 
@@ -1425,466 +1523,465 @@ public class SalaryFrame extends javax.swing.JFrame {
         // Tạo dữ liệu cho bảng
         Object[][] tableData = new Object[salaryChangeList.size()][8];
 
-    for (int i = 0; i < salaryChangeList.size(); ++i) {
-        SalaryChangeHistory history = salaryChangeList.get(i);
+        for (int i = 0; i < salaryChangeList.size(); ++i) {
+            SalaryChangeHistory history = salaryChangeList.get(i);
 
-        // Gán dữ liệu vào các cột của bảng
-        tableData[i][0] = history.getEmployee().getId();
-        tableData[i][1] = history.getEmployee().getName();  // Họ và tên
-        tableData[i][2] = history.getOldSalary();     // Lương hiện tại
-        tableData[i][3] = history.getNewSalary();     // Lương đề xuất
-        tableData[i][4] = history.getReasons();       // Lý do yêu cầu
-        tableData[i][5] = history.getchangeDateBrowse();    // Ngày thay đổi
-        tableData[i][6] = history.getApprovedBy().getName();    // Người duyệt
-        tableData[i][7] = history.getComments();      // Phản hồi
-    }
+            // Gán dữ liệu vào các cột của bảng
+            tableData[i][0] = history.getEmployee().getId();
+            tableData[i][1] = history.getEmployee().getName(); // Họ và tên
+            tableData[i][2] = history.getOldSalary(); // Lương hiện tại
+            tableData[i][3] = history.getNewSalary(); // Lương đề xuất
+            tableData[i][4] = history.getReasons(); // Lý do yêu cầu
+            tableData[i][5] = history.getchangeDateBrowse(); // Ngày thay đổi
+            tableData[i][6] = history.getApprovedBy().getName(); // Người duyệt
+            tableData[i][7] = history.getComments(); // Phản hồi
+        }
 
-    // Tạo model cho bảng và hiển thị trên JTable
-    DefaultTableModel model = new DefaultTableModel(tableData, new String[] {
-        "Mã nhân viên", "Họ và tên", "Lương hiện tại", "Lương đề xuất", 
-        "Lý do yêu cầu", "Ngày thay đổi", "Người duyệt", "Phản hồi"
-    });
+        // Tạo model cho bảng và hiển thị trên JTable
+        DefaultTableModel model = new DefaultTableModel(tableData, new String[] {
+                "Mã nhân viên", "Họ và tên", "Lương hiện tại", "Lương đề xuất",
+                "Lý do yêu cầu", "Ngày thay đổi", "Người duyệt", "Phản hồi"
+        });
 
-    // Cập nhật bảng với model mới
-    this.tblYeuCauTangLuong1.setModel(model);
-    }//GEN-LAST:event_tangdan2MouseClicked
+        // Cập nhật bảng với model mới
+        this.tblYeuCauTangLuong1.setModel(model);
+    }// GEN-LAST:event_tangdan2MouseClicked
 
-    private void giamdan2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_giamdan2MouseClicked
+    private void giamdan2MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_giamdan2MouseClicked
         SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
         ArrayList<SalaryChangeHistory> salaryList = salaryChangeHistoryDAO.selectAllWithEmployee();
 
         // Sắp xếp danh sách theo oldSalary và newSalary tăng dần
         Collections.sort(salaryList, (SalaryChangeHistory s1, SalaryChangeHistory s2) -> {
-        int compareOldSalary = s2.getOldSalary().compareTo(s1.getOldSalary()); // Đổi thứ tự để giảm dần
-        if (compareOldSalary != 0) {
-            return compareOldSalary; // Nếu khác nhau, trả về kết quả so sánh
-        }
-        return s2.getNewSalary().compareTo(s1.getNewSalary()); // So sánh newSalary giảm dần
+            int compareOldSalary = s2.getOldSalary().compareTo(s1.getOldSalary()); // Đổi thứ tự để giảm dần
+            if (compareOldSalary != 0) {
+                return compareOldSalary; // Nếu khác nhau, trả về kết quả so sánh
+            }
+            return s2.getNewSalary().compareTo(s1.getNewSalary()); // So sánh newSalary giảm dần
         });
 
         // Tạo dữ liệu cho bảng
         Object[][] tableData = new Object[salaryList.size()][8];
 
-    for (int i = 0; i < salaryList.size(); ++i) {
-        SalaryChangeHistory history = salaryList.get(i);
+        for (int i = 0; i < salaryList.size(); ++i) {
+            SalaryChangeHistory history = salaryList.get(i);
 
-        // Gán dữ liệu vào các cột của bảng
-        tableData[i][0] = history.getEmployee().getId();
-        tableData[i][1] = history.getEmployee().getName();  // Họ và tên
-        tableData[i][2] = history.getOldSalary();     // Lương hiện tại
-        tableData[i][3] = history.getNewSalary();     // Lương đề xuất
-        tableData[i][4] = history.getReasons();       // Lý do yêu cầu
-        tableData[i][5] = history.getchangeDateBrowse();    // Ngày thay đổi
-        tableData[i][6] = history.getApprovedBy().getName();    // Người duyệt
-        tableData[i][7] = history.getComments();      // Phản hồi
+            // Gán dữ liệu vào các cột của bảng
+            tableData[i][0] = history.getEmployee().getId();
+            tableData[i][1] = history.getEmployee().getName(); // Họ và tên
+            tableData[i][2] = history.getOldSalary(); // Lương hiện tại
+            tableData[i][3] = history.getNewSalary(); // Lương đề xuất
+            tableData[i][4] = history.getReasons(); // Lý do yêu cầu
+            tableData[i][5] = history.getchangeDateBrowse(); // Ngày thay đổi
+            tableData[i][6] = history.getApprovedBy().getName(); // Người duyệt
+            tableData[i][7] = history.getComments(); // Phản hồi
+        }
+
+        // Tạo model cho bảng và hiển thị trên JTable
+        DefaultTableModel model = new DefaultTableModel(tableData, new String[] {
+                "Mã nhân viên", "Họ và tên", "Lương hiện tại", "Lương đề xuất",
+                "Lý do yêu cầu", "Ngày thay đổi", "Người duyệt", "Phản hồi"
+        });
+        this.tblYeuCauTangLuong1.setModel(model);
+    }// GEN-LAST:event_giamdan2MouseClicked
+
+    private void rs2MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_rs2MouseClicked
+        loadDataToYeuCauTangLuongDaXemTable();
+    }// GEN-LAST:event_rs2MouseClicked
+
+    private void initializeFilterMenu() {
+        filterMenu = new JPopupMenu();
+
+        // Tạo các radio button
+        JRadioButtonMenuItem rbPhongBan = new JRadioButtonMenuItem("Phòng ban");
+        JRadioButtonMenuItem rbMucLuong = new JRadioButtonMenuItem("Mức lương");
+        JRadioButtonMenuItem rbHinhThucLamViec = new JRadioButtonMenuItem("Hình thức làm việc");
+
+        // Thêm radio button vào menu
+        filterMenu.add(rbPhongBan);
+        filterMenu.add(rbMucLuong);
+        filterMenu.add(rbHinhThucLamViec);
+
+        // Đảm bảo chỉ chọn được một radio button tại một thời điểm
+        ButtonGroup group = new ButtonGroup();
+        group.add(rbPhongBan);
+        group.add(rbMucLuong);
+        group.add(rbHinhThucLamViec);
+
+        // Gán sự kiện cho từng radio button
+        rbPhongBan.addActionListener(e -> showDialogWithDepartments("Chọn Phòng Ban"));
+        rbMucLuong.addActionListener(e -> showSalaryDialog("Chọn Mức Lương"));
+        rbHinhThucLamViec.addActionListener(
+                e -> showDialog("Chọn Hình Thức Làm Việc", new String[] { "Part-time", "Full-time" }));
     }
 
-    // Tạo model cho bảng và hiển thị trên JTable
-    DefaultTableModel model = new DefaultTableModel(tableData, new String[] {
-        "Mã nhân viên", "Họ và tên", "Lương hiện tại", "Lương đề xuất", 
-        "Lý do yêu cầu", "Ngày thay đổi", "Người duyệt", "Phản hồi"
-    });
-        this.tblYeuCauTangLuong1.setModel(model);
-    }//GEN-LAST:event_giamdan2MouseClicked
+    // Hàm hiển thị dialog cho mức lương
+    private void showSalaryDialog(String title) {
+        JDialog dialog = new JDialog(this, title, true);
+        dialog.setSize(400, 200);
+        dialog.setLocationRelativeTo(null);
 
-    private void rs2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rs2MouseClicked
-        loadDataToYeuCauTangLuongDaXemTable();
-    }//GEN-LAST:event_rs2MouseClicked
-    
-    
-                                          
-    private void initializeFilterMenu() {
-    filterMenu = new JPopupMenu();
+        JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
+        JLabel lblFrom = new JLabel("Từ mức lương:");
+        JTextField txtFrom = new JTextField();
+        JLabel lblTo = new JLabel("Đến mức lương:");
+        JTextField txtTo = new JTextField();
 
-    // Tạo các radio button
-    JRadioButtonMenuItem rbPhongBan = new JRadioButtonMenuItem("Phòng ban");
-    JRadioButtonMenuItem rbMucLuong = new JRadioButtonMenuItem("Mức lương");
-    JRadioButtonMenuItem rbHinhThucLamViec = new JRadioButtonMenuItem("Hình thức làm việc");
+        JButton btnOK = new JButton("Xác nhận");
+        btnOK.addActionListener(e -> {
+            try {
+                // Chuyển đổi đầu vào thành BigDecimal thay vì double
+                BigDecimal fromSalary = new BigDecimal(txtFrom.getText());
+                BigDecimal toSalary = new BigDecimal(txtTo.getText());
 
-    // Thêm radio button vào menu
-    filterMenu.add(rbPhongBan);
-    filterMenu.add(rbMucLuong);
-    filterMenu.add(rbHinhThucLamViec);
-
-    // Đảm bảo chỉ chọn được một radio button tại một thời điểm
-    ButtonGroup group = new ButtonGroup();
-    group.add(rbPhongBan);
-    group.add(rbMucLuong);
-    group.add(rbHinhThucLamViec);
-
-    // Gán sự kiện cho từng radio button
-    rbPhongBan.addActionListener(e -> showDialogWithDepartments("Chọn Phòng Ban"));
-    rbMucLuong.addActionListener(e -> showSalaryDialog("Chọn Mức Lương"));
-    rbHinhThucLamViec.addActionListener(e -> showDialog("Chọn Hình Thức Làm Việc", new String[]{"Part-time", "Full-time"}));
-}
-
-// Hàm hiển thị dialog cho mức lương
-private void showSalaryDialog(String title) {
-    JDialog dialog = new JDialog(this, title, true);
-    dialog.setSize(400, 200);
-    dialog.setLocationRelativeTo(null);
-
-    JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
-    JLabel lblFrom = new JLabel("Từ mức lương:");
-    JTextField txtFrom = new JTextField();
-    JLabel lblTo = new JLabel("Đến mức lương:");
-    JTextField txtTo = new JTextField();
-
-    JButton btnOK = new JButton("Xác nhận");
-    btnOK.addActionListener(e -> {
-        try {
-            // Chuyển đổi đầu vào thành BigDecimal thay vì double
-            BigDecimal fromSalary = new BigDecimal(txtFrom.getText());
-            BigDecimal toSalary = new BigDecimal(txtTo.getText());
-
-            if (fromSalary.compareTo(toSalary) > 0) {
-                JOptionPane.showMessageDialog(dialog, "Mức lương 'Từ' không được lớn hơn 'Đến'.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            } else {
-                selecedSalaryMin = fromSalary;
-                selecedSalaryMax = toSalary;
-                dialog.dispose();
-                // Gọi lại loadListSalariesToTableforFilter với các tham số đã chọn
-                loadListSalariesToTableforFilter(selectedDepartment, selecedSalaryMin, selecedSalaryMax, selectedWorkType);
+                if (fromSalary.compareTo(toSalary) > 0) {
+                    JOptionPane.showMessageDialog(dialog, "Mức lương 'Từ' không được lớn hơn 'Đến'.", "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    selecedSalaryMin = fromSalary;
+                    selecedSalaryMax = toSalary;
+                    dialog.dispose();
+                    // Gọi lại loadListSalariesToTableforFilter với các tham số đã chọn
+                    loadListSalariesToTableforFilter(selectedDepartment, selecedSalaryMin, selecedSalaryMax,
+                            selectedWorkType);
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialog, "Vui lòng nhập số hợp lệ cho mức lương.", "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
             }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(dialog, "Vui lòng nhập số hợp lệ cho mức lương.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    });
+        });
 
-    panel.add(lblFrom);
-    panel.add(txtFrom);
-    panel.add(lblTo);
-    panel.add(txtTo);
-    panel.add(new JLabel()); // Ô trống
-    panel.add(btnOK);
+        panel.add(lblFrom);
+        panel.add(txtFrom);
+        panel.add(lblTo);
+        panel.add(txtTo);
+        panel.add(new JLabel()); // Ô trống
+        panel.add(btnOK);
 
-    dialog.add(panel);
-    dialog.setVisible(true);
-}
+        dialog.add(panel);
+        dialog.setVisible(true);
+    }
 
-private void showDialogWithDepartments(String title) {
-    // Lấy danh sách phòng ban từ cơ sở dữ liệu
-    ArrayList<Department> departmentList = DepartmentDAO.getInstance().selectAll();
+    private void showDialogWithDepartments(String title) {
+        // Lấy danh sách phòng ban từ cơ sở dữ liệu
+        ArrayList<Department> departmentList = DepartmentDAO.getInstance().selectAll();
 
-    // Chuyển danh sách phòng ban thành mảng String để đổ vào JComboBox
-    String[] options = departmentList.stream()
-            .map(Department::getName) // Lấy tên phòng ban
-            .toArray(String[]::new);
+        // Chuyển danh sách phòng ban thành mảng String để đổ vào JComboBox
+        String[] options = departmentList.stream()
+                .map(Department::getName) // Lấy tên phòng ban
+                .toArray(String[]::new);
 
-    // Gọi hàm showDialog để hiển thị dialog
-    showDialog(title, options);
-}
+        // Gọi hàm showDialog để hiển thị dialog
+        showDialog(title, options);
+    }
 
-// Hàm hiển thị chung cho ComboBox (Phòng ban, Hình thức làm việc)
-private void showDialog(String title, String[] options) {
-    JDialog dialog = new JDialog(this, title, true);
-    dialog.setSize(300, 150);
-    dialog.setLocationRelativeTo(null);
+    // Hàm hiển thị chung cho ComboBox (Phòng ban, Hình thức làm việc)
+    private void showDialog(String title, String[] options) {
+        JDialog dialog = new JDialog(this, title, true);
+        dialog.setSize(300, 150);
+        dialog.setLocationRelativeTo(null);
 
-    JPanel panel = new JPanel();
-    panel.setLayout(new BorderLayout());
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
 
-    JComboBox<String> comboBox = new JComboBox<>(options);
-    JButton btnOK = new JButton("Xác nhận");
+        JComboBox<String> comboBox = new JComboBox<>(options);
+        JButton btnOK = new JButton("Xác nhận");
 
-    btnOK.addActionListener(e -> {
-        String selectedValue = (String) comboBox.getSelectedItem();
-        switch (title) {
-            case "Chọn Phòng Ban":
-                selectedDepartment = selectedValue;  // Lưu phòng ban đã chọn
-                break;
-            
-            case "Chọn Hình Thức Làm Việc":
-                selectedWorkType = selectedValue.equals("Part-time") ? "part_time" : "full_time";
-                break;
-        }
-        dialog.dispose();
-        // Gọi lại loadListSalariesToTableforFilter với các tham số đã chọn
-        loadListSalariesToTableforFilter(selectedDepartment, selecedSalaryMin, selecedSalaryMax, selectedWorkType);
-    });
+        btnOK.addActionListener(e -> {
+            String selectedValue = (String) comboBox.getSelectedItem();
+            switch (title) {
+                case "Chọn Phòng Ban":
+                    selectedDepartment = selectedValue; // Lưu phòng ban đã chọn
+                    break;
 
-    panel.add(comboBox, BorderLayout.CENTER);
-    panel.add(btnOK, BorderLayout.SOUTH);
+                case "Chọn Hình Thức Làm Việc":
+                    selectedWorkType = selectedValue.equals("Part-time") ? "part_time" : "full_time";
+                    break;
+            }
+            dialog.dispose();
+            // Gọi lại loadListSalariesToTableforFilter với các tham số đã chọn
+            loadListSalariesToTableforFilter(selectedDepartment, selecedSalaryMin, selecedSalaryMax, selectedWorkType);
+        });
 
-    dialog.add(panel);
-    dialog.setVisible(true);
-}
+        panel.add(comboBox, BorderLayout.CENTER);
+        panel.add(btnOK, BorderLayout.SOUTH);
 
-private void loadListSalariesToTableforFilter(String selectedDepartment, BigDecimal selectedSalaryMin, 
-                                               BigDecimal selectedSalaryMax, String selectedWorkType) {
-    // Lấy danh sách lương từ database
-    SalaryDAO salaryDAO = SalaryDAO.getInstance();
-    ArrayList<Salary> salaryList = salaryDAO.selectAll();
-    
-    // Lọc các dữ liệu dựa trên các tiêu chí đã chọn
-    Object[][] tableData = new Object[salaryList.size()][9];
-    int index = 0; // Biến đếm vị trí trong mảng tableData
+        dialog.add(panel);
+        dialog.setVisible(true);
+    }
 
-    for (Salary salary : salaryList) {
-        boolean matchesFilter = true;
+    private void loadListSalariesToTableforFilter(String selectedDepartment, BigDecimal selectedSalaryMin,
+            BigDecimal selectedSalaryMax, String selectedWorkType) {
+        // Lấy danh sách lương từ database
+        SalaryDAO salaryDAO = SalaryDAO.getInstance();
+        ArrayList<Salary> salaryList = salaryDAO.selectAll();
 
-        // Lọc theo phòng ban
-        if (selectedDepartment != null && !salary.getEmployee().getDepartment().getName().equals(selectedDepartment)) {
-            matchesFilter = false;
-        }
+        // Lọc các dữ liệu dựa trên các tiêu chí đã chọn
+        Object[][] tableData = new Object[salaryList.size()][9];
+        int index = 0; // Biến đếm vị trí trong mảng tableData
 
-        // Lọc theo mức lương
-        if (selectedSalaryMin != null && salary.getnet_salary().compareTo(selectedSalaryMin) < 0) {
-            matchesFilter = false;
-        }
-        if (selectedSalaryMax != null && salary.getnet_salary().compareTo(selectedSalaryMax) > 0) {
-            matchesFilter = false;
-        }
+        for (Salary salary : salaryList) {
+            boolean matchesFilter = true;
 
-        // Lọc theo loại hình làm việc
-        if (selectedWorkType != null) {
-            String workTypeString = selectedWorkType.equals("full-time") ? "full_time" : 
-                                    (selectedWorkType.equals("part-time") ? "part_time" : null);
-            if (workTypeString != null && !salary.getEmployee().getWork_type().name().equals(workTypeString)) {
+            // Lọc theo phòng ban
+            if (selectedDepartment != null
+                    && !salary.getEmployee().getDepartment().getName().equals(selectedDepartment)) {
                 matchesFilter = false;
             }
-        }
 
-        // Nếu thỏa mãn tất cả các điều kiện lọc, thêm vào dữ liệu bảng
-        if (matchesFilter) {
-            tableData[index][0] = salary.getEmployee().getId();
-            tableData[index][1] = salary.getEmployee().getName();
-            tableData[index][2] = salary.getPosition().getName();
-            tableData[index][3] = salary.getPositionSalary();
-            tableData[index][4] = salary.getOvertimeSalary();
-            tableData[index][5] = salary.getAttendance();
-            tableData[index][6] = salary.getBonus();
-            tableData[index][7] = salary.getDeductions();
-            tableData[index][8] = salary.getnet_salary();
-            index++;
-        }
-    }
-
-    // Tạo model bảng với dữ liệu đã lọc
-    DefaultTableModel model = new DefaultTableModel(tableData,
-            new String[] { "Mã nhân viên", "Họ và tên", "Vị trí", "Lương theo giờ", "Lương tăng ca", 
-                          "Chuyên cần", "Thưởng", "Khấu trừ", "Tổng lương" });
-
-    this.tblDanhSachLuong.setModel(model);
-}
-
-
-
-
-
-
-private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-                 try {
-        // Lấy dữ liệu từ giao diện
-        int employeeID = Integer.parseInt(txtIDEmployee.getText());
-        BigDecimal bonus = new BigDecimal(txtThuong.getText());
-        BigDecimal attendance = new BigDecimal(lblChuyenCan.getText());
-        BigDecimal deductions = new BigDecimal(txtKhauTru.getText());
-        String note = txtGhiChu.getText();
-        
-        // Lấy thông tin lương theo giờ, tăng ca, thuế và bảo hiểm xã hội
-        BigDecimal hourlySalary = new BigDecimal(lblTongLuongTheoGio.getText()); // Lương theo giờ
-        BigDecimal overtimeSalary = new BigDecimal(lblTongLuongTangCa.getText()); // Lương tăng ca
-        
-
-        // Tính tổng lương
-        BigDecimal net_salary = hourlySalary.add(overtimeSalary).add(bonus).subtract(deductions);
-        
-        // Lấy ngày hiệu lực từ JDateChooser
-        java.util.Date date = dataChooseNgayHieuLuc.getDate();
-        LocalDate payday = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        lblTongLuong.setText(net_salary.toString());
-        // Tạo đối tượng SalaryDAO và gọi phương thức updateSalary
-        SalaryDAO salaryDAO = new SalaryDAO();
-        boolean updated = salaryDAO.updateSalary(employeeID, bonus, attendance, deductions, note, payday, net_salary ,hourlySalary,overtimeSalary);
-
-        if (updated) {
-            JOptionPane.showMessageDialog(this, "Dữ liệu đã được cập nhật thành công!");
-            
-            // Lấy thông tin nhân viên từ EmployeeDAO
-            EmployeeDAO employeeDao = EmployeeDAO.getInstance();
-            Employee employee = employeeDao.selectByID(employeeID);  // Lấy thông tin nhân viên
-
-            // Lấy thông tin lương từ SalaryDAO
-            Salary salary = salaryDAO.selectByEmployeeID(employeeID);
-
-            if (employee != null && salary != null) {
-                // Cập nhật bảng JTable với thông tin của nhân viên và lương
-                DefaultTableModel model = (DefaultTableModel) tblCapNhapPhieuLuong.getModel();
-                
-                // Xóa tất cả các dòng hiện tại trong bảng trước khi thêm mới
-                model.setRowCount(0);
-                
-                // Thêm dòng mới vào bảng với thông tin nhân viên và lương
-                model.addRow(new Object[]{
-                    employeeID,
-                    employee.getName(), // Tên nhân viên
-                    employee.getPosition().getName(), // Vị trí công việc
-                    salary.getPositionSalary(), // Lương cơ bản
-                    salary.getOvertimeSalary(), // Lương tăng ca
-                    attendance, // Chuyên cần
-                    bonus, // Thưởng
-                    deductions, // Khấu trừ
-                    net_salary // Tổng lương sau khi tính toán
-                });
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin lương cho nhân viên với ID: " + employeeID, "Lỗi", JOptionPane.ERROR_MESSAGE);
+            // Lọc theo mức lương
+            if (selectedSalaryMin != null && salary.getnet_salary().compareTo(selectedSalaryMin) < 0) {
+                matchesFilter = false;
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên với ID: " + employeeID, "Lỗi", JOptionPane.ERROR_MESSAGE);
+            if (selectedSalaryMax != null && salary.getnet_salary().compareTo(selectedSalaryMax) > 0) {
+                matchesFilter = false;
+            }
+
+            // Lọc theo loại hình làm việc
+            if (selectedWorkType != null) {
+                String workTypeString = selectedWorkType.equals("full-time") ? "full_time"
+                        : (selectedWorkType.equals("part-time") ? "part_time" : null);
+                if (workTypeString != null && !salary.getEmployee().getWork_type().name().equals(workTypeString)) {
+                    matchesFilter = false;
+                }
+            }
+
+            // Nếu thỏa mãn tất cả các điều kiện lọc, thêm vào dữ liệu bảng
+            if (matchesFilter) {
+                tableData[index][0] = salary.getEmployee().getId();
+                tableData[index][1] = salary.getEmployee().getName();
+                tableData[index][2] = salary.getPosition().getName();
+                tableData[index][3] = salary.getPositionSalary();
+                tableData[index][4] = salary.getOvertimeSalary();
+                tableData[index][5] = salary.getAttendance();
+                tableData[index][6] = salary.getBonus();
+                tableData[index][7] = salary.getDeductions();
+                tableData[index][8] = salary.getnet_salary();
+                index++;
+            }
         }
-    } catch (NumberFormatException ex) {
-        JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ cho Thưởng và Chuyên cần.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        ex.printStackTrace();
+
+        // Tạo model bảng với dữ liệu đã lọc
+        DefaultTableModel model = new DefaultTableModel(tableData,
+                new String[] { "Mã nhân viên", "Họ và tên", "Vị trí", "Lương theo giờ", "Lương tăng ca",
+                        "Chuyên cần", "Thưởng", "Khấu trừ", "Tổng lương" });
+
+        this.tblDanhSachLuong.setModel(model);
     }
-        }// GEN-LAST:event_jButton1ActionPerformed
 
-        private void txtIDEmployeeActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtIDEmployeeActionPerformed
-                try {
-                        int id = Integer.parseInt(this.txtIDEmployee.getText());
-                        EmployeeDAO employeeDao = new EmployeeDAO();
-                        Employee employee = employeeDao.selectByID(id);
-                        if (employee == null) {
-                                JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên với ID: " + id, "Lỗi", 0);
-                        } else {
-                                SalaryDAO salaryDAO = new SalaryDAO();
-                                Salary salary = salaryDAO.selectByEmployeeID(employee.getId());
-                                this.lblPhongBan.setText(employee.getDepartment().getName());
-                                this.lblViTri.setText(employee.getPosition().getName());
-                                this.lblHinhThucLamViec.setText("" + String.valueOf(employee.getWork_type()));
-                                this.lblHoVaTen.setText(employee.getName());
-                                // Lấy các giá trị cần thiết
-                                BigDecimal positionSalary = salary.getPositionSalary(); // position_salary từ cơ sở dữ liệu
-                                float totalHourlyWorkFloat = salary.getTotal_hourly_work(); // total_hourly_work (float)
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            // Lấy dữ liệu từ giao diện
+            int employeeID = Integer.parseInt(txtIDEmployee.getText());
+            BigDecimal bonus = new BigDecimal(txtThuong.getText());
+            BigDecimal attendance = new BigDecimal(lblChuyenCan.getText());
+            BigDecimal deductions = new BigDecimal(txtKhauTru.getText());
+            String note = txtGhiChu.getText();
 
-                                // Chuyển đổi float sang BigDecimal
-                                BigDecimal totalHourlyWork = BigDecimal.valueOf(totalHourlyWorkFloat);
+            // Lấy thông tin lương theo giờ, tăng ca, thuế và bảo hiểm xã hội
+            BigDecimal hourlySalary = new BigDecimal(lblTongLuongTheoGio.getText()); // Lương theo giờ
+            BigDecimal overtimeSalary = new BigDecimal(lblTongLuongTangCa.getText()); // Lương tăng ca
 
-                                // Chia position_salary cho 26 và 8
-                                BigDecimal hourlyRate = positionSalary.divide(BigDecimal.valueOf(26), 2, RoundingMode.HALF_UP)
-                                                                       .divide(BigDecimal.valueOf(8), 2, RoundingMode.HALF_UP);
+            // Tính tổng lương
+            BigDecimal net_salary = hourlySalary.add(overtimeSalary).add(bonus).subtract(deductions);
 
-                                // Tính tổng lương theo giờ
-                                BigDecimal totalHourlySalary = hourlyRate.multiply(totalHourlyWork);
+            // Lấy ngày hiệu lực từ JDateChooser
+            java.util.Date date = dataChooseNgayHieuLuc.getDate();
+            LocalDate payday = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            lblTongLuong.setText(net_salary.toString());
+            // Tạo đối tượng SalaryDAO và gọi phương thức updateSalary
+            SalaryDAO salaryDAO = new SalaryDAO();
+            boolean updated = salaryDAO.updateSalary(employeeID, bonus, attendance, deductions, note, payday,
+                    net_salary, hourlySalary, overtimeSalary);
 
-                                // Làm tròn 2 chữ số thập phân
-                                BigDecimal roundedSalary = totalHourlySalary.setScale(2, RoundingMode.HALF_UP);
+            if (updated) {
+                JOptionPane.showMessageDialog(this, "Dữ liệu đã được cập nhật thành công!");
 
-                                // Hiển thị kết quả
-                                this.lblTongLuongTheoGio.setText(roundedSalary.toPlainString());
-//                                this.lblTongLuongTheoGio.setText(salary.getPositionSalary() + "");
-//                                this.txtGhiChu.setText(salary.getNote());
-//                                this.txtKhauTru.setText(salary.getDeductions() + "");
-//                                this.txtThuong.setText(salary.getBonus() + "");
-                                this.lblChuyenCan.setText(salary.getAttendance() + "");
-                                //this.lblTongLuong.setText(salary.getNetSalary() + "");
-//                                this.lblTax.setText(salary.gettax()+ "");
-//                                this.lblSocial_insurance.setText(salary.getsocial_insurance()+ "");
-//                                this.lblTongLuongTangCa.setText(salary.getOvertimeSalary() + "");
-//                                this.lblTax.setText(salary.getTax()+"");
-//                                this.lblSocial_insurance.setText(salary.getSocialInsurance()+"");
-//                                this.lblTongLuong.setText (salary.getnet_salary()+"");
-                                BigDecimal overtimeSalary = salary.getOvertimeSalary(); // overtime_salary từ cơ sở dữ liệu
-                                BigDecimal totalOvertimeShifts = salary.getTotal_overtime_shifts(); // total_overtime_shifts (float)
+                // Lấy thông tin nhân viên từ EmployeeDAO
+                EmployeeDAO employeeDao = EmployeeDAO.getInstance();
+                Employee employee = employeeDao.selectByID(employeeID); // Lấy thông tin nhân viên
 
-                                // Tính tổng lương tăng ca
-                                BigDecimal totalOvertimeSalary = overtimeSalary.multiply(totalOvertimeShifts);
+                // Lấy thông tin lương từ SalaryDAO
+                Salary salary = salaryDAO.selectByEmployeeID(employeeID);
 
-                                // Làm tròn 2 chữ số thập phân
-                                BigDecimal roundedOvertimeSalary = totalOvertimeSalary.setScale(2, RoundingMode.HALF_UP);
+                if (employee != null && salary != null) {
+                    // Cập nhật bảng JTable với thông tin của nhân viên và lương
+                    DefaultTableModel model = (DefaultTableModel) tblCapNhapPhieuLuong.getModel();
 
-                                // Hiển thị kết quả
-                                this.lblTongLuongTangCa.setText(roundedOvertimeSalary.toPlainString());
-                                  
-                                LocalDate payday = salary.getPayday();
-                                Date date = java.util.Date
-                                                .from(payday.atStartOfDay(ZoneId.systemDefault()).toInstant());
-                                // Thiết lập ngày cho JDateChooser
-//                                this.dataChooseNgayHieuLuc.setDate(date);
-                        }
-                } catch (NumberFormatException var7) {
-                        JOptionPane.showMessageDialog(this, "ID không hợp lệ. Vui lòng nhập số nguyên.", "Lỗi", 0);
-                } catch (Exception var8) {
-                        Exception ex = var8;
-                        JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi", 0);
-                        ex.printStackTrace();
+                    // Xóa tất cả các dòng hiện tại trong bảng trước khi thêm mới
+                    model.setRowCount(0);
+
+                    // Thêm dòng mới vào bảng với thông tin nhân viên và lương
+                    model.addRow(new Object[] {
+                            employeeID,
+                            employee.getName(), // Tên nhân viên
+                            employee.getPosition().getName(), // Vị trí công việc
+                            salary.getPositionSalary(), // Lương cơ bản
+                            salary.getOvertimeSalary(), // Lương tăng ca
+                            attendance, // Chuyên cần
+                            bonus, // Thưởng
+                            deductions, // Khấu trừ
+                            net_salary // Tổng lương sau khi tính toán
+                    });
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Không tìm thấy thông tin lương cho nhân viên với ID: " + employeeID, "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
                 }
-        }// GEN-LAST:event_txtIDEmployeeActionPerformed
-
-       
-        
-
-        private void btnRefreshDataYeuCauThayDoiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnRefreshDataYeuCauThayDoiActionPerformed
-                loadDataToYeuCauTangLuongTable();
-        }// GEN-LAST:event_btnRefreshDataYeuCauThayDoiActionPerformed
-
-        private void tblYeuCauTangLuongMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tblYeuCauTangLuongMouseClicked
-              int selectedRow = this.tblYeuCauTangLuong.getSelectedRow();
-                if (selectedRow != -1) {
-                        int salaryChangeId = (Integer) this.tblYeuCauTangLuong.getValueAt(selectedRow, 0);
-                        SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
-                        SalaryChangeHistory salaryChangeHistory = salaryChangeHistoryDAO.selectByID(salaryChangeId);
-                        SalaryUpdateDialog dialog = new SalaryUpdateDialog((Frame) null, salaryChangeHistory);
-                        dialog.setVisible(true);
-                }
-        }// GEN-LAST:event_tblYeuCauTangLuongMouseClicked
-
-       // GEN-LAST:event_btnRefreshDataYeuCauDaXemActionPerformed
-
-        // GEN-LAST:event_tblDanhSachLuongMouseClicked
-
-        /**
-         * @param args the command line arguments
-         */
-        public static void main(String args[]) {
-                /* Set the Nimbus look and feel */
-                // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
-                // (optional) ">
-                /*
-                 * If Nimbus (introduced in Java SE 6) is not available, stay with the default
-                 * look and feel.
-                 * For details see
-                 * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-                 */
-                try {
-                        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager
-                                        .getInstalledLookAndFeels()) {
-                                if ("Nimbus".equals(info.getName())) {
-                                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                                        break;
-                                }
-                        }
-                } catch (ClassNotFoundException ex) {
-                        java.util.logging.Logger.getLogger(SalaryFrame.class.getName()).log(
-                                        java.util.logging.Level.SEVERE, null,
-                                        ex);
-                } catch (InstantiationException ex) {
-                        java.util.logging.Logger.getLogger(SalaryFrame.class.getName()).log(
-                                        java.util.logging.Level.SEVERE, null,
-                                        ex);
-                } catch (IllegalAccessException ex) {
-                        java.util.logging.Logger.getLogger(SalaryFrame.class.getName()).log(
-                                        java.util.logging.Level.SEVERE, null,
-                                        ex);
-                } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-                        java.util.logging.Logger.getLogger(SalaryFrame.class.getName()).log(
-                                        java.util.logging.Level.SEVERE, null,
-                                        ex);
-                }
-                // </editor-fold>
-                // </editor-fold>
-                // </editor-fold>
-                // </editor-fold>
-
-                /* Create and display the form */
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                                new SalaryFrame().setVisible(true);
-                        }
-                });
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên với ID: " + employeeID, "Lỗi",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ cho Thưởng và Chuyên cần.", "Lỗi",
+                    JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
+    }// GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtIDEmployeeActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_txtIDEmployeeActionPerformed
+        try {
+            int id = Integer.parseInt(this.txtIDEmployee.getText());
+            EmployeeDAO employeeDao = new EmployeeDAO();
+            Employee employee = employeeDao.selectByID(id);
+            if (employee == null) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên với ID: " + id, "Lỗi", 0);
+            } else {
+                SalaryDAO salaryDAO = new SalaryDAO();
+                Salary salary = salaryDAO.selectByEmployeeID(employee.getId());
+                this.lblPhongBan.setText(employee.getDepartment().getName());
+                this.lblViTri.setText(employee.getPosition().getName());
+                this.lblHinhThucLamViec.setText("" + String.valueOf(employee.getWork_type()));
+                this.lblHoVaTen.setText(employee.getName());
+                // Lấy các giá trị cần thiết
+                BigDecimal positionSalary = salary.getPositionSalary(); // position_salary từ cơ sở dữ liệu
+                float totalHourlyWorkFloat = salary.getTotal_hourly_work(); // total_hourly_work (float)
+
+                // Chuyển đổi float sang BigDecimal
+                BigDecimal totalHourlyWork = BigDecimal.valueOf(totalHourlyWorkFloat);
+
+                // Chia position_salary cho 26 và 8
+                BigDecimal hourlyRate = positionSalary.divide(BigDecimal.valueOf(26), 2, RoundingMode.HALF_UP)
+                        .divide(BigDecimal.valueOf(8), 2, RoundingMode.HALF_UP);
+
+                // Tính tổng lương theo giờ
+                BigDecimal totalHourlySalary = hourlyRate.multiply(totalHourlyWork);
+
+                // Làm tròn 2 chữ số thập phân
+                BigDecimal roundedSalary = totalHourlySalary.setScale(2, RoundingMode.HALF_UP);
+
+                // Hiển thị kết quả
+                this.lblTongLuongTheoGio.setText(roundedSalary.toPlainString());
+                // this.lblTongLuongTheoGio.setText(salary.getPositionSalary() + "");
+                // this.txtGhiChu.setText(salary.getNote());
+                // this.txtKhauTru.setText(salary.getDeductions() + "");
+                // this.txtThuong.setText(salary.getBonus() + "");
+                this.lblChuyenCan.setText(salary.getAttendance() + "");
+                // this.lblTongLuong.setText(salary.getNetSalary() + "");
+                // this.lblTax.setText(salary.gettax()+ "");
+                // this.lblSocial_insurance.setText(salary.getsocial_insurance()+ "");
+                // this.lblTongLuongTangCa.setText(salary.getOvertimeSalary() + "");
+                // this.lblTax.setText(salary.getTax()+"");
+                // this.lblSocial_insurance.setText(salary.getSocialInsurance()+"");
+                // this.lblTongLuong.setText (salary.getnet_salary()+"");
+                BigDecimal overtimeSalary = salary.getOvertimeSalary(); // overtime_salary từ cơ sở dữ liệu
+                BigDecimal totalOvertimeShifts = salary.getTotal_overtime_shifts(); // total_overtime_shifts (float)
+
+                // Tính tổng lương tăng ca
+                BigDecimal totalOvertimeSalary = overtimeSalary.multiply(totalOvertimeShifts);
+
+                // Làm tròn 2 chữ số thập phân
+                BigDecimal roundedOvertimeSalary = totalOvertimeSalary.setScale(2, RoundingMode.HALF_UP);
+
+                // Hiển thị kết quả
+                this.lblTongLuongTangCa.setText(roundedOvertimeSalary.toPlainString());
+
+                LocalDate payday = salary.getPayday();
+                Date date = java.util.Date
+                        .from(payday.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                // Thiết lập ngày cho JDateChooser
+                // this.dataChooseNgayHieuLuc.setDate(date);
+            }
+        } catch (NumberFormatException var7) {
+            JOptionPane.showMessageDialog(this, "ID không hợp lệ. Vui lòng nhập số nguyên.", "Lỗi", 0);
+        } catch (Exception var8) {
+            Exception ex = var8;
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi", 0);
+            ex.printStackTrace();
+        }
+    }// GEN-LAST:event_txtIDEmployeeActionPerformed
+
+    private void btnRefreshDataYeuCauThayDoiActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnRefreshDataYeuCauThayDoiActionPerformed
+        loadDataToYeuCauTangLuongTable();
+    }// GEN-LAST:event_btnRefreshDataYeuCauThayDoiActionPerformed
+
+    private void tblYeuCauTangLuongMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_tblYeuCauTangLuongMouseClicked
+        int selectedRow = this.tblYeuCauTangLuong.getSelectedRow();
+        if (selectedRow != -1) {
+            int salaryChangeId = (Integer) this.tblYeuCauTangLuong.getValueAt(selectedRow, 0);
+            SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
+            SalaryChangeHistory salaryChangeHistory = salaryChangeHistoryDAO.selectByID(salaryChangeId);
+            SalaryUpdateDialog dialog = new SalaryUpdateDialog((Frame) null, salaryChangeHistory);
+            dialog.setVisible(true);
+        }
+    }// GEN-LAST:event_tblYeuCauTangLuongMouseClicked
+
+    // GEN-LAST:event_btnRefreshDataYeuCauDaXemActionPerformed
+
+    // GEN-LAST:event_tblDanhSachLuongMouseClicked
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
+        // (optional) ">
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
+         * look and feel.
+         * For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager
+                    .getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(SalaryFrame.class.getName()).log(
+                    java.util.logging.Level.SEVERE, null,
+                    ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(SalaryFrame.class.getName()).log(
+                    java.util.logging.Level.SEVERE, null,
+                    ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(SalaryFrame.class.getName()).log(
+                    java.util.logging.Level.SEVERE, null,
+                    ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(SalaryFrame.class.getName()).log(
+                    java.util.logging.Level.SEVERE, null,
+                    ex);
+        }
+        // </editor-fold>
+        // </editor-fold>
+        // </editor-fold>
+        // </editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new SalaryFrame().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel GiamDan;
@@ -1966,43 +2063,43 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIR
     private javax.swing.JTextField txtSearch2;
     private javax.swing.JTextField txtThuong;
     // End of variables declaration//GEN-END:variables
-        
-        private void loadListSalariesToTable() {
-            
-                SalaryDAO salaryDAO = SalaryDAO.getInstance();
-                ArrayList<Salary> salaryList = salaryDAO.selectAll();
-                Object[][] tableData = new Object[salaryList.size()][9];
 
-                for (int i = 0; i < salaryList.size(); ++i) {
-                        Salary salary = (Salary) salaryList.get(i);
-                        tableData[i][0] = salary.getEmployee().getId();
-                        tableData[i][1] = salary.getEmployee().getName();
-                        tableData[i][2] = salary.getPosition().getName();
-                        tableData[i][3] = salary.getPositionSalary();
-                        tableData[i][4] = salary.getOvertimeSalary();
-                        tableData[i][5] = salary.getAttendance();
-                        tableData[i][6] = salary.getBonus();
-                        tableData[i][7] = salary.getDeductions();
-                        tableData[i][8] = salary.getnet_salary();
-                }
+    private void loadListSalariesToTable() {
 
-                DefaultTableModel model = new DefaultTableModel(tableData,
-                                new String[] { "Mã nhân viên", "Họ và tên", "Vị trí",
-                                                "Lương theo giờ", "Lương tăng ca", "Chuyên cần", "Thưởng", "Khấu trừ",
-                                                "Tổng lương" });
-                this.tblDanhSachLuong.setModel(model);
+        SalaryDAO salaryDAO = SalaryDAO.getInstance();
+        ArrayList<Salary> salaryList = salaryDAO.selectAll();
+        Object[][] tableData = new Object[salaryList.size()][9];
+
+        for (int i = 0; i < salaryList.size(); ++i) {
+            Salary salary = (Salary) salaryList.get(i);
+            tableData[i][0] = salary.getEmployee().getId();
+            tableData[i][1] = salary.getEmployee().getName();
+            tableData[i][2] = salary.getPosition().getName();
+            tableData[i][3] = salary.getPositionSalary();
+            tableData[i][4] = salary.getOvertimeSalary();
+            tableData[i][5] = salary.getAttendance();
+            tableData[i][6] = salary.getBonus();
+            tableData[i][7] = salary.getDeductions();
+            tableData[i][8] = salary.getnet_salary();
         }
-        
-        private void loadDataSalariesToTable(int employeeId) {
-            DefaultTableModel model = (DefaultTableModel) tblDanhSachLuong.getModel();
-            model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
 
-            SalaryDAO salaryDAO = new SalaryDAO();
-            Salary salary = salaryDAO.selectByEmployeeID(employeeId); // Lấy thông tin lương của nhân viên theo ID
+        DefaultTableModel model = new DefaultTableModel(tableData,
+                new String[] { "Mã nhân viên", "Họ và tên", "Vị trí",
+                        "Lương theo giờ", "Lương tăng ca", "Chuyên cần", "Thưởng", "Khấu trừ",
+                        "Tổng lương" });
+        this.tblDanhSachLuong.setModel(model);
+    }
 
-            if (salary != null) {
-                // Thêm dữ liệu vào bảng
-                model.addRow(new Object[]{
+    private void loadDataSalariesToTable(int employeeId) {
+        DefaultTableModel model = (DefaultTableModel) tblDanhSachLuong.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
+
+        SalaryDAO salaryDAO = new SalaryDAO();
+        Salary salary = salaryDAO.selectByEmployeeID(employeeId); // Lấy thông tin lương của nhân viên theo ID
+
+        if (salary != null) {
+            // Thêm dữ liệu vào bảng
+            model.addRow(new Object[] {
                     salary.getEmployee().getId(),
                     salary.getEmployee().getName(),
                     salary.getPositionSalary(),
@@ -2013,66 +2110,67 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIR
                     salary.getPayday(),
                     salary.getNote(),
                     salary.getAttendance()
-                });
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin lương của nhân viên với ID: " + employeeId, "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
+            });
+        } else {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin lương của nhân viên với ID: " + employeeId,
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void loadDataToYeuCauTangLuongTable() {
+        this.tblYeuCauTangLuong.setRowHeight(30);
+        SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
+        ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectAllWithEmployee();
+        Object[][] tableData = new Object[salaryChangeList.size()][8];
+
+        for (int i = 0; i < salaryChangeList.size(); ++i) {
+            SalaryChangeHistory history = (SalaryChangeHistory) salaryChangeList.get(i);
+            tableData[i][0] = history.getId();
+            tableData[i][1] = history.getEmployee().getId();
+            tableData[i][2] = history.getEmployee().getName();
+            tableData[i][3] = history.getOldSalary();
+            tableData[i][4] = history.getNewSalary();
+            tableData[i][5] = history.getchangeDateSend();
+            tableData[i][6] = history.getReasons();
+            tableData[i][7] = history.getStatus();
         }
 
+        DefaultTableModel model = new DefaultTableModel(tableData,
+                new String[] { "Mã", "Mã nhân viên", "Nhân viên", "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", "Lý do",
+                        "Trạng thái" });
+        this.tblYeuCauTangLuong.setModel(model);
+        this.tblYeuCauTangLuong.getColumnModel().getColumn(7).setCellRenderer(new StatusRenderer());
+    }
 
-        private void loadDataToYeuCauTangLuongTable() {
-                this.tblYeuCauTangLuong.setRowHeight(30);
-                SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
-                ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectAllWithEmployee();
-                Object[][] tableData = new Object[salaryChangeList.size()][8];
+    private void loadDataToYeuCauTangLuongDaXemTable() {
+        SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
+        ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectReviewed();
+        Object[][] tableData = new Object[salaryChangeList.size()][8];
 
-                for (int i = 0; i < salaryChangeList.size(); ++i) {
-                        SalaryChangeHistory history = (SalaryChangeHistory) salaryChangeList.get(i);
-                        tableData[i][0] = history.getId();
-                        tableData[i][1] = history.getEmployee().getId();
-                        tableData[i][2] = history.getEmployee().getName();
-                        tableData[i][3] = history.getOldSalary();
-                        tableData[i][4] = history.getNewSalary();
-                        tableData[i][5] = history.getchangeDateSend();
-                        tableData[i][6] = history.getReasons();
-                        tableData[i][7] = history.getStatus();
-                }
-
-                DefaultTableModel model = new DefaultTableModel(tableData,
-                                new String[] { "Mã","Mã nhân viên", "Nhân viên", "Lương cũ", "Lương mới", "Ngày gửi yêu cầu", "Lý do",
-                                                "Trạng thái" });
-                this.tblYeuCauTangLuong.setModel(model);
-                this.tblYeuCauTangLuong.getColumnModel().getColumn(7).setCellRenderer(new StatusRenderer());
+        for (int i = 0; i < salaryChangeList.size(); ++i) {
+            SalaryChangeHistory history = (SalaryChangeHistory) salaryChangeList.get(i);
+            Object[] var10000 = tableData[i];
+            // Object[] var10003 = new Object[] { history.getEmployee().getId() };
+            // var10000[0] = "NV" + String.format("%03d", var10003);
+            // tableData[i][0] = history.getId();
+            tableData[i][0] = history.getEmployee().getId();
+            tableData[i][1] = history.getEmployee().getName();
+            tableData[i][2] = history.getOldSalary();
+            tableData[i][3] = history.getNewSalary();
+            tableData[i][4] = history.getReasons();
+            tableData[i][5] = history.getchangeDateBrowse();
+            tableData[i][6] = history.getApprovedBy().getName();
+            tableData[i][7] = history.getComments();
         }
 
-        private void loadDataToYeuCauTangLuongDaXemTable() {
-                SalaryChangeHistoryDAO salaryChangeHistoryDAO = SalaryChangeHistoryDAO.getInstance();
-                ArrayList<SalaryChangeHistory> salaryChangeList = salaryChangeHistoryDAO.selectReviewed();
-                Object[][] tableData = new Object[salaryChangeList.size()][8];
+        DefaultTableModel model = new DefaultTableModel(tableData, new String[] { "Mã nhân viên", "Họ và tên",
+                "Lương hiện tại", "Lương đề xuất", "Lý do yêu cầu", "Ngày thay đổi", "Người duyệt",
+                "Phản hồi" });
+        this.tblYeuCauTangLuong1.setModel(model);
+    }
 
-                for (int i = 0; i < salaryChangeList.size(); ++i) {
-                        SalaryChangeHistory history = (SalaryChangeHistory) salaryChangeList.get(i);
-                        Object[] var10000 = tableData[i];
-//                        Object[] var10003 = new Object[] { history.getEmployee().getId() };
-//                        var10000[0] = "NV" + String.format("%03d", var10003);
-//                        tableData[i][0] = history.getId();
-                        tableData[i][0] = history.getEmployee().getId();
-                        tableData[i][1] = history.getEmployee().getName();
-                        tableData[i][2] = history.getOldSalary();
-                        tableData[i][3] = history.getNewSalary();
-                        tableData[i][4] = history.getReasons();
-                        tableData[i][5] = history.getchangeDateBrowse();
-                        tableData[i][6] = history.getApprovedBy().getName();
-                        tableData[i][7] = history.getComments();
-                }
-
-                DefaultTableModel model = new DefaultTableModel(tableData, new String[] {"Mã nhân viên", "Họ và tên",
-                                "Lương hiện tại", "Lương đề xuất", "Lý do yêu cầu", "Ngày thay đổi", "Người duyệt",
-                                "Phản hồi" });
-                this.tblYeuCauTangLuong1.setModel(model);
-        }
-        private void goBack() {
-    	// Đóng JFrame hiện tại
+    private void goBack() {
+        // Đóng JFrame hiện tại
         SwingUtilities.getWindowAncestor(this).dispose();
 
         // Mở MainFrame (hoặc JFrame chính của bạn)

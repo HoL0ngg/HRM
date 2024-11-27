@@ -28,8 +28,40 @@ public class SalaryDAO implements DAOInterface<Salary> {
     }
 
     @Override
-    public int them(Salary object) {
-        throw new UnsupportedOperationException("Unimplemented method 'them'");
+    public int them(Salary salary) {
+        String sql = "INSERT INTO salaries (employee_id, position_salary, bonus, deductions, net_salary, overtime_salary, payday, note, attendance) "
+               + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        Connection con = JDBCUtil.createConnection();
+        int result = 0;
+
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            // Thiết lập các tham số cho câu lệnh SQL
+            pst.setInt(1, salary.getEmployee().getId()); // ID nhân viên
+            pst.setBigDecimal(2, salary.getPositionSalary()); // Lương cơ bản
+            pst.setBigDecimal(3, salary.getBonus()); // Thưởng
+            pst.setBigDecimal(4, salary.getDeductions()); // Khấu trừ
+            pst.setBigDecimal(5, salary.getnet_salary()); // Lương thực nhận
+            pst.setBigDecimal(6, salary.getOvertimeSalary()); // Lương ngoài giờ
+            pst.setObject(7, salary.getPayday()); // Ngày trả lương
+            pst.setString(8, salary.getNote()); // Ghi chú
+            pst.setInt(9, salary.getAttendance()); // Số ngày công
+
+            // Thực thi câu lệnh và nhận số hàng bị ảnh hưởng
+            result = pst.executeUpdate();
+
+            if (result > 0) {
+                System.out.println("Thêm mới thông tin lương thành công cho nhân viên ID: " + salary.getEmployee().getId());
+            } else {
+                System.out.println("Thêm mới thông tin lương thất bại.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.closeConnection(con);
+        }
+
+        return result;
     }
 
     @Override
@@ -37,11 +69,40 @@ public class SalaryDAO implements DAOInterface<Salary> {
         throw new UnsupportedOperationException("Unimplemented method 'xoa'");
     }
 
-    @Override
-    public boolean capnhat(Salary object) {
-        throw new UnsupportedOperationException("Unimplemented method 'capnhat'");
-    }
+@Override
+    public boolean capnhat(Salary salary) {
+        String sql = "UPDATE salaries " +
+                 "SET position_salary = ?, bonus = ?, deductions = ?, net_salary = ?, overtime_salary = ?, payday = ?, note = ?, attendance = ? " +
+                 "WHERE id = ?";
+        Connection con = JDBCUtil.createConnection();
+        boolean isUpdated = false;
 
+        try {
+            PreparedStatement pst = con.prepareStatement(sql);
+            // Gán các giá trị từ đối tượng Salary
+            pst.setBigDecimal(1, salary.getPositionSalary());
+            pst.setBigDecimal(2, salary.getBonus());
+            pst.setBigDecimal(3, salary.getDeductions());
+            pst.setBigDecimal(4, salary.getnet_salary());
+            pst.setBigDecimal(5, salary.getOvertimeSalary());
+            pst.setObject(6, salary.getPayday()); // Sử dụng `setObject` cho kiểu LocalDate
+            pst.setString(7, salary.getNote());
+            pst.setInt(8, salary.getAttendance());
+            pst.setInt(9, salary.getId());
+
+            // Thực thi câu lệnh SQL
+            int rowsAffected = pst.executeUpdate();
+            isUpdated = rowsAffected > 0; // Nếu có ít nhất 1 dòng được cập nhật thì trả về true
+
+            pst.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.closeConnection(con);
+        }
+
+        return isUpdated;
+    }
     @Override
     public ArrayList<Salary> selectAll() {
         String sql = "SELECT s.*, e.id as employee_id, e.name as employee_name, e.gender, e.phone_number, " +
@@ -460,4 +521,85 @@ private void closeResources(PreparedStatement pst, ResultSet rs) {
 
         return maxId;
     }
+    public ArrayList<Salary> selectByEmployeeNameforDanhSachLuong(String employeeName) {
+    // Câu truy vấn SQL
+    String sql = """
+        SELECT s.*, 
+               e.id AS employee_id, 
+               e.name AS employee_name, 
+               e.gender, 
+               e.phone_number, 
+               p.id AS position_id, 
+               p.name AS position_name, 
+               sch.reasons AS salary_change_reasons, 
+               sch.comments AS Comment 
+        FROM salaries s
+        JOIN employee e ON s.employee_id = e.id
+        JOIN position p ON e.position_id = p.id
+        LEFT JOIN salary_change_history sch ON sch.employee_id = e.id
+        WHERE e.name LIKE ?
+    """;
+
+    ArrayList<Salary> salaryList = new ArrayList<>();
+    try (Connection con = JDBCUtil.createConnection();
+         PreparedStatement pst = con.prepareStatement(sql)) {
+
+        // Thiết lập tham số
+        pst.setString(1, "%" + employeeName + "%"); // Tìm kiếm theo tên với LIKE
+
+        // Thực thi câu truy vấn
+        ResultSet rs = pst.executeQuery();
+
+        // Lặp qua kết quả
+        while (rs.next()) {
+            // Lấy thông tin từ ResultSet
+            int id = rs.getInt("id");
+            BigDecimal positionSalary = rs.getBigDecimal("position_salary");
+            BigDecimal bonus = rs.getBigDecimal("bonus");
+            BigDecimal deductions = rs.getBigDecimal("deductions");
+            BigDecimal net_salary = rs.getBigDecimal("net_salary");
+            BigDecimal overtimeSalary = rs.getBigDecimal("overtime_salary");
+            LocalDate payday = rs.getObject("payday", LocalDate.class);
+            String note = rs.getString("note");
+            int attendance = rs.getInt("attendance");
+            int employeeId = rs.getInt("employee_id");
+            String employeeNameResult = rs.getString("employee_name");
+            String reasons = rs.getString("salary_change_reasons");
+            if (reasons == null) {
+                reasons = "Không có lý do thay đổi lương"; // Giá trị mặc định nếu reasons là NULL
+            }
+            String comment = rs.getString("Comment");
+            SalaryChangeHistory salaryChangeHistory = new SalaryChangeHistory();
+            salaryChangeHistory.setReasons(reasons);
+            salaryChangeHistory.setComments(comment);
+            String genderStr = rs.getString("gender").toLowerCase();
+            Employee.Gender gender = Employee.Gender.valueOf(genderStr); // Chuyển đổi giới tính
+            String phoneNumber = rs.getString("phone_number");
+
+            BigDecimal hourly_salary = rs.getBigDecimal("hourly_salary");
+            BigDecimal overtime_hourly_salary = rs.getBigDecimal("overtime_hourly_salary");
+            BigDecimal total_overtime_shifts = rs.getBigDecimal("total_overtime_shifts");
+            float total_hourly_work = rs.getFloat("total_hourly_work");
+
+            // Tạo đối tượng Employee
+            Employee employee = new Employee();
+            employee.setId(employeeId);
+            employee.setName(employeeNameResult);
+            employee.setGender(gender);
+            employee.setPhone_mumber(phoneNumber);
+
+            // Tạo đối tượng Position
+            int positionId = rs.getInt("position_id");
+            String positionName = rs.getString("position_name");
+            Position position = new Position(positionId, 0, positionName);
+
+            // Tạo đối tượng Salary và thêm vào danh sách
+            Salary salary = new Salary(id, employee, salaryChangeHistory, positionSalary, bonus, deductions, net_salary, overtimeSalary, payday, note, attendance, position, hourly_salary, overtime_hourly_salary, total_overtime_shifts, total_hourly_work);
+            salaryList.add(salary);
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace(); // In ra thông báo lỗi SQL nếu có
+    }
+    return salaryList;
+}
 }

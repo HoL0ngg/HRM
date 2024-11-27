@@ -12,6 +12,7 @@ import com.hrm.view.CongViecFrame;
 import com.hrm.view.LoginFrame;
 import com.hrm.view.MainFrame;
 import com.hrm.view.BaoCaoFrame;
+import com.hrm.view.EmployeeManagerFrame;
 import com.hrm.view.SalaryFrame;
 import com.hrm.view.SalaryNhanVien;
 import com.hrm.view.TrainingDevelopmentView;
@@ -31,23 +32,27 @@ public class MainController implements MouseListener {
         // Employee employee =
         // EmployeeDAO.getInstance().selectByID(mainFrame.getEmployee().getId());
         switch (name) {
+            case "NhanVienPanel":
+                new EmployeeManagerFrame(); 
+                mainFrame.dispose();
+                break;
             case "ChamCongPanel":
                 new ChamCongFrame(mainFrame.getEmployee());
                 mainFrame.dispose();
                 break;
             case "DangXuatPanel":
-                new LoginFrame();
                 mainFrame.dispose();
+                new LoginFrame();
                 break;
             case "LuongPanel":
-                if (mainFrame.getEmployee().getId()==27 || mainFrame.getEmployee().getId()== 421 ){
-                new SalaryFrame(mainFrame.getEmployee());
-                mainFrame.dispose();
-                }
-                else {
+                if (mainFrame.getEmployee().getId() == 27 || mainFrame.getEmployee().getId() == 421) {
+                    new SalaryFrame(mainFrame.getEmployee());
+                    mainFrame.dispose();
+                } else {
                     new SalaryNhanVien(mainFrame.getEmployee());
+                    mainFrame.dispose();
                 }
-                
+
                 break;
             case "CongViecPanel":
                 new CongViecFrame(EmployeeDAO.getInstance().selectByID(mainFrame.getEmployee().getId()));

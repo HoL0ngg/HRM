@@ -939,10 +939,10 @@ public class EmployeeDetailFrame extends javax.swing.JFrame {
             return;
         }
 
-//        if (!thueStr.matches("\\d{1,8}(\\.\\d{1,2})?")) {
-//            JOptionPane.showMessageDialog(this, "Thuế phải là số hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-//            return;
-//        }
+        if (!thueStr.matches("\\d{1,8}(\\.\\d{1,2})?")) {
+            JOptionPane.showMessageDialog(this, "Thuế phải là số hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
 //        if (!hinhThuc.matches("full_time|part_time|internship|on_board|work_from_home")) {
 //            JOptionPane.showMessageDialog(this, "Hình thức làm việc không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -969,9 +969,8 @@ public class EmployeeDetailFrame extends javax.swing.JFrame {
             employee.setHire_date(LocalDate.parse(startDateStr, DateTimeFormatter.ISO_DATE));
             employee.setStatus(rbDangLamViec.isSelected() ? Employee.Status.on : Employee.Status.off);
             employee.setAccount_bank(Integer.parseInt(txtSoTaiKhoan.getText()));
-            employee.setTax_code(Integer.parseInt(txtThue.getText()));
-            employee.setSocial_insurance_code(Integer.parseInt(txtBHXH.getText()));
-            
+            employee.setTax_code(Integer.parseInt(thueStr)); 
+            // employee.setSocial_insurance_code(Integer.parseInt(txtBHXH.getText()));
             // Lấy thông tin giới tính
             String genderInput = txtGender.getText().trim();
             if (genderInput.isEmpty() || (!genderInput.equalsIgnoreCase("Nam") && !genderInput.equalsIgnoreCase("Nữ"))) {
@@ -984,11 +983,12 @@ public class EmployeeDetailFrame extends javax.swing.JFrame {
             employee.setGender(genderEnum);
             
              // Lấy thông tin hình thức làm việc
-            String workTypeInput = txtHinhThuc.getText().trim();
-            if (workTypeInput.isEmpty() || (!workTypeInput.equalsIgnoreCase("full_time") && !workTypeInput.equalsIgnoreCase("part_time"))) {
-                JOptionPane.showMessageDialog(this, "Hình thức làm việc phải là 'full_time' hoặc 'part_time'!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+             String workTypeInput = txtHinhThuc.getText().trim();
+             if (workTypeInput.isEmpty() || 
+                 (!workTypeInput.equalsIgnoreCase("full_time") && !workTypeInput.equalsIgnoreCase("part_time"))) {
+                 JOptionPane.showMessageDialog(this, "Hình thức làm việc phải là 'full_time' hoặc 'part_time'!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                 return;
+             }
             // Chuyển đổi hình thức làm việc sang enum
             Employee.Work_type workTypeEnum = workTypeInput.equalsIgnoreCase("full_time")
                     ? Employee.Work_type.full_time

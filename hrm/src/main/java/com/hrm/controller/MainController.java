@@ -35,18 +35,18 @@ public class MainController implements MouseListener {
                 mainFrame.dispose();
                 break;
             case "DangXuatPanel":
-                new LoginFrame();
                 mainFrame.dispose();
+                new LoginFrame();
                 break;
             case "LuongPanel":
-                if (mainFrame.getEmployee().getId()==27 || mainFrame.getEmployee().getId()== 421 ){
-                new SalaryFrame(mainFrame.getEmployee());
-                mainFrame.dispose();
-                }
-                else {
+                if (mainFrame.getEmployee().getId() == 27 || mainFrame.getEmployee().getId() == 421) {
+                    new SalaryFrame(mainFrame.getEmployee());
+                    mainFrame.dispose();
+                } else {
                     new SalaryNhanVien(mainFrame.getEmployee());
+                    mainFrame.dispose();
                 }
-                
+
                 break;
             case "CongViecPanel":
                 new CongViecFrame(EmployeeDAO.getInstance().selectByID(mainFrame.getEmployee().getId()));

@@ -2,8 +2,6 @@ package com.hrm;
 
 import com.hrm.view.LoginFrame;
 
-import javax.swing.UIManager;
-
 public class Main {
     public static void main(String[] args) {
         // Đặt encoding toàn cục cho ứng dụng

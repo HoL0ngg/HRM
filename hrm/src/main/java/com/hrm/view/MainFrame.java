@@ -145,7 +145,7 @@ public class MainFrame extends JFrame {
                 ChamCongPanel.addMouseListener(controller);
 
                 RoundedPanel BaoCaoPanel = new RoundedPanel(20,
-                                new File("hrm/src/main/resources/img/rpview1.png").getAbsolutePath());
+                                new File("../hrm/src/main/resources/img/rpview1.png").getAbsolutePath());
                 BaoCaoPanel.setBounds(220, 375, 65, 65);
                 BaoCaoPanel.setName("BaoCaoPanel");
                 JLabel BaoCaoLabel = new JLabel("Bao cao");
@@ -159,12 +159,12 @@ public class MainFrame extends JFrame {
                                 new File("../hrm/src/main/resources/img/promotion.png").getAbsolutePath());
                 PhatTrienPanel.setBounds(440, 375, 65, 65);
                 PhatTrienPanel.setName("PhatTrienPanel");
-                JLabel PhatTrienLabel = new JLabel(
-                                "<html><div style='text-align: center;'>Dao tao<br>va phat trien</div></html>");
+                JLabel PhatTrienLabel = new JLabel("Dao tao va phat trien");
                 PhatTrienLabel.setFont(MenuFont);
                 PhatTrienLabel.setBounds(422, 422, 100, 80);
-                contentPane.add(PhatTrienLabel);
                 contentPane.add(PhatTrienPanel);
+                contentPane.add(PhatTrienLabel);
+                PhatTrienPanel.addMouseListener(controller);
 
                 RoundedPanel CongViecPanel = new RoundedPanel(20,
                                 new File("../hrm/src/main/resources/img/task.png").getAbsolutePath());

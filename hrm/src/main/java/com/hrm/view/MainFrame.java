@@ -159,7 +159,7 @@ public class MainFrame extends JFrame {
                 RoundedPanel PhatTrienPanel = new RoundedPanel(20,
                                 new File("../hrm/src/main/resources/img/promotion.png").getAbsolutePath());
                 PhatTrienPanel.setBounds(440, 375, 65, 65);
-                PhatTrienPanel.setName("PhatTrienPanel");
+                PhatTrienPanel.setName("DapTaoPanel");
                 JLabel PhatTrienLabel = new JLabel("Dao tao va phat trien");
                 PhatTrienLabel.setFont(MenuFont);
                 PhatTrienLabel.setBounds(422, 422, 100, 80);

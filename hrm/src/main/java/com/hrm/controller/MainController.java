@@ -14,6 +14,7 @@ import com.hrm.view.MainFrame;
 import com.hrm.view.BaoCaoFrame;
 import com.hrm.view.SalaryFrame;
 import com.hrm.view.SalaryNhanVien;
+import com.hrm.view.TrainingDevelopmentView;
 import com.hrm.view.muctieuframe;
 
 public class MainController implements MouseListener {
@@ -54,6 +55,10 @@ public class MainController implements MouseListener {
                 break;
             case "BaoCaoPanel":
                 new BaoCaoFrame(mainFrame.getEmployee());
+                mainFrame.dispose();
+                break;
+            case "PhatTrienPanel":
+                new TrainingDevelopmentView(mainFrame.getEmployee());
                 mainFrame.dispose();
                 break;
             case "MucTieuPanel":

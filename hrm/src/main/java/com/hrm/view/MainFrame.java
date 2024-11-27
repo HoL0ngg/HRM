@@ -145,7 +145,7 @@ public class MainFrame extends JFrame {
                 ChamCongPanel.addMouseListener(controller);
 
                 RoundedPanel BaoCaoPanel = new RoundedPanel(20,
-                                new File("hrm/src/main/resources/img/graph2.png").getAbsolutePath());
+                                new File("hrm/src/main/resources/img/rpview1.png").getAbsolutePath());
                 BaoCaoPanel.setBounds(220, 375, 65, 65);
                 BaoCaoPanel.setName("BaoCaoPanel");
                 JLabel BaoCaoLabel = new JLabel("Bao cao");

@@ -12,6 +12,7 @@ import com.hrm.view.CongViecFrame;
 import com.hrm.view.LoginFrame;
 import com.hrm.view.MainFrame;
 import com.hrm.view.BaoCaoFrame;
+import com.hrm.view.EmployeeManagerFrame;
 import com.hrm.view.SalaryFrame;
 import com.hrm.view.SalaryNhanVien;
 import com.hrm.view.muctieuframe;
@@ -30,6 +31,10 @@ public class MainController implements MouseListener {
         // Employee employee =
         // EmployeeDAO.getInstance().selectByID(mainFrame.getEmployee().getId());
         switch (name) {
+            case "NhanVienPanel":
+                new EmployeeManagerFrame(); 
+                mainFrame.dispose();
+                break;
             case "ChamCongPanel":
                 new ChamCongFrame(mainFrame.getEmployee());
                 mainFrame.dispose();

@@ -31,18 +31,199 @@ public class EmployeeDAO implements DAOInterface<Employee> {
     }
 
     @Override
-    public int them(Employee object) {
-        throw new UnsupportedOperationException("Unimplemented method 'them'");
+    public int them(Employee employee) {
+        Connection con = JDBCUtil.createConnection();
+        int result = 0;
+
+        try {
+            // Kiểm tra trạng thái quản lý của phòng ban
+            String selectManagerSql = "SELECT manager_id FROM departments WHERE id = ?";
+            PreparedStatement selectManagerPst = con.prepareStatement(selectManagerSql);
+            selectManagerPst.setInt(1, employee.getDepartment_id());
+            ResultSet rs = selectManagerPst.executeQuery();
+
+            Integer currentManagerId = null;
+            if (rs.next()) {
+                currentManagerId = rs.getObject("manager_id", Integer.class);
+            }
+            rs.close();
+            selectManagerPst.close();
+
+            // Nếu nhân viên được thêm với vai trò quản lý
+            if ("Quản lý".equals(employee.getLevel())) {
+                if (currentManagerId != null) {
+                    // Nếu đã có quản lý, hạ cấp quản lý hiện tại xuống "Nhân viên"
+                    updateEmployeeLevel(con, currentManagerId, "Nhân viên");
+                }
+                // Cập nhật phòng ban với quản lý mới
+                updateDepartmentManager(con, employee.getDepartment_id(), employee.getId());
+            }
+
+            // Thêm mới nhân viên
+            String sql = "INSERT INTO employee (id, name, position_id, departments_id, previous_position, date_of_birth, gender, phone_number, address, email, hire_date, status, account_bank, identify_card, tax_code, social_insurance_code, work_type, level) "
+                       + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, employee.getId());
+            pst.setString(2, employee.getName());
+            pst.setInt(3, employee.getPosition().getId());
+            pst.setInt(4, employee.getDepartment_id());
+            pst.setString(5, employee.getPrevious_position());
+            pst.setObject(6, employee.getDob());
+            pst.setString(7, employee.getGender().name().toLowerCase());
+            pst.setString(8, employee.getPhone_mumber());
+            pst.setString(9, employee.getAddress());
+            pst.setString(10, employee.getEmail());
+            pst.setObject(11, employee.getHire_date());
+            pst.setString(12, employee.getStatus().name().toLowerCase());
+            pst.setInt(13, employee.getAccount_bank());
+            pst.setInt(14, employee.getIndentify_card());
+            pst.setInt(15, employee.getTax_code());
+            pst.setInt(16, employee.getSocial_insurance_code());
+            pst.setString(17, employee.getWork_type().name().toLowerCase());
+            pst.setString(18, employee.getLevel());
+
+            result = pst.executeUpdate();
+            pst.close();
+
+            if (result > 0) {
+                System.out.println("Thêm mới nhân viên thành công: " + employee.getName());
+            } else {
+                System.out.println("Không thêm được nhân viên. Hãy kiểm tra lại dữ liệu.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.closeConnection(con);
+        }
+
+        return result;
+    }
+
+    // Hàm cập nhật cấp bậc nhân viên
+    private void updateEmployeeLevel(Connection con, int employeeId, String newLevel) throws SQLException {
+        String sql = "UPDATE employee SET level = ? WHERE id = ?";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setString(1, newLevel);
+        pst.setInt(2, employeeId);
+        pst.executeUpdate();
+        pst.close();
+    }
+
+    // Hàm cập nhật quản lý phòng ban
+    private void updateDepartmentManager(Connection con, int departmentId, Integer newManagerId) throws SQLException {
+        String sql = "UPDATE departments SET manager_id = ? WHERE id = ?";
+        PreparedStatement pst = con.prepareStatement(sql);
+        if (newManagerId != null) {
+            pst.setInt(1, newManagerId);
+        } else {
+            pst.setNull(1, java.sql.Types.INTEGER);
+        }
+        pst.setInt(2, departmentId);
+        pst.executeUpdate();
+        pst.close();
+    }
+
+
+    @Override
+    public boolean xoa(Employee employee) {
+        String sql = "UPDATE employee SET isDeleted = 1 WHERE id = ?";
+        Connection con = JDBCUtil.createConnection();
+        boolean isDeleted = false;
+
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setInt(1, employee.getId()); // Gán giá trị ID của nhân viên cần xóa
+            int rowsAffected = pst.executeUpdate();
+            isDeleted = rowsAffected > 0; // Kiểm tra xem có hàng nào bị ảnh hưởng không
+
+            if (isDeleted) {
+                System.out.println("Xóa thành công nhân viên với ID: " + employee.getId());
+            } else {
+                System.out.println("Không tìm thấy nhân viên với ID: " + employee.getId());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.closeConnection(con);
+        }
+
+        return isDeleted;
     }
 
     @Override
-    public boolean xoa(Employee object) {
-        throw new UnsupportedOperationException("Unimplemented method 'xoa'");
-    }
+    public boolean capnhat(Employee employee) {
+        Connection con = JDBCUtil.createConnection();
+        boolean isUpdated = false;
 
-    @Override
-    public boolean capnhat(Employee object) {
-        throw new UnsupportedOperationException("Unimplemented method 'capnhat'");
+        try {
+            // Lấy ID phòng ban của nhân viên
+            int departmentId = employee.getDepartment().getId();
+
+            // Kiểm tra quản lý hiện tại của phòng ban
+            String selectManagerSql = "SELECT manager_id FROM departments WHERE id = ?";
+            PreparedStatement selectManagerPst = con.prepareStatement(selectManagerSql);
+            selectManagerPst.setInt(1, departmentId);
+            ResultSet rs = selectManagerPst.executeQuery();
+
+            int currentManagerId = -1;
+            if (rs.next()) {
+                currentManagerId = rs.getInt("manager_id");
+            }
+            rs.close();
+            selectManagerPst.close();
+
+            // Nếu nhân viên được cập nhật lên quản lý
+            if ("Quản lý".equals(employee.getLevel())) {
+                if (currentManagerId == -1) {
+                    // Phòng chưa có quản lý, cập nhật trực tiếp
+                    updateEmployeeLevel(con, employee.getId(), "Quản lý");
+                    updateDepartmentManager(con, departmentId, employee.getId());
+                } else if (currentManagerId != employee.getId()) {
+                    // Phòng có quản lý khác, hạ cấp quản lý hiện tại xuống nhân viên
+                    updateEmployeeLevel(con, currentManagerId, "Nhân viên");
+
+                    // Cập nhật nhân viên này thành quản lý
+                    updateEmployeeLevel(con, employee.getId(), "Quản lý");
+                    updateDepartmentManager(con, departmentId, employee.getId());
+                }
+            } else if ("Nhân viên".equals(employee.getLevel()) && currentManagerId == employee.getId()) {
+                // Nếu nhân viên này là quản lý hiện tại nhưng bị hạ xuống nhân viên
+                updateDepartmentManager(con, departmentId, null);
+            }
+
+            // Cập nhật thông tin khác của nhân viên
+            String sql = "UPDATE employee SET name = ?, date_of_birth = ?, gender = ?, phone_number = ?, address = ?, email = ?, " +
+                    "hire_date = ?, status = ?, account_bank = ?, identify_card = ?, tax_code = ?, social_insurance_code = ?, " +
+                    "work_type = ?, position_id = ?, departments_id = ?, level = ? WHERE id = ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, employee.getName());
+            pst.setObject(2, employee.getDob());
+            pst.setString(3, employee.getGender().name().toLowerCase());
+            pst.setString(4, employee.getPhone_mumber());
+            pst.setString(5, employee.getAddress());
+            pst.setString(6, employee.getEmail());
+            pst.setObject(7, employee.getHire_date());
+            pst.setString(8, employee.getStatus().name().toLowerCase());
+            pst.setInt(9, employee.getAccount_bank());
+            pst.setInt(10, employee.getIndentify_card());
+            pst.setInt(11, employee.getTax_code());
+            pst.setInt(12, employee.getSocial_insurance_code());
+            pst.setString(13, employee.getWork_type().name().toLowerCase());
+            pst.setInt(14, employee.getPosition().getId());
+            pst.setInt(15, departmentId);
+            pst.setString(16, employee.getLevel());
+            pst.setInt(17, employee.getId());
+
+            int rowsAffected = pst.executeUpdate();
+            isUpdated = rowsAffected > 0;
+
+            pst.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.closeConnection(con);
+        }
+
+        return isUpdated;
     }
 
     public ArrayList<Employee> getNameList() {

@@ -28,8 +28,40 @@ public class SalaryDAO implements DAOInterface<Salary> {
     }
 
     @Override
-    public int them(Salary object) {
-        throw new UnsupportedOperationException("Unimplemented method 'them'");
+    public int them(Salary salary) {
+        String sql = "INSERT INTO salaries (employee_id, position_salary, bonus, deductions, net_salary, overtime_salary, payday, note, attendance) "
+               + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        Connection con = JDBCUtil.createConnection();
+        int result = 0;
+
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            // Thiết lập các tham số cho câu lệnh SQL
+            pst.setInt(1, salary.getEmployee().getId()); // ID nhân viên
+            pst.setBigDecimal(2, salary.getPositionSalary()); // Lương cơ bản
+            pst.setBigDecimal(3, salary.getBonus()); // Thưởng
+            pst.setBigDecimal(4, salary.getDeductions()); // Khấu trừ
+            pst.setBigDecimal(5, salary.getnet_salary()); // Lương thực nhận
+            pst.setBigDecimal(6, salary.getOvertimeSalary()); // Lương ngoài giờ
+            pst.setObject(7, salary.getPayday()); // Ngày trả lương
+            pst.setString(8, salary.getNote()); // Ghi chú
+            pst.setInt(9, salary.getAttendance()); // Số ngày công
+
+            // Thực thi câu lệnh và nhận số hàng bị ảnh hưởng
+            result = pst.executeUpdate();
+
+            if (result > 0) {
+                System.out.println("Thêm mới thông tin lương thành công cho nhân viên ID: " + salary.getEmployee().getId());
+            } else {
+                System.out.println("Thêm mới thông tin lương thất bại.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.closeConnection(con);
+        }
+
+        return result;
     }
 
     @Override
@@ -37,11 +69,40 @@ public class SalaryDAO implements DAOInterface<Salary> {
         throw new UnsupportedOperationException("Unimplemented method 'xoa'");
     }
 
-    @Override
-    public boolean capnhat(Salary object) {
-        throw new UnsupportedOperationException("Unimplemented method 'capnhat'");
-    }
+@Override
+    public boolean capnhat(Salary salary) {
+        String sql = "UPDATE salaries " +
+                 "SET position_salary = ?, bonus = ?, deductions = ?, net_salary = ?, overtime_salary = ?, payday = ?, note = ?, attendance = ? " +
+                 "WHERE id = ?";
+        Connection con = JDBCUtil.createConnection();
+        boolean isUpdated = false;
 
+        try {
+            PreparedStatement pst = con.prepareStatement(sql);
+            // Gán các giá trị từ đối tượng Salary
+            pst.setBigDecimal(1, salary.getPositionSalary());
+            pst.setBigDecimal(2, salary.getBonus());
+            pst.setBigDecimal(3, salary.getDeductions());
+            pst.setBigDecimal(4, salary.getnet_salary());
+            pst.setBigDecimal(5, salary.getOvertimeSalary());
+            pst.setObject(6, salary.getPayday()); // Sử dụng `setObject` cho kiểu LocalDate
+            pst.setString(7, salary.getNote());
+            pst.setInt(8, salary.getAttendance());
+            pst.setInt(9, salary.getId());
+
+            // Thực thi câu lệnh SQL
+            int rowsAffected = pst.executeUpdate();
+            isUpdated = rowsAffected > 0; // Nếu có ít nhất 1 dòng được cập nhật thì trả về true
+
+            pst.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.closeConnection(con);
+        }
+
+        return isUpdated;
+    }
     @Override
     public ArrayList<Salary> selectAll() {
         String sql = "SELECT s.*, e.id as employee_id, e.name as employee_name, e.gender, e.phone_number, " +

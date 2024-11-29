@@ -6,7 +6,6 @@ package com.hrm.controller;
 
 import com.hrm.dao.EmployeeDAO;
 import com.hrm.model.Employee;
-import com.hrm.model.Interviews;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,23 +26,24 @@ public class EmployeeBus {
         dptmBus = new DepartmentBUS();
         empList = empDao.getNameList();
     }
-    
-    public List<String> getList(){
+
+    public List<String> getList() {
         List<String> list = new ArrayList<>();
-        for(Employee e : empList){
+        for (Employee e : empList) {
             list.add(e.getName());
         }
         return list;
     }
 
-    public int getIdByName(String name){
-        for(Employee e : empList){
-            if(e.getName().equals(name)){
+    public int getIdByName(String name) {
+        for (Employee e : empList) {
+            if (e.getName().equals(name)) {
                 return e.getId();
             }
         }
         return 0;
     }
+
     public List<String> getManagerNameList() {
         List<String> list = new ArrayList<>();
         if (empList == null) {

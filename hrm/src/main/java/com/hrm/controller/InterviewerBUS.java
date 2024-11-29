@@ -1,7 +1,6 @@
 package com.hrm.controller;
 
 import com.hrm.dao.InterviewerDAO;
-import com.hrm.model.Employee;
 import com.hrm.model.Interviewer;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,19 +35,19 @@ public class InterviewerBUS {
         }
         return false;
     }
-//    public String[] getFullNameById(int id) {
-//        List<String> list = new ArrayList<>();
-//        if (intverList == null) {
-//            return null;
-//        }
-//        for (Interviewer j : intverList) {
-//            if (j.getInterview_id() == id) {
-//                String emp = empBus.getFullName(j.getEmployee_id());
-//                list.add(emp);
-//            }
-//        }
-//        return list.toArray(new String[0]);
-//    }
+    // public String[] getFullNameById(int id) {
+    // List<String> list = new ArrayList<>();
+    // if (intverList == null) {
+    // return null;
+    // }
+    // for (Interviewer j : intverList) {
+    // if (j.getInterview_id() == id) {
+    // String emp = empBus.getFullName(j.getEmployee_id());
+    // list.add(emp);
+    // }
+    // }
+    // return list.toArray(new String[0]);
+    // }
 
     public String getFullNamesById(int id) {
         List<String> list = new ArrayList<>();

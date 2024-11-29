@@ -4,7 +4,6 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import com.hrm.view.CongViecFrame;
 import com.hrm.view.MainFrame;
 import com.hrm.view.muctieuframe;
 

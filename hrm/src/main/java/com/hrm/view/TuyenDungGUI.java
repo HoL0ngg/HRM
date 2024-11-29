@@ -1,6 +1,5 @@
 package com.hrm.view;
 
-import com.formdev.flatlaf.FlatLightLaf;
 import com.hrm.controller.ApplicantsBUS;
 import com.hrm.controller.EmployeeBus;
 import com.hrm.controller.ExcelExporter;
@@ -92,11 +91,11 @@ public class TuyenDungGUI extends JFrame {
 
     public TuyenDungGUI(Employee employee) {
 
-//        try {
-//            UIManager.setLookAndFeel(new FlatLightLaf());
-//        } catch (UnsupportedLookAndFeelException ex) {
-//            ex.printStackTrace();
-//        }
+        // try {
+        // UIManager.setLookAndFeel(new FlatLightLaf());
+        // } catch (UnsupportedLookAndFeelException ex) {
+        // ex.printStackTrace();
+        // }
 
         jobList = new ArrayList<>();
         jobBus = new JobOpeningsBUS();
@@ -105,12 +104,12 @@ public class TuyenDungGUI extends JFrame {
         this.init();
     }
 
-//    public static TuyenDungGUI getInstance() {
-//        if (instance == null) {
-//            instance = new TuyenDungGUI();
-//        }
-//        return instance;
-//    }
+    // public static TuyenDungGUI getInstance() {
+    // if (instance == null) {
+    // instance = new TuyenDungGUI();
+    // }
+    // return instance;
+    // }
     public void init() {
 
         setTitle("Quản lý tuyển dụng");
@@ -118,7 +117,7 @@ public class TuyenDungGUI extends JFrame {
         setSize(1000, 750);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-        //setSize(WIDTH, HEIGHT);
+        // setSize(WIDTH, HEIGHT);
         setBackground(Color.white);
 
         JPanel contentPane = new JPanel();
@@ -127,7 +126,7 @@ public class TuyenDungGUI extends JFrame {
         contentPane.setBackground(Color.WHITE); // Đặt màu nền cho contentPane là trắng
         setContentPane(contentPane);
 
-// Navbar Panel
+        // Navbar Panel
         JPanel navBarPanel = new JPanel(new BorderLayout());
         navBarPanel.setBackground(new Color(245, 143, 82));
         navBarPanel.setPreferredSize(new Dimension(1000, 50)); // Chiều cao cố định cho navbar
@@ -163,10 +162,10 @@ public class TuyenDungGUI extends JFrame {
         userPanel.setOpaque(false);
 
         String[] iconPaths = {
-            "src/main/resources/img/bubble-chat.png",
-            "src/main/resources/img/bell.png",
-            "src/main/resources/img/set-up.png",
-            "src/main/resources/img/profile.png"
+                "src/main/resources/img/bubble-chat.png",
+                "src/main/resources/img/bell.png",
+                "src/main/resources/img/set-up.png",
+                "src/main/resources/img/profile.png"
         };
 
         for (String path : iconPaths) {
@@ -184,16 +183,15 @@ public class TuyenDungGUI extends JFrame {
         navBarPanel.add(userPanel, BorderLayout.EAST); // Thêm userPanel vào bên phải navbar
         contentPane.add(navBarPanel, BorderLayout.NORTH); // Thêm navbar vào phần Bắc của JFrame
 
-        
         contentPane.add(createHeaderPanel(), BorderLayout.CENTER);
         contentPane.add(createContentPanel(), BorderLayout.SOUTH);
-        
+
         setVisible(true);
     }
 
     private JPanel createHeaderPanel() {
         headBar = new JPanel(new BorderLayout());
-        //headBar.setBounds(20, 20, WIDTH, 170);
+        // headBar.setBounds(20, 20, WIDTH, 170);
         headBar.setPreferredSize(new Dimension(WIDTH, 120));
         headBar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 120));
 
@@ -218,7 +216,8 @@ public class TuyenDungGUI extends JFrame {
         toolBar.add(addJobBtn);
         applyButtonHoverEffect(addJobBtn);
 
-        jobOpeningListBtn = createRoundedButton("Danh sách ứng viên", "src\\main\\java\\img\\rectangle-list.png", 150, 30);
+        jobOpeningListBtn = createRoundedButton("Danh sách ứng viên", "src\\main\\java\\img\\rectangle-list.png", 150,
+                30);
         jobOpeningListBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -263,7 +262,7 @@ public class TuyenDungGUI extends JFrame {
 
         clear = new JButton("X");
         clear.setForeground(Color.red);
-        //clear.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        // clear.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         searchField = new JPanel(new BorderLayout());
         searchField.setPreferredSize(new Dimension(200, 30));
@@ -339,7 +338,8 @@ public class TuyenDungGUI extends JFrame {
     }
 
     private JButton createRoundedButton(String text, String iconPath, int width, int height) {
-        ImageIcon icon = new ImageIcon(new ImageIcon(iconPath).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
+        ImageIcon icon = new ImageIcon(
+                new ImageIcon(iconPath).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH));
         JButton button = new RoundedButton(text, 30);
         button.setIcon(icon);
         button.setPreferredSize(new Dimension(width, height));
@@ -350,7 +350,8 @@ public class TuyenDungGUI extends JFrame {
     }
 
     private JButton createIconButton(String iconPath) {
-        ImageIcon icon = new ImageIcon(new ImageIcon(iconPath).getImage().getScaledInstance(18, 18, Image.SCALE_SMOOTH));
+        ImageIcon icon = new ImageIcon(
+                new ImageIcon(iconPath).getImage().getScaledInstance(18, 18, Image.SCALE_SMOOTH));
         JButton button = new JButton(icon);
         button.setBackground(Color.white);
         button.setBorder(BorderFactory.createEmptyBorder());
@@ -360,7 +361,7 @@ public class TuyenDungGUI extends JFrame {
     private JPanel createContentPanel() {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
-        //mainPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        // mainPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         mainPanel.setBackground(Color.WHITE);
         mainPanel.setPreferredSize(new Dimension(1000, 520));
 
@@ -369,9 +370,10 @@ public class TuyenDungGUI extends JFrame {
         homePanel.add(createJobPanel("Mới nhất", new Color(255, 204, 0)));
         homePanel.add(createJobPanel("Cũ nhất", new Color(102, 153, 255)));
 
-        scrollPane1 = new JScrollPane(homePanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane1 = new JScrollPane(homePanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane1.getVerticalScrollBar().setUnitIncrement(14);
-        //scrollPane1.setPreferredSize(new Dimension(1000, 750 - 170));
+        // scrollPane1.setPreferredSize(new Dimension(1000, 750 - 170));
 
         jobFormPanel = new JobDetailPanel();
         jobFormPanel.addButtonListener(e -> completeBtn());
@@ -426,11 +428,11 @@ public class TuyenDungGUI extends JFrame {
     private JPanel createJobPanel(String title, Color headerColor) {
         JPanel jobPanel = new JPanel(new BorderLayout());
         jobPanel.setBorder(BorderFactory.createLineBorder(headerColor, 2));
-        jobPanel.setPreferredSize(new Dimension(WIDTH - 150, 305));//350
+        jobPanel.setPreferredSize(new Dimension(WIDTH - 150, 305));// 350
 
         JPanel header = new JPanel(new BorderLayout());
         header.setBorder(new EmptyBorder(0, 10, 0, 10));
-        header.setPreferredSize(new Dimension(WIDTH - 150, 50));//w700
+        header.setPreferredSize(new Dimension(WIDTH - 150, 50));// w700
         header.setBackground(headerColor);
 
         JLabel titleLabel = new JLabel(title, JLabel.LEFT);
@@ -616,7 +618,7 @@ public class TuyenDungGUI extends JFrame {
         // Mở JFrame khác (ReportEffectWorkView)
         new MainFrame(employee).setVisible(true);
     }
-    
+
     private void applyButtonHoverEffect(JButton button) {
         button.addMouseListener(new MouseAdapter() {
             @Override
@@ -669,7 +671,7 @@ public class TuyenDungGUI extends JFrame {
         }
     }
 
-// Các hàm làm mới dữ liệu cụ thể cho từng panel
+    // Các hàm làm mới dữ liệu cụ thể cho từng panel
     private void loadJobList() {
         jobList = jobBus.getList();
 
@@ -681,10 +683,11 @@ public class TuyenDungGUI extends JFrame {
         homePanel.revalidate();
         homePanel.repaint();
 
-        //scrollPane.removeAll();
-        scrollPane1 = new JScrollPane(homePanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        // scrollPane.removeAll();
+        scrollPane1 = new JScrollPane(homePanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane1.getVerticalScrollBar().setUnitIncrement(14);
-        //scrollPane.setPreferredSize(new Dimension(WIDTH - 146, HEIGHT - 190));
+        // scrollPane.setPreferredSize(new Dimension(WIDTH - 146, HEIGHT - 190));
 
         mainPanel.add(scrollPane1, "Home");
         mainPanel.revalidate();
@@ -693,7 +696,7 @@ public class TuyenDungGUI extends JFrame {
     }
 
     private void loadApplicantList() {
-        //applicantBus = new ApplicantsBUS();
+        // applicantBus = new ApplicantsBUS();
         applicantList = applicantBus.getList();
         applicantTable = createApplicantTable(applicantList);
         applicantPanel.removeAll();
@@ -718,7 +721,7 @@ public class TuyenDungGUI extends JFrame {
         jobList = jobBus.getList();
 
         JPanel jobPanel = new JPanel(new BorderLayout());
-        //viewAllJobPanel = new JPanel(new BorderLayout());
+        // viewAllJobPanel = new JPanel(new BorderLayout());
         jobPanel.setBorder(BorderFactory.createLineBorder(headerColor, 2));
         jobPanel.setPreferredSize(new Dimension(WIDTH - 146, HEIGHT - 190));
 
@@ -743,7 +746,7 @@ public class TuyenDungGUI extends JFrame {
             }
         });
         header.add(titleLabel, BorderLayout.WEST);
-        //header.add(viewAllLabel, BorderLayout.EAST);
+        // header.add(viewAllLabel, BorderLayout.EAST);
         jobPanel.add(header, BorderLayout.NORTH);
 
         ArrayList<JobOpenings> sortedJobList = "Mới nhất".equals(title)
@@ -762,7 +765,7 @@ public class TuyenDungGUI extends JFrame {
         }
         JPanel jobsGrid = new JPanel(new GridLayout(row, 3, 35, 20));
         jobsGrid.setBorder(new EmptyBorder(15, 15, 15, 15));
-        //jobsGrid.setPreferredSize(new Dimension(WIDTH - 80, HEIGHT - 170 - 50));
+        // jobsGrid.setPreferredSize(new Dimension(WIDTH - 80, HEIGHT - 170 - 50));
         jobsGrid.setBackground(Color.white);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -780,7 +783,8 @@ public class TuyenDungGUI extends JFrame {
             }
         }
 
-        JScrollPane jobScrollPane = new JScrollPane(jobsGrid, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane jobScrollPane = new JScrollPane(jobsGrid, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jobScrollPane.setPreferredSize(new Dimension(WIDTH - 148, HEIGHT - 190 - 50));
         jobScrollPane.getVerticalScrollBar().setUnitIncrement(14);
         jobScrollPane.setBackground(Color.white);
@@ -792,7 +796,7 @@ public class TuyenDungGUI extends JFrame {
     public Table createApplicantTable(ArrayList<Applicants> applicantList) {
         Table applicantTable = new Table();
 
-        String[] headers = {"STT", "Họ Tên", "Vị Trí Ứng Tuyển", "Phòng ban", "Ngày Nộp", "Trạng Thái", "Link CV"};
+        String[] headers = { "STT", "Họ Tên", "Vị Trí Ứng Tuyển", "Phòng ban", "Ngày Nộp", "Trạng Thái", "Link CV" };
         applicantTable.setHeaders(headers);
 
         int index = 0;
@@ -808,14 +812,14 @@ public class TuyenDungGUI extends JFrame {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String date = applicant.getApplicant_date().format(formatter);
 
-            applicantTable.addRow(new String[]{
-                Integer.toString(index), // STT
-                applicant.getFull_name(), // Họ Tên
-                position, // Vị Trí
-                department, // Phòng ban
-                date, // Ngày Nộp
-                intvBus.getStageById(applicant.getId()), // Trạng Thái (có thể cập nhật sau)
-                applicant.getResume() // Link CV
+            applicantTable.addRow(new String[] {
+                    Integer.toString(index), // STT
+                    applicant.getFull_name(), // Họ Tên
+                    position, // Vị Trí
+                    department, // Phòng ban
+                    date, // Ngày Nộp
+                    intvBus.getStageById(applicant.getId()), // Trạng Thái (có thể cập nhật sau)
+                    applicant.getResume() // Link CV
             });
         }
 
@@ -854,7 +858,7 @@ public class TuyenDungGUI extends JFrame {
     public Table createInterviewTable(ArrayList<Interviews> intvList) {
         Table intvTable = new Table();
 
-        String[] headers = {"STT", "Họ Tên", "Vị Trí Ứng Tuyển", "Thời Gian", "Trạng Thái", "Người Phỏng Vấn"};
+        String[] headers = { "STT", "Họ Tên", "Vị Trí Ứng Tuyển", "Thời Gian", "Trạng Thái", "Người Phỏng Vấn" };
         intvTable.setHeaders(headers);
 
         // Duyệt qua danh sách ứng viên và thêm vào bảng
@@ -868,29 +872,32 @@ public class TuyenDungGUI extends JFrame {
             String position = intvBus.getPositionById(intv.getId());
             String intverName = intverBus.getFullNamesById(intv.getId());
 
-            // Kiểm tra nếu thông tin về người phỏng vấn không có (null) và thay thế bằng giá trị mặc định
+            // Kiểm tra nếu thông tin về người phỏng vấn không có (null) và thay thế bằng
+            // giá trị mặc định
             if (intverName == null || intverName.trim().isEmpty()) {
                 intverName = "Chưa cập nhật"; // Giá trị mặc định nếu không có người phỏng vấn
             }
 
             // Định dạng ngày tháng
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            String date = intv.getInterview_date() != null ? intv.getInterview_date().format(formatter) : "Chưa cập nhật"; // Nếu ngày phỏng vấn null, thay bằng giá trị mặc định
+            String date = intv.getInterview_date() != null ? intv.getInterview_date().format(formatter)
+                    : "Chưa cập nhật"; // Nếu ngày phỏng vấn null, thay bằng giá trị mặc định
             // Thêm hàng dữ liệu vào bảng
-            intvTable.addRow(new Object[]{
-                Integer.toString(index), // STT
-                applicantName, // Họ tên
-                position, // Vị trí
-                date, // Thời gian
-                intv.getInterview_stage(), // Trạng thái (dùng String thay vì JComboBox)
-                intverName // Người phỏng vấn
+            intvTable.addRow(new Object[] {
+                    Integer.toString(index), // STT
+                    applicantName, // Họ tên
+                    position, // Vị trí
+                    date, // Thời gian
+                    intv.getInterview_stage(), // Trạng thái (dùng String thay vì JComboBox)
+                    intverName // Người phỏng vấn
             });
         }
 
         // Tạo và áp dụng TableCellRenderer cho cột trạng thái (cột thứ 4 trong bảng)
         intvTable.getColumnModel().getColumn(4).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                    boolean hasFocus, int row, int column) {
                 Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 String status = (String) value; // Lấy giá trị của trạng thái từ bảng
 
@@ -960,9 +967,9 @@ public class TuyenDungGUI extends JFrame {
     }
 
     public void updateJobPanel(ArrayList<JobOpenings> searchResults, int flag) {
-        //viewAll("Danh sách công việc", new Color(102, 153, 255), 1)
+        // viewAll("Danh sách công việc", new Color(102, 153, 255), 1)
         JPanel jobPanel = new JPanel(new BorderLayout());
-        //viewAllJobPanel = new JPanel(new BorderLayout());
+        // viewAllJobPanel = new JPanel(new BorderLayout());
         jobPanel.setBorder(BorderFactory.createLineBorder(new Color(255, 204, 0), 2));
         jobPanel.setPreferredSize(new Dimension(WIDTH - 146, HEIGHT - 190));
 
@@ -987,7 +994,7 @@ public class TuyenDungGUI extends JFrame {
             }
         });
         header.add(titleLabel, BorderLayout.WEST);
-        //header.add(viewAllLabel, BorderLayout.EAST);
+        // header.add(viewAllLabel, BorderLayout.EAST);
         jobPanel.add(header, BorderLayout.NORTH);
 
         ArrayList<JobOpenings> sortedJobList = searchResults.stream()
@@ -1002,7 +1009,7 @@ public class TuyenDungGUI extends JFrame {
         }
         JPanel jobsGrid = new JPanel(new GridLayout(row, 3, 35, 20));
         jobsGrid.setBorder(new EmptyBorder(15, 15, 15, 15));
-        //jobsGrid.setPreferredSize(new Dimension(WIDTH - 80, HEIGHT - 170 - 50));
+        // jobsGrid.setPreferredSize(new Dimension(WIDTH - 80, HEIGHT - 170 - 50));
         jobsGrid.setBackground(Color.white);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -1020,7 +1027,8 @@ public class TuyenDungGUI extends JFrame {
             }
         }
 
-        JScrollPane jobScrollPane = new JScrollPane(jobsGrid, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane jobScrollPane = new JScrollPane(jobsGrid, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         jobScrollPane.setPreferredSize(new Dimension(WIDTH - 148, HEIGHT - 190 - 50));
         jobScrollPane.getVerticalScrollBar().setUnitIncrement(14);
         jobScrollPane.setBackground(Color.white);
@@ -1032,8 +1040,8 @@ public class TuyenDungGUI extends JFrame {
         cardLayout.show(mainPanel, "JobSearch");
     }
 
-//   PHẦN XỬ KIẾN SỰ KIỆN NÚT TRONG CÁC CHỨC NĂNG  
-//   nút thoát
+    // PHẦN XỬ KIẾN SỰ KIỆN NÚT TRONG CÁC CHỨC NĂNG
+    // nút thoát
     private void exitButton(int flag) {
         if (flag == 0) {
             togglePanel("Home");
@@ -1058,7 +1066,7 @@ public class TuyenDungGUI extends JFrame {
 
     }
 
-    //   Nút hoàn tất khi thêm bài đăng
+    // Nút hoàn tất khi thêm bài đăng
     private void completeBtn() {
         int id = jobBus.getNextId();
         String position = jobFormPanel.positionField.getText().trim();
@@ -1083,7 +1091,8 @@ public class TuyenDungGUI extends JFrame {
             return;
         }
 
-        JobOpenings job = new JobOpenings(id, departmentId, position, salary, openingDate, endDate, status, description);
+        JobOpenings job = new JobOpenings(id, departmentId, position, salary, openingDate, endDate, status,
+                description);
         jobBus.add(job);
         JOptionPane.showMessageDialog(this, "Thông tin đã được lưu!");
         loadJobList();
@@ -1122,7 +1131,8 @@ public class TuyenDungGUI extends JFrame {
     }
 
     private void deleteButton(int id) {
-        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa công việc này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa công việc này?", "Xác nhận",
+                JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
 
             jobBus.delete(id);
@@ -1277,6 +1287,6 @@ public class TuyenDungGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        
+
     }
 }

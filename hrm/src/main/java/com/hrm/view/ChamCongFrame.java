@@ -154,7 +154,7 @@ public class ChamCongFrame extends JFrame {
                 TenLabel.setBounds(600, 15, 210, 15);
                 navBar.add(TenLabel);
 
-                Image BackBtn = new ImageIcon(new File("hrm/src/main/resources/img/left-arrow.png").getAbsolutePath())
+                Image BackBtn = new ImageIcon(new File("../hrm/src/main/resources/img/left-arrow.png").getAbsolutePath())
                                 .getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
                 JLabel BackLabel = new JLabel(new ImageIcon(BackBtn));
                 BackLabel.setBounds(10, 5, 30, 30);

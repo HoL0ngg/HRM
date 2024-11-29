@@ -4,7 +4,6 @@ import com.hrm.dao.ApplicantsDAO;
 import com.hrm.model.Applicants;
 import com.hrm.model.Employee;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class ApplicantsBUS {
@@ -40,7 +39,8 @@ public class ApplicantsBUS {
 
     public void delete(int id) {
         for (Applicants applicant : applicants) {
-            if (applicant.getId() == (id));
+            if (applicant.getId() == (id))
+                ;
             {
                 applicants.remove(id);
                 ApplicantsDAO applicantsDAO = new ApplicantsDAO();
@@ -71,37 +71,39 @@ public class ApplicantsBUS {
         return false;
     }
 
-//    public ArrayList<Applicants> search(String id, String fullName, String position) {
-//        ArrayList<Applicants> searchResults = new ArrayList<>();
-//        
-//        String idString = (id != null) ? id : null;
-//        String fullNameString = (fullName != null) ? fullName : "";
-//        String positionString = (position != null) ? position : "";
-//        
-//         searchResults = applicants.stream()
-//                .filter(apl -> (idString == null || String.valueOf(apl.getId()).contains(idString))
-//                && (positionString.isEmpty() || intvBus.getPositionByApplicantId(apl.getId()).toLowerCase().contains(positionString.toLowerCase()))
-//                && (fullNameString.isEmpty() || apl.getFull_name().toLowerCase().contains(fullNameString.toLowerCase())))
-//                .collect(Collectors.toCollection(ArrayList::new));
-//
-//        return searchResults;
-//    }
+    // public ArrayList<Applicants> search(String id, String fullName, String
+    // position) {
+    // ArrayList<Applicants> searchResults = new ArrayList<>();
+    //
+    // String idString = (id != null) ? id : null;
+    // String fullNameString = (fullName != null) ? fullName : "";
+    // String positionString = (position != null) ? position : "";
+    //
+    // searchResults = applicants.stream()
+    // .filter(apl -> (idString == null ||
+    // String.valueOf(apl.getId()).contains(idString))
+    // && (positionString.isEmpty() ||
+    // intvBus.getPositionByApplicantId(apl.getId()).toLowerCase().contains(positionString.toLowerCase()))
+    // && (fullNameString.isEmpty() ||
+    // apl.getFull_name().toLowerCase().contains(fullNameString.toLowerCase())))
+    // .collect(Collectors.toCollection(ArrayList::new));
+    //
+    // return searchResults;
+    // }
     public ArrayList<Applicants> search(String searchText) {
         intvBus = new InterviewsBUS();
-        
+
         ArrayList<Applicants> searchResults = new ArrayList<>();
 
         String searchTextLower = searchText != null ? searchText.toLowerCase() : "";
 
         searchResults = applicants.stream()
-                .filter(apl
-                        -> // Tìm theo ID
-                        (String.valueOf(apl.getId()).contains(searchText))
-                || // Tìm theo Full Name
-                apl.getFull_name().toLowerCase().contains(searchTextLower)
-                || // Tìm theo Position
-                intvBus.getPositionByApplicantId(apl.getId()).toLowerCase().contains(searchTextLower)
-                )
+                .filter(apl -> // Tìm theo ID
+                (String.valueOf(apl.getId()).contains(searchText))
+                        || // Tìm theo Full Name
+                        apl.getFull_name().toLowerCase().contains(searchTextLower)
+                        || // Tìm theo Position
+                        intvBus.getPositionByApplicantId(apl.getId()).toLowerCase().contains(searchTextLower))
                 .collect(Collectors.toCollection(ArrayList::new));
 
         return searchResults;

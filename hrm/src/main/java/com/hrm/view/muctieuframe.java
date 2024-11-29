@@ -11,7 +11,6 @@ import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
 
-import com.hrm.controller.CongViecController;
 import com.hrm.controller.MucTieuController;
 import com.hrm.model.Employee;
 
@@ -80,9 +79,6 @@ public class muctieuframe extends JFrame {
         navBar.add(lblNewLabel);
 
         // tao lich hop
-        
-
-        
 
         JLabel daucong = new JLabel("Muc tieu");
         daucong.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
@@ -91,8 +87,6 @@ public class muctieuframe extends JFrame {
         JLabel daucong2 = new JLabel("Danh gia");
         daucong2.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
         daucong2.setForeground(Color.black);
-        
-        
 
         RoundedPanel cong = new RoundedPanel(18);
         cong.setBounds(210, 300, 80, 30);
@@ -101,29 +95,29 @@ public class muctieuframe extends JFrame {
         cong.add(daucong);
 
         RoundedPanel cong2 = new RoundedPanel(18);
-        cong2.setBounds(460, 300, 80, 30 );
+        cong2.setBounds(460, 300, 80, 30);
         cong2.setForeground(Color.green);
         cong2.setBackground(Color.green);
         cong2.add(daucong2);
 
-//        RoundedPanel taocongviec = new RoundedPanel(18);
-//        taocongviec.setBounds(100, 160, 202, 300);
-//        taocongviec.setBackground(Color.WHITE);
-//        taocongviec.setLayout(null);
-//        taocongviec.add(cong);
-//        
-//        contentPane.add(taocongviec);
-//
-//        
-//
-//        RoundedPanel taocongviec2 = new RoundedPanel(18);
-//        taocongviec2.setBounds(440, 160, 202, 300);
-//        taocongviec2.setBackground(Color.WHITE);
-//       
-//        taocongviec2.setLayout(null);
-//        taocongviec2.add(cong2);
-//        
-//        contentPane.add(taocongviec2);
+        // RoundedPanel taocongviec = new RoundedPanel(18);
+        // taocongviec.setBounds(100, 160, 202, 300);
+        // taocongviec.setBackground(Color.WHITE);
+        // taocongviec.setLayout(null);
+        // taocongviec.add(cong);
+        //
+        // contentPane.add(taocongviec);
+        //
+        //
+        //
+        // RoundedPanel taocongviec2 = new RoundedPanel(18);
+        // taocongviec2.setBounds(440, 160, 202, 300);
+        // taocongviec2.setBackground(Color.WHITE);
+        //
+        // taocongviec2.setLayout(null);
+        // taocongviec2.add(cong2);
+        //
+        // contentPane.add(taocongviec2);
         contentPane.add(cong);
         contentPane.add(cong2);
         setVisible(true);

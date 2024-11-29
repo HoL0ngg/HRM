@@ -19,7 +19,6 @@ import com.hrm.view.TrainingDevelopmentView;
 import com.hrm.view.SettingGUI;
 import com.hrm.view.TuyenDungGUI;
 import com.hrm.view.muctieuframe;
-import javax.swing.JFrame;
 
 public class MainController implements MouseListener {
 
@@ -37,7 +36,7 @@ public class MainController implements MouseListener {
         // EmployeeDAO.getInstance().selectByID(mainFrame.getEmployee().getId());
         switch (name) {
             case "NhanVienPanel":
-                new EmployeeManagerFrame(); 
+                new EmployeeManagerFrame();
                 mainFrame.dispose();
                 break;
             case "ChamCongPanel":
@@ -58,28 +57,26 @@ public class MainController implements MouseListener {
                 }
 
                 break;
-                
+
             case "CongViecPanel":
                 new CongViecFrame(EmployeeDAO.getInstance().selectByID(mainFrame.getEmployee().getId()));
                 mainFrame.dispose();
                 break;
-                
+
             case "DapTaoPanel":
-            	try {
-            	    new TrainingDevelopmentView(mainFrame.getEmployee()).setVisible(true);
-            	} catch (Exception ex) {
-            	    ex.printStackTrace();
-            	}
+                try {
+                    new TrainingDevelopmentView(mainFrame.getEmployee()).setVisible(true);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
                 mainFrame.dispose();
                 break;
-                
+
             case "BaoCaoPanel":
                 new BaoCaoFrame(mainFrame.getEmployee());
                 mainFrame.dispose();
                 break;
-                
-            
-                
+
             case "MucTieuPanel":
                 new muctieuframe(mainFrame.getEmployee());
                 mainFrame.dispose();

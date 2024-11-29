@@ -6,7 +6,6 @@ import com.hrm.model.Department;
 import com.hrm.model.Interviews;
 import com.hrm.model.JobOpenings;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class InterviewsBUS {
@@ -39,8 +38,8 @@ public class InterviewsBUS {
         }
         return null;
     }
-    
-    public Interviews getByJobId(int id){
+
+    public Interviews getByJobId(int id) {
         if (intvList == null) {
             return null;
         }
@@ -165,16 +164,16 @@ public class InterviewsBUS {
         }
     }
 
-//    public void delete(int id){
-//        for(Interviews intv : intvList){
-//            if(intv.getId()==id){
-//                intvList.remove(id);
-//                intvDao = new InterviewsDAO();
-//                intvDao.delete(id);
-//                return;
-//            }
-//        }
-//    }
+    // public void delete(int id){
+    // for(Interviews intv : intvList){
+    // if(intv.getId()==id){
+    // intvList.remove(id);
+    // intvDao = new InterviewsDAO();
+    // intvDao.delete(id);
+    // return;
+    // }
+    // }
+    // }
     public void set(Interviews intv) {
         for (int i = 0; i < intvList.size(); i++) {
             if (intvList.get(i).getId() == intv.getId()) {
@@ -212,11 +211,16 @@ public class InterviewsBUS {
 
         // Lọc danh sách intvList
         searchResults = intvList.stream()
-                .filter(intv
-                        -> (searchString.isEmpty() || String.valueOf(intv.getId()).contains(searchString)) // Kiểm tra ID
-                || (searchString.isEmpty() || getPositionById(intv.getId()).toLowerCase().contains(searchString.toLowerCase())) // Kiểm tra Position
-                || (searchString.isEmpty() || intverBus.getFullNamesById(intv.getId()).toLowerCase().contains(searchString.toLowerCase()))
-                ) .collect(Collectors.toCollection(ArrayList::new));
+                .filter(intv -> (searchString.isEmpty() || String.valueOf(intv.getId()).contains(searchString)) // Kiểm
+                                                                                                                // tra
+                                                                                                                // ID
+                        || (searchString.isEmpty()
+                                || getPositionById(intv.getId()).toLowerCase().contains(searchString.toLowerCase())) // Kiểm
+                                                                                                                     // tra
+                                                                                                                     // Position
+                        || (searchString.isEmpty() || intverBus.getFullNamesById(intv.getId()).toLowerCase()
+                                .contains(searchString.toLowerCase())))
+                .collect(Collectors.toCollection(ArrayList::new));
 
         return searchResults;
     }

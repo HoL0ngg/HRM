@@ -37,11 +37,19 @@ import javax.swing.table.DefaultTableModel;
 public class EmployeeManagerFrame extends javax.swing.JFrame {
 
     private JPopupMenu filterMenu;
-    
+    private Employee employee;
     // Biến lưu giá trị lọc
     private String selectedDepartment = null; // Phòng ban
     private String selectedStatus = null;     // Trạng thái (On/Off)
     private String selectedWorkType = null;   // Hình thức làm việc (Part-time/Full-time)
+    
+    public EmployeeManagerFrame(Employee employee) {
+        this.employee = employee;
+        initComponents(); // Đảm bảo phương thức này được gọi
+        loadListEmployeesToTable();
+        setVisible(true);
+        addEvents();
+    }
     
     public EmployeeManagerFrame() {
         initComponents();
@@ -93,7 +101,7 @@ public class EmployeeManagerFrame extends javax.swing.JFrame {
         
         btnAddEmployee.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                new EmployeeDetailCreateFrame().setVisible(true);
+                new EmployeeDetailCreateFrame(employee).setVisible(true);
                 dispose();
             }
         });
@@ -121,6 +129,7 @@ public class EmployeeManagerFrame extends javax.swing.JFrame {
         btnAddEmployee = new javax.swing.JButton();
         pnMenu = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        quaylaimain = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Chương trình quản lý nhân viên");
@@ -200,20 +209,31 @@ public class EmployeeManagerFrame extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel1.setText("Quản lý nhân viên");
 
+        quaylaimain.setText("quay lại");
+        quaylaimain.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quaylaimainActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnMenuLayout = new javax.swing.GroupLayout(pnMenu);
         pnMenu.setLayout(pnMenuLayout);
         pnMenuLayout.setHorizontalGroup(
             pnMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnMenuLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addContainerGap()
+                .addComponent(quaylaimain)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addContainerGap(711, Short.MAX_VALUE))
+                .addContainerGap(639, Short.MAX_VALUE))
         );
         pnMenuLayout.setVerticalGroup(
             pnMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnMenuLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(jLabel1)
+                .addGroup(pnMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(quaylaimain, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
@@ -229,7 +249,7 @@ public class EmployeeManagerFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(pnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(651, Short.MAX_VALUE))
+                .addContainerGap(648, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addGap(0, 51, Short.MAX_VALUE)
@@ -248,6 +268,12 @@ public class EmployeeManagerFrame extends javax.swing.JFrame {
         // Cập nhật lại ComboBox phân trang và JTable
         loadListEmployeesToTable();
     }//GEN-LAST:event_btlRemoveFilterActionPerformed
+
+    private void quaylaimainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quaylaimainActionPerformed
+        System.out.println("hihihi");
+        new MainFrame(employee);
+        dispose();
+    }//GEN-LAST:event_quaylaimainActionPerformed
 
     private void lableFilterMouseClicked(java.awt.event.MouseEvent evt) {
         if (filterMenu == null) {
@@ -280,7 +306,7 @@ public class EmployeeManagerFrame extends javax.swing.JFrame {
         // Gán sự kiện cho từng radio button
         rbPhongBan.addActionListener(e -> showDialogWithDepartments("Chọn Phòng Ban"));
         rbTrangThaiLamViec.addActionListener(e -> showDialog("Chọn Trạng Thái Làm Việc", new String[] { "On", "Off" }));
-        rbHinhThucLamViec.addActionListener(e -> showDialog("Chọn Hình Thức Làm Việc", new String[] { "Part-time", "Full-time" }));
+        rbHinhThucLamViec.addActionListener(e -> showDialog("Chọn Hình Thức Làm Việc", new String[] { "Part-time", "Full-time", "Internship", "On Board", "Work From Home" }));
     }
 
     // Hàm để hiển thị dialog cho phòng ban (dữ liệu từ database)
@@ -319,7 +345,19 @@ public class EmployeeManagerFrame extends javax.swing.JFrame {
                     selectedStatus = selectedValue.equals("On") ? "on" : "off";
                     break;
                 case "Chọn Hình Thức Làm Việc":
-                    selectedWorkType = selectedValue.equals("Part-time") ? "part_time" : "full_time";
+                    if (selectedValue.equals("Part-time")) {
+                        selectedWorkType = "part_time";
+                    } else if (selectedValue.equals("Full-time")) {
+                        selectedWorkType = "full_time";
+                    } else if (selectedValue.equals("Internship")) {
+                        selectedWorkType = "internship";
+                    } else if (selectedValue.equals("On Board")) {
+                        selectedWorkType = "on_board";
+                    } else if (selectedValue.equals("Work From Home")) {
+                        selectedWorkType = "work_from_home";
+                    } else {
+                        selectedWorkType = null; // Hoặc gán giá trị mặc định nếu cần
+                    }
                     break;
             }
             dialog.dispose();
@@ -391,6 +429,7 @@ public class EmployeeManagerFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lableFilter;
     private javax.swing.JPanel pnMenu;
+    private javax.swing.JButton quaylaimain;
     private javax.swing.JTable tbltDanhSachNhanVien;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
@@ -492,9 +531,9 @@ public class EmployeeManagerFrame extends javax.swing.JFrame {
                                          selectedDepartment.equals(employee.getDepartment().getName()));
             boolean matchesStatus = (selectedStatus == null || 
                                      selectedStatus.equalsIgnoreCase(employee.getStatus().name()));
-            boolean matchesWorkType = (selectedWorkType == null || 
-                           (employee.getWork_type() != null && 
-                            selectedWorkType.equalsIgnoreCase(employee.getWork_type().name())));
+        boolean matchesWorkType = (selectedWorkType == null || 
+                                   (employee.getWork_type() != null && 
+                                    selectedWorkType.equalsIgnoreCase(employee.getWork_type().name().toLowerCase())));
 
             if (matchesDepartment && matchesStatus && matchesWorkType) {
                 filteredEmployees.add(employee);

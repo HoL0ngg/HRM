@@ -39,6 +39,11 @@ public class EmployeeDetailCreateFrame extends javax.swing.JFrame {
     
     private javax.swing.ButtonGroup groupCapBac;
 
+    public EmployeeDetailCreateFrame(Employee employee) {
+        this.employee = employee;
+        init();
+    }
+    
     public EmployeeDetailCreateFrame() {
         init();
     }
@@ -77,7 +82,7 @@ public class EmployeeDetailCreateFrame extends javax.swing.JFrame {
         
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                new EmployeeManagerFrame().setVisible(true);
+                new EmployeeManagerFrame(employee).setVisible(true);
                 dispose();
             }
         });

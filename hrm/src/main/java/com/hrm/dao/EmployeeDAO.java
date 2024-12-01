@@ -21,8 +21,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class EmployeeDAO implements DAOInterface<Employee> {
+    private MySQLConnect mySQL = new MySQLConnect();
     
-     private MySQLConnect mySQL = new MySQLConnect();
     public EmployeeDAO() {
     }
 
@@ -300,10 +300,8 @@ public class EmployeeDAO implements DAOInterface<Employee> {
                 Department department = new Department(department_id, manager_id, department_name);
 
                 // Tạo đối tượng Employee với đối tượng Position và Department
-                Employee employee = new Employee(id, name, dob, position, department, prevPosition, gender, phone,
-                        address,
-                        email, hire_date, status, account_bank, indentify_card, tax_code, social_insurance_code,
-                        work_type);
+                Employee employee = new Employee(id, name, dob, position, department, prevPosition, gender, phone, address,
+                        email, hire_date, status, account_bank, indentify_card, tax_code, social_insurance_code, work_type);
 
                 // Thêm Employee vào danh sách
                 employeeList.add(employee);
@@ -349,7 +347,10 @@ public class EmployeeDAO implements DAOInterface<Employee> {
                 int tax_code = rs.getInt("tax_code");
                 int social_insurance_code = rs.getInt("social_insurance_code");
                 String prevPosition = rs.getString("previous_position");
-
+                
+                // Lấy thông tin image
+                String image = rs.getString("image");
+                
                 // Xử lý work_type
                 Work_type work_type = null;
                 String workTypeStr = rs.getString("work_type").toLowerCase().replace("-", "_");
@@ -371,10 +372,13 @@ public class EmployeeDAO implements DAOInterface<Employee> {
                 int manager_id = rs.getInt("manager_id");
                 Department department = new Department(department_id, manager_id, department_name);
 
-                // Tạo đối tượng Employee với đối tượng Position và Department
+               // Tạo đối tượng Employee với đối tượng Position, Department, và image
                 employee = new Employee(id, name, dob, position, department, prevPosition, gender, phone, address,
-                        email, hire_date, status, account_bank, indentify_card, tax_code, social_insurance_code,
-                        work_type);
+                        email, hire_date, status, account_bank, indentify_card, tax_code, social_insurance_code, work_type);
+      
+                // Gán giá trị image vào Employee
+                employee.setImage(image);
+                
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -382,7 +386,6 @@ public class EmployeeDAO implements DAOInterface<Employee> {
             JDBCUtil.closeConnection(con);
         }
 
-        JDBCUtil.closeConnection(con);
         return employee;
     }
 

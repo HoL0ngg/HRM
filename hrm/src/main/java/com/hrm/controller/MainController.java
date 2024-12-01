@@ -1,5 +1,6 @@
 package com.hrm.controller;
 
+import com.hrm.model.Employee;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -12,6 +13,7 @@ import com.hrm.view.CongViecFrame;
 import com.hrm.view.LoginFrame;
 import com.hrm.view.MainFrame;
 import com.hrm.view.BaoCaoFrame;
+import com.hrm.view.EmployeeDetailFrame;
 import com.hrm.view.EmployeeManagerFrame;
 import com.hrm.view.SalaryFrame;
 import com.hrm.view.SalaryNhanVien;
@@ -19,6 +21,7 @@ import com.hrm.view.TrainingDevelopmentView;
 import com.hrm.view.SettingGUI;
 import com.hrm.view.TuyenDungGUI;
 import com.hrm.view.muctieuframe;
+import javax.swing.JOptionPane;
 
 public class MainController implements MouseListener {
 
@@ -36,9 +39,9 @@ public class MainController implements MouseListener {
         // EmployeeDAO.getInstance().selectByID(mainFrame.getEmployee().getId());
         switch (name) {
             case "NhanVienPanel":
-                new EmployeeManagerFrame();
-                mainFrame.dispose();
-                break;
+            new EmployeeManagerFrame(mainFrame.getEmployee());
+            mainFrame.dispose();
+            break;
             case "ChamCongPanel":
                 new ChamCongFrame(mainFrame.getEmployee());
                 mainFrame.dispose();

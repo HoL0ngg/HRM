@@ -95,7 +95,7 @@ public class EmployeeDetailFrame extends javax.swing.JFrame {
         
         btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                new EmployeeManagerFrame().setVisible(true);
+                new EmployeeManagerFrame(employee).setVisible(true);
                 dispose();
             }
         });
@@ -183,45 +183,38 @@ public class EmployeeDetailFrame extends javax.swing.JFrame {
     }
     
     private void loadSalaryData() {
-    // Lấy dữ liệu lương từ DAO
-    ArrayList<Salary> salaries = SalaryDAO.getInstance().selectByEmployeeIdforDanhSachLuong(employee.getId());
+        // Sử dụng SalaryDAO để lấy dữ liệu lương
+        Salary salary = SalaryDAO.getInstance().selectByEmployeeID2(employee.getId());
 
-    if (!salaries.isEmpty()) {
-        // Lấy thông tin lương đầu tiên trong danh sách
-        Salary salary = salaries.get(0);
+        if (salary != null) {
+            // Gán thông tin lương vào các trường
+            this.txtSoTaiKhoan.setText(employee.getAccount_bank() + ""); // Số tài khoản
+            this.txtLuongCoBan.setText(salary.getPositionSalary().toString()); // Lương cơ bản
+            
+            // Giả sử salary.getPositionSalary() trả về kiểu BigDecimal
+            BigDecimal positionSalary = salary.getPositionSalary(); // Lương theo vị trí
+            BigDecimal workingDays = new BigDecimal(26); // 26 ngày làm việc
+            BigDecimal workingHours = new BigDecimal(8); // 8 giờ mỗi ngày
+            BigDecimal factor = new BigDecimal(1.5); // Hệ số nhân 1.5
 
-        // Gán thông tin lương vào các trường
-        this.txtSoTaiKhoan.setText(employee.getAccount_bank()+""); // Số tài khoản
-        this.txtLuongCoBan.setText(salary.getPositionSalary().toString()); // Lương cơ bản
+            // Tính lương theo giờ: (positionSalary / 26 / 8) * 1.5
+            BigDecimal luongTheoGio = positionSalary
+                    .divide(workingDays, 2, RoundingMode.HALF_UP) // positionSalary / 26
+                    .divide(workingHours, 2, RoundingMode.HALF_UP) // / 8
+                    .multiply(factor); // * 1.5
 
-        // Tính lương theo giờ
-        BigDecimal positionSalary = salary.getPositionSalary(); // Lương theo vị trí
-        BigDecimal workingDays = new BigDecimal(26); // 26 ngày làm việc
-        BigDecimal workingHours = new BigDecimal(8); // 8 giờ mỗi ngày
-        BigDecimal factor = new BigDecimal(1.5); // Hệ số nhân 1.5
-
-        // Công thức: (positionSalary / 26 / 8) * 1.5
-        BigDecimal luongTheoGio = positionSalary
-                .divide(workingDays, 2, RoundingMode.HALF_UP)
-                .divide(workingHours, 2, RoundingMode.HALF_UP)
-                .multiply(factor);
-
-        // Gán lương theo giờ
-        this.txtLuongTheoGio.setText(luongTheoGio.toString());
-        this.txtLuongTheoGio.setEditable(false);
-        this.txtLuongTheoGio.setFocusable(false);
-
-        // Gán thông tin khác
-        this.txtBHXH.setText(employee.getSocial_insurance_code()+" "); // BHXH
-        this.txtThue.setText(employee.getTax_code()+ " "); // Thuế
-
-    } else {
-        // Thông báo nếu không tìm thấy dữ liệu
-        System.out.println("Không tìm thấy thông tin lương cho nhân viên ID: " + employee.getId());
-        JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin lương cho nhân viên!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+            this.txtLuongTheoGio.setText(luongTheoGio + "");
+            this.txtLuongTheoGio.setEditable(false); // Không cho phép chỉnh sửa nội dung
+            this.txtLuongTheoGio.setFocusable(false); // Không cho phép người dùng focus vào ô
+            
+            
+            this.txtBHXH.setText(employee.getSocial_insurance_code() + ""); // BHXH (khấu trừ)
+            this.txtThue.setText(employee.getTax_code() + ""); // Thuế (bonus)
+        } else {
+            // Xử lý nếu không có dữ liệu lương
+            System.out.println("Không tìm thấy thông tin lương cho nhân viên ID: " + employee.getId());
+        }
     }
-}
-
 
     private final String[] menu = new String[]{"Mã nhân viên", "Họ và tên", "Trạng thái làm việc", "Email", "Vị trí", "Phòng ban"};
 
@@ -983,12 +976,11 @@ public class EmployeeDetailFrame extends javax.swing.JFrame {
             employee.setGender(genderEnum);
             
              // Lấy thông tin hình thức làm việc
-             String workTypeInput = txtHinhThuc.getText().trim();
-             if (workTypeInput.isEmpty() || 
-                 (!workTypeInput.equalsIgnoreCase("full_time") && !workTypeInput.equalsIgnoreCase("part_time"))) {
-                 JOptionPane.showMessageDialog(this, "Hình thức làm việc phải là 'full_time' hoặc 'part_time'!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                 return;
-             }
+            String workTypeInput = txtHinhThuc.getText().trim();
+                if (workTypeInput.isEmpty() || (!workTypeInput.equalsIgnoreCase("full_time") && !workTypeInput.equalsIgnoreCase("part_time"))) {
+                    JOptionPane.showMessageDialog(this, "Hình thức làm việc phải là 'full_time' hoặc 'part_time'!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+            }
             // Chuyển đổi hình thức làm việc sang enum
             Employee.Work_type workTypeEnum = workTypeInput.equalsIgnoreCase("full_time")
                     ? Employee.Work_type.full_time

@@ -72,7 +72,11 @@ public class AccountDAO implements DAOInterface<Account> {
         JDBCUtil.closeConnection(con);
         return user;
     }
-
+    
+    public ArrayList<Account> seclectAll() {
+        return null;
+    }
+    
     public Employee DangNhap(String user, String password) {
         String sql = "select * from account where username = ?";
         Connection con = JDBCUtil.createConnection();

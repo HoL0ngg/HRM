@@ -45,7 +45,7 @@ public class Employee {
     private String image;
     private int isDeleted;
 
-public String getImage() {
+    public String getImage() {
         return image;
     }
 
@@ -286,9 +286,7 @@ public String getImage() {
         return "Employee [id=" + id + ", name=" + name + ", dob=" + dob + ", position_id=" + position_id
                 + ", department_id=" + department_id + ", previous_position=" + previous_position + ", gender=" + gender
                 + ", phone_mumber=" + phone_mumber + ", address=" + address + ", email=" + email + ", hire_date="
-                + hire_date + ", status=" + status + ", account_bank=" + account_bank + ", indentify_card="
-                + indentify_card
-                + ", tax_code=" + tax_code + ", social_insurance_code=" + social_insurance_code + ", work_type="
-                + work_type + "]";
+                + hire_date + ", status=" + status + ", account_bank=" + account_bank + ", indentify_card=" + indentify_card
+                + ", tax_code=" + tax_code + ", social_insurance_code=" + social_insurance_code + ", work_type=" + work_type + "]";
     }
 }

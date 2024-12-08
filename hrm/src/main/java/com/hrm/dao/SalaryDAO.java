@@ -6,6 +6,7 @@
 package com.hrm.dao;
 
 import com.hrm.db.JDBCUtil;
+import com.hrm.model.Department;
 import com.hrm.model.Employee;
 import com.hrm.model.Position;
 import com.hrm.model.Salary;
@@ -474,6 +475,56 @@ private void closeResources(PreparedStatement pst, ResultSet rs) {
     }
 }
 
+    public Salary selectByEmployeeID2(int employeeId) {
+        String sql = "SELECT s.*, e.id as employee_id, e.name as employee_name, e.gender, e.phone_number, " +
+                     "p.id as position_id, p.name as position_name " +
+                     "FROM salaries s " +
+                     "JOIN employee e ON s.employee_id = e.id " +
+                     "JOIN position p ON e.position_id = p.id " +
+                     "WHERE s.employee_id = ?";
+        Connection con = JDBCUtil.createConnection();
+        Salary salary = null;
+
+        try {
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, employeeId);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                BigDecimal positionSalary = rs.getBigDecimal("position_salary");
+                BigDecimal bonus = rs.getBigDecimal("bonus");
+                BigDecimal deductions = rs.getBigDecimal("deductions");
+                BigDecimal netSalary = rs.getBigDecimal("net_salary");
+                BigDecimal overtimeSalary = rs.getBigDecimal("overtime_salary");
+                LocalDate payday = rs.getObject("payday", LocalDate.class);
+                String note = rs.getString("note");
+                int attendance = rs.getInt("attendance");
+
+                // Tạo đối tượng Employee
+                Employee employee = new Employee();
+                employee.setId(rs.getInt("employee_id"));
+                employee.setName(rs.getString("employee_name"));
+                employee.setGender(Employee.Gender.valueOf(rs.getString("gender").toLowerCase()));
+                employee.setPhone_mumber(rs.getString("phone_number"));
+
+                // Tạo đối tượng Position
+                Position position = new Position();
+                position.setId(rs.getInt("position_id"));
+                position.setName(rs.getString("position_name"));
+
+                // Khởi tạo Salary
+                salary = new Salary(id, employee, null, positionSalary, bonus, deductions, netSalary, overtimeSalary, payday, note, attendance, position, null, null, null, 0);            }
+
+            pst.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtil.closeConnection(con);
+        }
+
+        return salary;
+    }
     
     public int themLuongCoBan(int id, int employeeId, BigDecimal positionSalary) {
         String sql = "INSERT INTO salaries (id, employee_id, position_salary) VALUES (?, ?, ?)";

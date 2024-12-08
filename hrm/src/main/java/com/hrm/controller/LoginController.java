@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import com.hrm.model.Employee;
+import com.hrm.view.EmployeeDetailFrame;
+import com.hrm.view.EmployeeManagerFrame;
 import com.hrm.view.LoginFrame;
 import com.hrm.view.MainFrame;
 

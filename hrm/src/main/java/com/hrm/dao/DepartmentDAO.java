@@ -118,6 +118,7 @@ public class DepartmentDAO implements DAOInterface<Department> {
 
         return department;
     }
+    
      public Integer getManagerIdByDepartment(int departmentId) {
         String sql = "SELECT manager_id FROM departments WHERE id = ?";
         try (Connection con = JDBCUtil.createConnection();
@@ -132,6 +133,7 @@ public class DepartmentDAO implements DAOInterface<Department> {
         }
         return null;
     }
+     
       public boolean updateManager(int departmentId, int managerId) {
         String sql = "UPDATE departments SET manager_id = ? WHERE id = ?";
         try (Connection conn = JDBCUtil.createConnection();
@@ -155,6 +157,5 @@ public class DepartmentDAO implements DAOInterface<Department> {
             e.printStackTrace();
         }
         return false;
-    }
-    
+    }    
 }

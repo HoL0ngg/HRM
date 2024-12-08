@@ -206,14 +206,10 @@ public class Salary {
     @Override
     public String toString() {
         int var10000 = this.id;
-        return "Salary [id=" + var10000 + ", employeeId=" + this.employeeId + ", positionSalary="
-                + String.valueOf(this.positionSalary) + ", bonus=" + String.valueOf(this.bonus) + ", deductions="
-                + String.valueOf(this.deductions) + ", net_salary=" + String.valueOf(this.net_salary)
-                + ", overtimeSalary=" + String.valueOf(this.overtimeSalary) + ", payday=" + String.valueOf(this.payday)
-                + ", note=" + this.note + ", attendance=" + this.attendance + "]";
+        return "Salary [id=" + var10000 + ", employeeId=" + this.employeeId + ", positionSalary=" + String.valueOf(this.positionSalary) + ", bonus=" + String.valueOf(this.bonus) + ", deductions=" + String.valueOf(this.deductions) + ", netSalary=" + String.valueOf(this.net_salary) + ", overtimeSalary=" + String.valueOf(this.overtimeSalary) + ", payday=" + String.valueOf(this.payday) + ", note=" + this.note + ", attendance=" + this.attendance + "]";
     }
 
-    public Salary get(int i) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+//    public Salary get(int i) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
 }

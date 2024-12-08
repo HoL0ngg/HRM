@@ -44,7 +44,6 @@ com\hrm\view\JobDetailPanel$1.class
 com\hrm\view\SalaryFrame$24.class
 com\hrm\view\TuyenDungGUI$8.class
 com\hrm\dao\SalaryDAO.class
-com\hrm\view\TuyenDungGUI$10$1.class
 com\hrm\view\EmployeeDetailFrame$7.class
 com\hrm\controller\ReportController.class
 com\hrm\dao\TimeKeepingDAO.class
@@ -78,7 +77,6 @@ com\hrm\view\LoginFrame$2.class
 com\hrm\view\JobDetailPanel.class
 com\hrm\view\TuyenDungGUI$6.class
 com\hrm\view\Table$1.class
-com\hrm\view\TuyenDungGUI$10$3.class
 com\hrm\utils\SSLUtilities.class
 com\hrm\view\SalaryUpdateDialog$3.class
 com\hrm\model\JobOpenings.class
@@ -105,7 +103,6 @@ com\hrm\view\MainFrame$1.class
 com\hrm\model\Achievement.class
 com\hrm\view\SalaryFrame$20.class
 com\hrm\view\EmployeeDetailFrame$6.class
-com\hrm\view\TuyenDungGUI$10$2.class
 com\hrm\view\SalaryFrame$26.class
 com\hrm\view\SalaryFrame$4.class
 com\hrm\utils\StatusRenderer.class
